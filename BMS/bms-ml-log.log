@@ -1,0 +1,1867 @@
+2025-05-03 15:31:33,589 - INFO - Job Run ID: e368f112-7a28-442e-81ea-ab5cb7d1ca92
+2025-05-03 15:31:33,589 - INFO - Started execution of 'load_data'
+2025-05-03 15:31:34,398 - INFO - Data loaded successfully.
+2025-05-03 15:31:34,398 - INFO - Completed 'load_data' in 0.81 seconds
+2025-05-03 15:31:34,398 - INFO - Started execution of 'perform_eda'
+2025-05-03 15:31:34,398 - INFO - Performing EDA...
+2025-05-03 15:31:34,476 - INFO - Dataset Info:
+None
+2025-05-03 15:31:34,608 - INFO - Summary Statistics:
+         Voltage (V)    Current (A)  Resistance (Ohms)        SOC (%)        SOD (%)        SOH (%)                      Timestamp
+count  500000.000000  500000.000000      500000.000000  500000.000000  500000.000000  500000.000000                         500000
+mean        3.599775       1.249252           3.328581      75.022916      24.977084      94.996536  2024-01-01 13:40:24.921688320
+min         3.000000       0.500000           1.500000      50.000000       0.000000      90.000000            2023-01-01 00:00:35
+25%         3.300000       0.870000           2.220000      62.000000      12.000000      92.000000  2023-07-02 16:44:23.750000128
+50%         3.600000       1.250000           2.880000      75.000000      25.000000      95.000000     2024-01-01 05:24:45.500000
+75%         3.900000       1.620000           4.110000      88.000000      38.000000      98.000000     2024-07-02 15:52:06.500000
+max         4.200000       2.000000           8.400000     100.000000      50.000000     100.000000            2024-12-31 23:59:53
+std         0.346535       0.432727           1.418318      14.727512      14.727512       3.165482                            NaN
+2025-05-03 15:31:34,677 - INFO - Missing Values:
+Battery ID           0
+Cell ID              0
+Voltage (V)          0
+Current (A)          0
+Resistance (Ohms)    0
+SOC (%)              0
+SOD (%)              0
+SOH (%)              0
+Timestamp            0
+State of Cell        0
+Communication        0
+dtype: int64
+2025-05-03 15:31:34,692 - INFO - Unique Values in 'State of Cell': ['live' 'dead']
+2025-05-03 15:31:34,709 - INFO - Unique Values in 'Communication': ['yes' 'no']
+2025-05-03 15:31:34,709 - INFO - logged Summary Statistics Successfully
+2025-05-03 15:31:34,709 - INFO - Plotting histograms and correlation heatmap...
+2025-05-03 15:36:06,842 - INFO - Plotted Summary Statistics Plot Successfully
+2025-05-03 15:36:06,842 - INFO - Plotting Heatmap...
+2025-05-03 15:36:11,747 - INFO - Plotted Heatmap Successfully
+2025-05-03 15:36:11,747 - INFO - Plotting Pairplot...
+2025-05-03 15:37:08,431 - INFO - Plotted Pairplot Successfully
+2025-05-03 15:37:08,431 - INFO - Plotting Boxplot...
+2025-05-03 15:37:21,189 - INFO - Plotted Boxplot Successfully
+2025-05-03 15:37:21,189 - INFO - Plotting Countplot for Communication ...
+2025-05-03 15:37:29,763 - INFO - Plotted Countplot for Communication Successfully
+2025-05-03 15:37:29,764 - INFO - Plotting Countplot for State of Cell...
+2025-05-03 15:37:35,077 - INFO - Plotted Countplot for State of Cell Successfully
+2025-05-03 15:38:11,186 - INFO - EDA completed successfully.
+2025-05-03 15:38:11,187 - INFO - Completed 'perform_eda' in 396.79 seconds
+2025-05-03 15:38:11,187 - INFO - Started execution of 'preprocess_data'
+2025-05-03 15:38:11,344 - INFO - Data preprocessing completed successfully.
+2025-05-03 15:38:11,344 - INFO - Completed 'preprocess_data' in 0.16 seconds
+2025-05-03 15:38:11,344 - INFO - Started execution of 'train_regression_models'
+2025-05-03 15:38:11,344 - INFO - Training regression model for Voltage (V)...
+2025-05-03 15:38:11,396 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-03 15:38:11,396 - INFO - Starting hyperparameter tuning for Voltage (V) with the following param_grid:
+2025-05-03 15:38:11,397 - INFO -     n_estimators: [50, 100, 200]
+2025-05-03 15:38:11,397 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-03 15:38:11,397 - INFO -     max_depth: [3, 5, 10]
+2025-05-03 15:50:48,574 - INFO - Hyperparameter tuning for Voltage (V) completed successfully.
+2025-05-03 15:50:48,574 - INFO - Best hyperparameters for Voltage (V): {'learning_rate': 0.2, 'max_depth': 3, 'n_estimators': 200}
+2025-05-03 15:50:48,574 - INFO - Completed 'tune_hyperparameters' in 757.18 seconds
+2025-05-03 15:51:15,782 - INFO - Evaluation metrics for Voltage (V): MSE=0.0714, R2=0.1433
+2025-05-03 15:51:15,782 - INFO - Training regression model for Current (A)...
+2025-05-03 15:51:15,835 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-03 15:51:15,835 - INFO - Starting hyperparameter tuning for Current (A) with the following param_grid:
+2025-05-03 15:51:15,835 - INFO -     n_estimators: [50, 100, 200]
+2025-05-03 15:51:15,835 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-03 15:51:15,835 - INFO -     max_depth: [3, 5, 10]
+2025-05-03 16:02:40,277 - INFO - Hyperparameter tuning for Current (A) completed successfully.
+2025-05-03 16:02:40,278 - INFO - Best hyperparameters for Current (A): {'learning_rate': 0.1, 'max_depth': 5, 'n_estimators': 100}
+2025-05-03 16:02:40,279 - INFO - Completed 'tune_hyperparameters' in 684.44 seconds
+2025-05-03 16:03:02,062 - INFO - Evaluation metrics for Current (A): MSE=0.0056, R2=0.9322
+2025-05-03 16:03:02,062 - INFO - Training regression model for SOH (%)...
+2025-05-03 16:03:02,099 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-03 16:03:02,099 - INFO - Starting hyperparameter tuning for SOH (%) with the following param_grid:
+2025-05-03 16:03:02,100 - INFO -     n_estimators: [50, 100, 200]
+2025-05-03 16:03:02,100 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-03 16:03:02,100 - INFO -     max_depth: [3, 5, 10]
+2025-05-03 16:16:10,049 - INFO - Hyperparameter tuning for SOH (%) completed successfully.
+2025-05-03 16:16:10,050 - INFO - Best hyperparameters for SOH (%): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-03 16:16:10,051 - INFO - Completed 'tune_hyperparameters' in 787.95 seconds
+2025-05-03 16:16:17,434 - INFO - Evaluation metrics for SOH (%): MSE=0.1002, R2=-0.0001
+2025-05-03 16:16:17,434 - INFO - All regression models trained successfully.
+2025-05-03 16:16:17,440 - INFO - Completed 'train_regression_models' in 2286.10 seconds
+2025-05-03 16:16:17,440 - INFO - Prediction for Cell ID CELL1234 - Resistance: 0.5, SOC: 80.0, SOD: 20.0
+2025-05-03 16:16:17,440 - INFO - Started execution of 'predict_values'
+2025-05-03 16:16:17,458 - INFO - Prediction for Voltage (V): 0.5425
+2025-05-03 16:16:17,458 - INFO - Prediction for Current (A): 0.1556
+2025-05-03 16:16:17,459 - INFO - Prediction for SOH (%): 0.4991
+2025-05-03 16:16:17,459 - INFO - Completed 'predict_values' in 0.02 seconds
+2025-05-03 16:16:17,459 - INFO - Predicted Values for Cell ID CELL1234: {'Voltage (V)': 0.5424720633182948, 'Current (A)': 0.15555714593761316, 'SOH (%)': 0.49908716285392574}
+2025-05-03 16:16:17,459 - INFO - Total execution time: 2683.87 seconds
+2025-05-03 16:32:23,162 - INFO - Job Run ID: 8e8954ca-3abc-47ca-ac72-e9bb7eb7abe4
+2025-05-03 16:32:23,163 - INFO - Created folder for plots: plots_8e8954ca-3abc-47ca-ac72-e9bb7eb7abe4
+2025-05-03 16:32:23,163 - INFO - Started execution of 'load_data'
+2025-05-03 16:32:24,036 - INFO - Data loaded successfully.
+2025-05-03 16:32:24,036 - INFO - Completed 'load_data' in 0.87 seconds
+2025-05-03 16:32:24,036 - INFO - Started execution of 'perform_eda'
+2025-05-03 16:32:24,036 - INFO - Performing EDA...
+2025-05-03 16:32:24,123 - INFO - Dataset Info:
+None
+2025-05-03 16:32:24,304 - INFO - Summary Statistics:
+         Voltage (V)    Current (A)  Resistance (Ohms)        SOC (%)        SOD (%)        SOH (%)                      Timestamp
+count  500000.000000  500000.000000      500000.000000  500000.000000  500000.000000  500000.000000                         500000
+mean        3.599775       1.249252           3.328581      75.022916      24.977084      94.996536  2024-01-01 13:40:24.921688320
+min         3.000000       0.500000           1.500000      50.000000       0.000000      90.000000            2023-01-01 00:00:35
+25%         3.300000       0.870000           2.220000      62.000000      12.000000      92.000000  2023-07-02 16:44:23.750000128
+50%         3.600000       1.250000           2.880000      75.000000      25.000000      95.000000     2024-01-01 05:24:45.500000
+75%         3.900000       1.620000           4.110000      88.000000      38.000000      98.000000     2024-07-02 15:52:06.500000
+max         4.200000       2.000000           8.400000     100.000000      50.000000     100.000000            2024-12-31 23:59:53
+std         0.346535       0.432727           1.418318      14.727512      14.727512       3.165482                            NaN
+2025-05-03 16:32:24,381 - INFO - Missing Values:
+Battery ID           0
+Cell ID              0
+Voltage (V)          0
+Current (A)          0
+Resistance (Ohms)    0
+SOC (%)              0
+SOD (%)              0
+SOH (%)              0
+Timestamp            0
+State of Cell        0
+Communication        0
+dtype: int64
+2025-05-03 16:32:24,399 - INFO - Unique Values in 'State of Cell': ['live' 'dead']
+2025-05-03 16:32:24,417 - INFO - Unique Values in 'Communication': ['yes' 'no']
+2025-05-03 16:32:24,417 - INFO - logged Summary Statistics Successfully
+2025-05-03 16:32:24,417 - INFO - Plotting histograms and correlation heatmap...
+2025-05-03 16:32:24,417 - INFO - Plotting Distribution of Numerical Features...
+2025-05-03 16:32:40,228 - INFO - Saved distribution plot to plots_8e8954ca-3abc-47ca-ac72-e9bb7eb7abe4/distribution_numerical_features.png
+2025-05-03 16:32:40,228 - INFO - Plotted Summary Statistics Plot Successfully
+2025-05-03 16:32:40,228 - INFO - Plotting Heatmap...
+2025-05-03 16:32:40,498 - INFO - Saved heatmap to plots_8e8954ca-3abc-47ca-ac72-e9bb7eb7abe4/correlation_heatmap.png
+2025-05-03 16:32:40,498 - INFO - Plotted Heatmap Successfully
+2025-05-03 16:32:40,498 - INFO - Plotting Pairplot...
+2025-05-03 16:33:09,421 - INFO - Saved Pairplot to plots_8e8954ca-3abc-47ca-ac72-e9bb7eb7abe4/pairplot_numerical_features.png
+2025-05-03 16:33:09,421 - INFO - Plotted Pairplot Successfully
+2025-05-03 16:33:09,421 - INFO - Plotting Boxplot...
+2025-05-03 16:33:16,819 - INFO - Saved Boxplot to plots_8e8954ca-3abc-47ca-ac72-e9bb7eb7abe4/boxplot_numerical_features.png
+2025-05-03 16:33:16,819 - INFO - Plotted Boxplot Successfully
+2025-05-03 16:33:16,819 - INFO - Plotting Countplot for Communication ...
+2025-05-03 16:33:17,757 - INFO - Saved Countplot for Communication to plots_8e8954ca-3abc-47ca-ac72-e9bb7eb7abe4/countplot_communication.png
+2025-05-03 16:33:17,757 - INFO - Plotted Countplot for Communication Successfully
+2025-05-03 16:33:17,757 - INFO - Plotting Countplot for State of Cell...
+2025-05-03 16:33:18,642 - INFO - Saved Countplot for State of Cell to plots_8e8954ca-3abc-47ca-ac72-e9bb7eb7abe4/countplot_state_of_cell.png
+2025-05-03 16:33:18,642 - INFO - Plotted Countplot for State of Cell Successfully
+2025-05-03 17:00:51,486 - INFO - EDA completed successfully.
+2025-05-03 17:00:51,488 - INFO - Completed 'perform_eda' in 1707.45 seconds
+2025-05-03 17:00:51,488 - INFO - Started execution of 'preprocess_data'
+2025-05-03 17:00:51,646 - INFO - Data preprocessing completed successfully.
+2025-05-03 17:00:51,646 - INFO - Completed 'preprocess_data' in 0.16 seconds
+2025-05-03 17:00:51,647 - INFO - Started execution of 'train_regression_models'
+2025-05-03 17:00:51,647 - INFO - Training regression model for Voltage (V)...
+2025-05-03 17:00:51,692 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-03 17:00:51,692 - INFO - Starting hyperparameter tuning for Voltage (V) with the following param_grid:
+2025-05-03 17:00:51,692 - INFO -     n_estimators: [50, 100, 200]
+2025-05-03 17:00:51,693 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-03 17:00:51,693 - INFO -     max_depth: [3, 5, 10]
+2025-05-03 17:12:39,605 - INFO - Hyperparameter tuning for Voltage (V) completed successfully.
+2025-05-03 17:12:39,606 - INFO - Best hyperparameters for Voltage (V): {'learning_rate': 0.2, 'max_depth': 3, 'n_estimators': 200}
+2025-05-03 17:12:39,607 - INFO - Completed 'tune_hyperparameters' in 707.91 seconds
+2025-05-03 17:13:06,894 - INFO - Evaluation metrics for Voltage (V): MSE=0.0714, R2=0.1433
+2025-05-03 17:13:06,895 - INFO - Training regression model for Current (A)...
+2025-05-03 17:13:06,962 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-03 17:13:06,962 - INFO - Starting hyperparameter tuning for Current (A) with the following param_grid:
+2025-05-03 17:13:06,962 - INFO -     n_estimators: [50, 100, 200]
+2025-05-03 17:13:06,963 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-03 17:13:06,963 - INFO -     max_depth: [3, 5, 10]
+2025-05-03 17:24:04,905 - INFO - Hyperparameter tuning for Current (A) completed successfully.
+2025-05-03 17:24:04,907 - INFO - Best hyperparameters for Current (A): {'learning_rate': 0.1, 'max_depth': 5, 'n_estimators': 100}
+2025-05-03 17:24:04,908 - INFO - Completed 'tune_hyperparameters' in 657.95 seconds
+2025-05-03 17:24:26,453 - INFO - Evaluation metrics for Current (A): MSE=0.0056, R2=0.9322
+2025-05-03 17:24:26,453 - INFO - Training regression model for SOH (%)...
+2025-05-03 17:24:26,502 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-03 17:24:26,502 - INFO - Starting hyperparameter tuning for SOH (%) with the following param_grid:
+2025-05-03 17:24:26,502 - INFO -     n_estimators: [50, 100, 200]
+2025-05-03 17:24:26,502 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-03 17:24:26,503 - INFO -     max_depth: [3, 5, 10]
+2025-05-03 17:36:12,361 - INFO - Hyperparameter tuning for SOH (%) completed successfully.
+2025-05-03 17:36:12,361 - INFO - Best hyperparameters for SOH (%): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-03 17:36:12,361 - INFO - Completed 'tune_hyperparameters' in 705.86 seconds
+2025-05-03 17:36:19,781 - INFO - Evaluation metrics for SOH (%): MSE=0.1002, R2=-0.0001
+2025-05-03 17:36:19,781 - INFO - All regression models trained successfully.
+2025-05-03 17:36:19,785 - INFO - Completed 'train_regression_models' in 2128.14 seconds
+2025-05-03 17:36:19,785 - INFO - Prediction for Cell ID CELL1234 - Resistance: 0.5, SOC: 80.0, SOD: 20.0
+2025-05-03 17:36:19,785 - INFO - Started execution of 'predict_values'
+2025-05-03 17:36:19,797 - INFO - Prediction for Voltage (V): 0.5425
+2025-05-03 17:36:19,797 - INFO - Prediction for Current (A): 0.1556
+2025-05-03 17:36:19,798 - INFO - Prediction for SOH (%): 0.4991
+2025-05-03 17:36:19,798 - INFO - Completed 'predict_values' in 0.01 seconds
+2025-05-03 17:36:19,798 - INFO - Predicted Values for Cell ID CELL1234: {'Voltage (V)': 0.5424720633182948, 'Current (A)': 0.15555714593761316, 'SOH (%)': 0.49908716285392574}
+2025-05-03 17:36:19,798 - INFO - Total execution time: 3836.63 seconds
+2025-05-03 21:01:28,080 - INFO - Job Run ID: fa30b86e-005f-4ed2-90f1-2eb6cdce9b5f
+2025-05-03 21:01:28,080 - INFO - Created folder for plots: plots_fa30b86e-005f-4ed2-90f1-2eb6cdce9b5f
+2025-05-03 21:01:28,080 - INFO - Started execution of 'load_data'
+2025-05-03 21:01:31,000 - ERROR - Unexpected error during data loading: Unknown datetime string format, unable to parse: yes, at position 0
+2025-05-03 21:01:31,000 - ERROR - Error in 'load_data': Unknown datetime string format, unable to parse: yes, at position 0
+2025-05-03 21:01:31,000 - CRITICAL - Critical error: Unknown datetime string format, unable to parse: yes, at position 0
+2025-05-03 21:16:16,136 - INFO - Job Run ID: d24fd89b-5f31-47cf-8e58-7f222e7bc604
+2025-05-03 21:16:16,136 - INFO - Created folder for plots: plots_d24fd89b-5f31-47cf-8e58-7f222e7bc604
+2025-05-03 21:16:16,137 - INFO - Started execution of 'load_data'
+2025-05-03 21:16:38,918 - INFO - Data loaded successfully.
+2025-05-03 21:16:38,918 - INFO - Completed 'load_data' in 22.78 seconds
+2025-05-03 21:16:38,918 - INFO - Started execution of 'preprocess_data'
+2025-05-03 21:16:38,921 - ERROR - Error during preprocessing: "['Cell Temperature', 'Ambient Temperature'] not in index"
+2025-05-03 21:16:38,921 - ERROR - Error in 'preprocess_data': "['Cell Temperature', 'Ambient Temperature'] not in index"
+2025-05-03 21:16:38,921 - CRITICAL - Critical error: "['Cell Temperature', 'Ambient Temperature'] not in index"
+2025-05-03 21:18:19,630 - INFO - Job Run ID: b2a662ff-993d-429a-81b5-165accf59442
+2025-05-03 21:18:19,631 - INFO - Created folder for plots: plots_b2a662ff-993d-429a-81b5-165accf59442
+2025-05-03 21:18:19,631 - INFO - Started execution of 'load_data'
+2025-05-03 21:18:37,129 - INFO - Data loaded successfully.
+2025-05-03 21:18:37,129 - INFO - Completed 'load_data' in 17.50 seconds
+2025-05-03 21:18:37,129 - INFO - Started execution of 'preprocess_data'
+2025-05-03 21:18:41,587 - INFO - Data preprocessing completed successfully.
+2025-05-03 21:18:41,587 - INFO - Completed 'preprocess_data' in 4.46 seconds
+2025-05-03 21:18:41,587 - INFO - Started execution of 'create_lag_features'
+2025-05-03 21:18:44,347 - ERROR - Error during lag feature creation: 'Cell Temperature'
+2025-05-03 21:18:44,347 - ERROR - Error in 'create_lag_features': 'Cell Temperature'
+2025-05-03 21:18:44,347 - CRITICAL - Critical error: 'Cell Temperature'
+2025-05-03 22:49:28,973 - INFO - Job Run ID: 6c14a709-a18e-4ebe-b3a6-92a8d36d8e8e
+2025-05-03 22:49:28,973 - INFO - Created folder for plots: plots_6c14a709-a18e-4ebe-b3a6-92a8d36d8e8e
+2025-05-03 22:49:28,974 - INFO - Started execution of 'load_data'
+2025-05-03 22:49:49,017 - INFO - Data loaded successfully.
+2025-05-03 22:49:49,018 - INFO - Completed 'load_data' in 20.04 seconds
+2025-05-03 22:49:49,018 - INFO - Started execution of 'preprocess_data'
+2025-05-03 22:49:54,042 - INFO - Data preprocessing completed successfully.
+2025-05-03 22:49:54,043 - INFO - Completed 'preprocess_data' in 5.02 seconds
+2025-05-03 22:49:54,043 - INFO - Started execution of 'create_lag_features'
+2025-05-03 22:50:05,090 - INFO - Lag features created successfully for targets: ['Voltage (V)', 'Current (A)', 'Resistance (Ohms)', 'SOC (%)', 'SOD (%)', 'SOH (%)', 'Cell Temperature (°C)', 'Ambient Temperature (°C)']
+2025-05-03 22:50:05,090 - INFO - Completed 'create_lag_features' in 11.05 seconds
+2025-05-03 22:50:05,752 - INFO - Started execution of 'train_time_series_models'
+2025-05-03 22:50:05,752 - INFO - Training time-series model for Voltage (V)...
+2025-05-04 08:37:16,586 - INFO - Job Run ID: 68d25b2f-b770-44c2-b0d3-0cd5e41c6332
+2025-05-04 08:37:16,587 - INFO - Created folder for plots: plots_68d25b2f-b770-44c2-b0d3-0cd5e41c6332
+2025-05-04 08:37:16,587 - INFO - Started execution of 'load_data'
+2025-05-04 08:37:33,796 - INFO - Data loaded successfully.
+2025-05-04 08:37:33,797 - INFO - Completed 'load_data' in 17.21 seconds
+2025-05-04 08:37:33,797 - INFO - Started execution of 'preprocess_data'
+2025-05-04 08:37:39,174 - INFO - Data preprocessing completed successfully.
+2025-05-04 08:37:39,174 - INFO - Completed 'preprocess_data' in 5.38 seconds
+2025-05-04 08:37:39,174 - INFO - Started execution of 'create_lag_features'
+2025-05-04 08:37:48,544 - INFO - Lag features created successfully for targets: ['Voltage (V)', 'Current (A)', 'Resistance (Ohms)', 'SOC (%)', 'SOD (%)', 'SOH (%)', 'Cell Temperature (°C)', 'Ambient Temperature (°C)']
+2025-05-04 08:37:48,544 - INFO - Completed 'create_lag_features' in 9.37 seconds
+2025-05-04 08:37:48,924 - INFO - Started execution of 'train_time_series_models'
+2025-05-04 08:37:48,925 - INFO - Training time-series model for Voltage (V)...
+2025-05-05 08:32:51,573 - INFO - Job Run ID: 081fc8a6-5b15-43ec-8c05-7b208e833402
+2025-05-05 08:32:51,573 - INFO - Created folder for plots: plots_081fc8a6-5b15-43ec-8c05-7b208e833402
+2025-05-05 08:32:51,573 - INFO - Started execution of 'load_data'
+2025-05-05 08:32:57,892 - INFO - Data loaded successfully.
+2025-05-05 08:32:57,892 - INFO - Completed 'load_data' in 6.32 seconds
+2025-05-05 08:32:57,892 - INFO - Started execution of 'perform_eda'
+2025-05-05 08:32:57,892 - INFO - Performing EDA...
+2025-05-05 08:32:57,894 - INFO - Dataset Info:
+None
+2025-05-05 08:32:59,143 - INFO - Summary Statistics:
+        Voltage (V)   Current (A)  Resistance (Ohms)       SOC (%)       SOD (%)       SOH (%)  Cell Temperature (°C)  Ambient Temperature (°C)                      Timestamp
+count  9.999999e+06  9.999999e+06       9.999999e+06  9.999999e+06  9.999999e+06  9.999999e+06           9.999999e+06              9.999999e+06                        9999999
+mean   3.599916e+00  1.250046e+00       3.327103e+00  7.501019e+01  2.498981e+01  9.500086e+01           3.699952e+01              3.900092e+01  2024-01-01 11:59:10.568674304
+min    3.000000e+00  5.000000e-01       1.500000e+00  5.000000e+01  0.000000e+00  9.000000e+01           3.200000e+01              3.200000e+01            2023-01-01 00:00:13
+25%    3.300000e+00  8.700000e-01       2.210000e+00  6.200000e+01  1.200000e+01  9.200000e+01           3.450000e+01              3.550000e+01     2023-07-02 14:17:46.500000
+50%    3.600000e+00  1.250000e+00       2.880000e+00  7.500000e+01  2.500000e+01  9.500000e+01           3.700000e+01              3.900000e+01            2024-01-01 12:52:59
+75%    3.900000e+00  1.630000e+00       4.110000e+00  8.800000e+01  3.800000e+01  9.800000e+01           3.950000e+01              4.250000e+01     2024-07-02 04:43:27.500000
+max    4.200000e+00  2.000000e+00       8.400000e+00  1.000000e+02  5.000000e+01  1.000000e+02           4.200000e+01              4.600000e+01            2024-12-31 23:59:57
+std    3.464749e-01  4.331108e-01       1.418161e+00  1.471605e+01  1.471605e+01  3.162633e+00           2.886914e+00              4.041078e+00                            NaN
+2025-05-05 08:32:59,638 - INFO - Missing Values:
+Battery ID                  0
+Cell ID                     0
+Voltage (V)                 0
+Current (A)                 0
+Resistance (Ohms)           0
+SOC (%)                     0
+SOD (%)                     0
+SOH (%)                     0
+Cell Temperature (°C)       0
+Ambient Temperature (°C)    0
+Timestamp                   0
+State of Cell               0
+Communication               0
+dtype: int64
+2025-05-05 08:32:59,764 - INFO - Unique Values in 'State of Cell': ['dead' 'live']
+2025-05-05 08:32:59,904 - INFO - Unique Values in 'Communication': ['no' 'yes']
+2025-05-05 08:32:59,904 - INFO - logged Summary Statistics Successfully
+2025-05-05 08:32:59,904 - INFO - Plotting histograms and correlation heatmap...
+2025-05-05 08:32:59,904 - INFO - Plotting Distribution of Numerical Features...
+2025-05-05 08:33:00,076 - ERROR - Error during Distribution of Numerical Features Plotting: "['Cell Temperature', 'Ambient Temperature'] not in index"
+2025-05-05 08:33:00,076 - ERROR - Error during plotting: "['Cell Temperature', 'Ambient Temperature'] not in index"
+2025-05-05 08:33:00,076 - ERROR - Error during EDA: "['Cell Temperature', 'Ambient Temperature'] not in index"
+2025-05-05 08:33:00,076 - ERROR - Error in 'perform_eda': "['Cell Temperature', 'Ambient Temperature'] not in index"
+2025-05-05 08:33:00,076 - CRITICAL - Critical error: "['Cell Temperature', 'Ambient Temperature'] not in index"
+2025-05-05 08:34:21,025 - INFO - Job Run ID: 77f76f7c-a7a9-4565-8250-6137e8d4edf2
+2025-05-05 08:34:21,025 - INFO - Created folder for plots: plots_77f76f7c-a7a9-4565-8250-6137e8d4edf2
+2025-05-05 08:34:21,025 - INFO - Started execution of 'load_data'
+2025-05-05 08:34:27,114 - INFO - Data loaded successfully.
+2025-05-05 08:34:27,114 - INFO - Completed 'load_data' in 6.09 seconds
+2025-05-05 08:34:27,114 - INFO - Started execution of 'perform_eda'
+2025-05-05 08:34:27,114 - INFO - Performing EDA...
+2025-05-05 08:34:27,115 - INFO - Dataset Info:
+None
+2025-05-05 08:34:28,345 - INFO - Summary Statistics:
+        Voltage (V)   Current (A)  Resistance (Ohms)       SOC (%)       SOD (%)       SOH (%)  Cell Temperature (°C)  Ambient Temperature (°C)                      Timestamp
+count  9.999999e+06  9.999999e+06       9.999999e+06  9.999999e+06  9.999999e+06  9.999999e+06           9.999999e+06              9.999999e+06                        9999999
+mean   3.599916e+00  1.250046e+00       3.327103e+00  7.501019e+01  2.498981e+01  9.500086e+01           3.699952e+01              3.900092e+01  2024-01-01 11:59:10.568674304
+min    3.000000e+00  5.000000e-01       1.500000e+00  5.000000e+01  0.000000e+00  9.000000e+01           3.200000e+01              3.200000e+01            2023-01-01 00:00:13
+25%    3.300000e+00  8.700000e-01       2.210000e+00  6.200000e+01  1.200000e+01  9.200000e+01           3.450000e+01              3.550000e+01     2023-07-02 14:17:46.500000
+50%    3.600000e+00  1.250000e+00       2.880000e+00  7.500000e+01  2.500000e+01  9.500000e+01           3.700000e+01              3.900000e+01            2024-01-01 12:52:59
+75%    3.900000e+00  1.630000e+00       4.110000e+00  8.800000e+01  3.800000e+01  9.800000e+01           3.950000e+01              4.250000e+01     2024-07-02 04:43:27.500000
+max    4.200000e+00  2.000000e+00       8.400000e+00  1.000000e+02  5.000000e+01  1.000000e+02           4.200000e+01              4.600000e+01            2024-12-31 23:59:57
+std    3.464749e-01  4.331108e-01       1.418161e+00  1.471605e+01  1.471605e+01  3.162633e+00           2.886914e+00              4.041078e+00                            NaN
+2025-05-05 08:34:28,847 - INFO - Missing Values:
+Battery ID                  0
+Cell ID                     0
+Voltage (V)                 0
+Current (A)                 0
+Resistance (Ohms)           0
+SOC (%)                     0
+SOD (%)                     0
+SOH (%)                     0
+Cell Temperature (°C)       0
+Ambient Temperature (°C)    0
+Timestamp                   0
+State of Cell               0
+Communication               0
+dtype: int64
+2025-05-05 08:34:28,978 - INFO - Unique Values in 'State of Cell': ['dead' 'live']
+2025-05-05 08:34:29,121 - INFO - Unique Values in 'Communication': ['no' 'yes']
+2025-05-05 08:34:29,121 - INFO - logged Summary Statistics Successfully
+2025-05-05 08:34:29,121 - INFO - Plotting histograms and correlation heatmap...
+2025-05-05 08:34:29,122 - INFO - Plotting Distribution of Numerical Features...
+2025-05-05 08:35:39,784 - INFO - Saved distribution plot to plots_77f76f7c-a7a9-4565-8250-6137e8d4edf2/distribution_numerical_features.png
+2025-05-05 08:35:39,784 - INFO - Plotted Summary Statistics Plot Successfully
+2025-05-05 08:35:39,784 - INFO - Plotting Heatmap...
+2025-05-05 08:35:40,495 - INFO - Saved heatmap to plots_77f76f7c-a7a9-4565-8250-6137e8d4edf2/correlation_heatmap.png
+2025-05-05 08:35:40,495 - INFO - Plotted Heatmap Successfully
+2025-05-05 08:35:40,495 - INFO - Plotting Pairplot...
+2025-05-05 08:39:36,947 - INFO - Saved Pairplot to plots_77f76f7c-a7a9-4565-8250-6137e8d4edf2/pairplot_numerical_features.png
+2025-05-05 08:39:36,947 - INFO - Plotted Pairplot Successfully
+2025-05-05 08:39:36,947 - INFO - Plotting Boxplot...
+2025-05-05 08:40:52,043 - INFO - Saved Boxplot to plots_77f76f7c-a7a9-4565-8250-6137e8d4edf2/boxplot_numerical_features.png
+2025-05-05 08:40:52,043 - INFO - Plotted Boxplot Successfully
+2025-05-05 08:40:52,043 - INFO - Plotting Countplot for Communication ...
+2025-05-05 08:40:58,583 - INFO - Saved Countplot for Communication to plots_77f76f7c-a7a9-4565-8250-6137e8d4edf2/countplot_communication.png
+2025-05-05 08:40:58,583 - INFO - Plotted Countplot for Communication Successfully
+2025-05-05 08:40:58,583 - INFO - Plotting Countplot for State of Cell...
+2025-05-05 08:41:04,822 - INFO - Saved Countplot for State of Cell to plots_77f76f7c-a7a9-4565-8250-6137e8d4edf2/countplot_state_of_cell.png
+2025-05-05 08:41:04,823 - INFO - Plotted Countplot for State of Cell Successfully
+2025-05-05 08:41:04,823 - INFO - Performing trend analysis for a sample Cell ID...
+2025-05-05 08:41:05,134 - INFO - Saved Trend Analysis of Sample Cell to plots_77f76f7c-a7a9-4565-8250-6137e8d4edf2/trend_analysis_sample_cell.png
+2025-05-05 08:41:05,135 - INFO - Plotted Trend Analysis of Sample Cell Successfully
+2025-05-05 08:41:05,135 - INFO - EDA completed successfully.
+2025-05-05 08:41:05,135 - INFO - Completed 'perform_eda' in 398.02 seconds
+2025-05-05 08:41:05,135 - INFO - Started execution of 'preprocess_data'
+2025-05-05 08:41:06,045 - INFO - Data preprocessing completed successfully.
+2025-05-05 08:41:06,045 - INFO - Completed 'preprocess_data' in 0.91 seconds
+2025-05-05 08:41:06,045 - INFO - Started execution of 'create_lag_features'
+2025-05-05 08:41:08,196 - INFO - Lag features created successfully for targets: ['Voltage (V)', 'Current (A)', 'Resistance (Ohms)', 'SOC (%)', 'SOD (%)', 'SOH (%)', 'Cell Temperature (°C)', 'Ambient Temperature (°C)']
+2025-05-05 08:41:08,197 - INFO - Completed 'create_lag_features' in 2.15 seconds
+2025-05-05 08:41:08,370 - INFO - Started execution of 'train_time_series_models'
+2025-05-05 08:41:08,371 - INFO - Training time-series model for Voltage (V)...
+2025-05-05 08:41:10,716 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-05 08:41:10,716 - INFO - Starting hyperparameter tuning for Voltage (V) with the following param_grid:
+2025-05-05 08:41:10,716 - INFO -     n_estimators: [50, 100, 200]
+2025-05-05 08:41:10,716 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-05 08:41:10,716 - INFO -     max_depth: [3, 5, 10]
+2025-05-05 08:44:12,635 - INFO - Job Run ID: 62ecb17a-3e00-45e0-8fe4-9cde0e23e50c
+2025-05-05 08:44:12,635 - INFO - Created folder for plots: plots_62ecb17a-3e00-45e0-8fe4-9cde0e23e50c
+2025-05-05 08:44:12,635 - INFO - Started execution of 'load_data'
+2025-05-05 08:44:19,214 - INFO - Data loaded successfully.
+2025-05-05 08:44:19,215 - INFO - Completed 'load_data' in 6.58 seconds
+2025-05-05 08:44:19,215 - INFO - Started execution of 'perform_eda'
+2025-05-05 08:44:19,215 - INFO - Performing EDA...
+2025-05-05 08:44:19,218 - INFO - Dataset Info:
+None
+2025-05-05 08:44:20,527 - INFO - Summary Statistics:
+        Voltage (V)   Current (A)  Resistance (Ohms)       SOC (%)       SOD (%)       SOH (%)  Cell Temperature (°C)  Ambient Temperature (°C)                      Timestamp
+count  9.999999e+06  9.999999e+06       9.999999e+06  9.999999e+06  9.999999e+06  9.999999e+06           9.999999e+06              9.999999e+06                        9999999
+mean   3.599916e+00  1.250046e+00       3.327103e+00  7.501019e+01  2.498981e+01  9.500086e+01           3.699952e+01              3.900092e+01  2024-01-01 11:59:10.568674304
+min    3.000000e+00  5.000000e-01       1.500000e+00  5.000000e+01  0.000000e+00  9.000000e+01           3.200000e+01              3.200000e+01            2023-01-01 00:00:13
+25%    3.300000e+00  8.700000e-01       2.210000e+00  6.200000e+01  1.200000e+01  9.200000e+01           3.450000e+01              3.550000e+01     2023-07-02 14:17:46.500000
+50%    3.600000e+00  1.250000e+00       2.880000e+00  7.500000e+01  2.500000e+01  9.500000e+01           3.700000e+01              3.900000e+01            2024-01-01 12:52:59
+75%    3.900000e+00  1.630000e+00       4.110000e+00  8.800000e+01  3.800000e+01  9.800000e+01           3.950000e+01              4.250000e+01     2024-07-02 04:43:27.500000
+max    4.200000e+00  2.000000e+00       8.400000e+00  1.000000e+02  5.000000e+01  1.000000e+02           4.200000e+01              4.600000e+01            2024-12-31 23:59:57
+std    3.464749e-01  4.331108e-01       1.418161e+00  1.471605e+01  1.471605e+01  3.162633e+00           2.886914e+00              4.041078e+00                            NaN
+2025-05-05 08:44:21,036 - INFO - Missing Values:
+Battery ID                  0
+Cell ID                     0
+Voltage (V)                 0
+Current (A)                 0
+Resistance (Ohms)           0
+SOC (%)                     0
+SOD (%)                     0
+SOH (%)                     0
+Cell Temperature (°C)       0
+Ambient Temperature (°C)    0
+Timestamp                   0
+State of Cell               0
+Communication               0
+dtype: int64
+2025-05-05 08:44:21,164 - INFO - Unique Values in 'State of Cell': ['dead' 'live']
+2025-05-05 08:44:21,315 - INFO - Unique Values in 'Communication': ['no' 'yes']
+2025-05-05 08:44:21,315 - INFO - logged Summary Statistics Successfully
+2025-05-05 08:44:21,315 - INFO - Plotting histograms and correlation heatmap...
+2025-05-05 08:44:21,315 - INFO - Plotting Distribution of Numerical Features...
+2025-05-05 08:45:33,972 - INFO - Saved distribution plot to plots_62ecb17a-3e00-45e0-8fe4-9cde0e23e50c/distribution_numerical_features.png
+2025-05-05 08:45:33,972 - INFO - Plotted Summary Statistics Plot Successfully
+2025-05-05 08:45:33,972 - INFO - Plotting Heatmap...
+2025-05-05 08:45:34,696 - INFO - Saved heatmap to plots_62ecb17a-3e00-45e0-8fe4-9cde0e23e50c/correlation_heatmap.png
+2025-05-05 08:45:34,696 - INFO - Plotted Heatmap Successfully
+2025-05-05 08:45:34,696 - INFO - Plotting Pairplot...
+2025-05-05 08:49:29,716 - INFO - Saved Pairplot to plots_62ecb17a-3e00-45e0-8fe4-9cde0e23e50c/pairplot_numerical_features.png
+2025-05-05 08:49:29,716 - INFO - Plotted Pairplot Successfully
+2025-05-05 08:49:29,716 - INFO - Plotting Boxplot...
+2025-05-05 08:50:42,803 - INFO - Saved Boxplot to plots_62ecb17a-3e00-45e0-8fe4-9cde0e23e50c/boxplot_numerical_features.png
+2025-05-05 08:50:42,803 - INFO - Plotted Boxplot Successfully
+2025-05-05 08:50:42,803 - INFO - Plotting Countplot for Communication ...
+2025-05-05 08:50:49,366 - INFO - Saved Countplot for Communication to plots_62ecb17a-3e00-45e0-8fe4-9cde0e23e50c/countplot_communication.png
+2025-05-05 08:50:49,367 - INFO - Plotted Countplot for Communication Successfully
+2025-05-05 08:50:49,367 - INFO - Plotting Countplot for State of Cell...
+2025-05-05 08:50:55,619 - INFO - Saved Countplot for State of Cell to plots_62ecb17a-3e00-45e0-8fe4-9cde0e23e50c/countplot_state_of_cell.png
+2025-05-05 08:50:55,619 - INFO - Plotted Countplot for State of Cell Successfully
+2025-05-05 08:50:55,619 - INFO - Performing trend analysis for a sample Cell ID...
+2025-05-05 08:50:55,918 - INFO - Saved Trend Analysis of Sample Cell to plots_62ecb17a-3e00-45e0-8fe4-9cde0e23e50c/trend_analysis_sample_cell.png
+2025-05-05 08:50:55,918 - INFO - Plotted Trend Analysis of Sample Cell Successfully
+2025-05-05 08:50:55,918 - INFO - EDA completed successfully.
+2025-05-05 08:50:55,918 - INFO - Completed 'perform_eda' in 396.70 seconds
+2025-05-05 08:50:55,918 - INFO - Started execution of 'preprocess_data'
+2025-05-05 08:50:56,803 - INFO - Data preprocessing completed successfully.
+2025-05-05 08:50:56,803 - INFO - Completed 'preprocess_data' in 0.88 seconds
+2025-05-05 08:50:56,803 - INFO - Started execution of 'create_lag_features'
+2025-05-05 08:50:58,970 - INFO - Lag features created successfully for targets: ['Voltage (V)', 'Current (A)', 'Resistance (Ohms)', 'SOC (%)', 'SOD (%)', 'SOH (%)', 'Cell Temperature (°C)', 'Ambient Temperature (°C)']
+2025-05-05 08:50:58,970 - INFO - Completed 'create_lag_features' in 2.17 seconds
+2025-05-05 08:50:59,085 - INFO - Started execution of 'train_time_series_models'
+2025-05-05 08:50:59,085 - INFO - Training time-series model for Voltage (V)...
+2025-05-05 08:51:01,451 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-05 08:51:01,451 - INFO - Starting hyperparameter tuning for Voltage (V) with the following param_grid:
+2025-05-05 08:51:01,451 - INFO -     n_estimators: [50, 100, 200]
+2025-05-05 08:51:01,451 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-05 08:51:01,451 - INFO -     max_depth: [3, 5, 10]
+2025-05-05 09:42:40,228 - INFO - Job Run ID: 2b9423e9-3552-4386-9bce-7ddf8f93a607
+2025-05-05 09:42:40,229 - INFO - Created folder for plots: plots_2b9423e9-3552-4386-9bce-7ddf8f93a607
+2025-05-05 09:42:40,229 - INFO - Started execution of 'load_data'
+2025-05-05 09:42:40,353 - INFO - Data loaded successfully.
+2025-05-05 09:42:40,353 - INFO - Completed 'load_data' in 0.12 seconds
+2025-05-05 09:42:40,353 - INFO - Started execution of 'perform_eda'
+2025-05-05 09:42:40,353 - INFO - Performing EDA...
+2025-05-05 09:42:40,365 - INFO - Dataset Info:
+None
+2025-05-05 09:42:40,396 - INFO - Summary Statistics:
+        Voltage (V)   Current (A)  Resistance (Ohms)       SOC (%)       SOD (%)       SOH (%)  Cell Temperature (°C)  Ambient Temperature (°C)                      Timestamp
+count  99999.000000  99999.000000       99999.000000  99999.000000  99999.000000  99999.000000           99999.000000              99999.000000                          99999
+mean       3.599881      1.249560           3.328319     75.011390     24.988610     94.989010              37.007375                 38.980398  2023-12-31 14:05:33.921639424
+min        3.000000      0.500000           1.500000     50.000000      0.000000     90.000000              32.000000                 32.000000            2023-01-01 00:21:27
+25%        3.300000      0.870000           2.220000     62.000000     12.000000     92.000000              34.510000                 35.480000     2023-07-01 11:57:38.500000
+50%        3.600000      1.250000           2.880000     75.000000     25.000000     95.000000              37.010000                 38.970000            2023-12-31 08:35:59
+75%        3.900000      1.620000           4.110000     88.000000     38.000000     98.000000              39.510000                 42.470000            2024-07-01 01:13:00
+max        4.200000      2.000000           8.400000    100.000000     50.000000    100.000000              42.000000                 46.000000            2024-12-31 23:53:58
+std        0.346228      0.432905           1.418999     14.717364     14.717364      3.165165               2.886968                  4.037145                            NaN
+2025-05-05 09:42:40,402 - INFO - Missing Values:
+Battery ID                  0
+Cell ID                     0
+Voltage (V)                 0
+Current (A)                 0
+Resistance (Ohms)           0
+SOC (%)                     0
+SOD (%)                     0
+SOH (%)                     0
+Cell Temperature (°C)       0
+Ambient Temperature (°C)    0
+Timestamp                   0
+State of Cell               0
+Communication               0
+dtype: int64
+2025-05-05 09:42:40,404 - INFO - Unique Values in 'State of Cell': ['live' 'dead']
+2025-05-05 09:42:40,411 - INFO - Unique Values in 'Communication': ['yes' 'no']
+2025-05-05 09:42:40,411 - INFO - logged Summary Statistics Successfully
+2025-05-05 09:42:40,411 - INFO - Plotting histograms and correlation heatmap...
+2025-05-05 09:42:40,411 - INFO - Plotting Distribution of Numerical Features...
+2025-05-05 09:42:42,030 - INFO - Saved distribution plot to plots_2b9423e9-3552-4386-9bce-7ddf8f93a607/distribution_numerical_features.png
+2025-05-05 09:42:42,030 - INFO - Plotted Summary Statistics Plot Successfully
+2025-05-05 09:42:42,030 - INFO - Plotting Heatmap...
+2025-05-05 09:42:42,133 - INFO - Saved heatmap to plots_2b9423e9-3552-4386-9bce-7ddf8f93a607/correlation_heatmap.png
+2025-05-05 09:42:42,133 - INFO - Plotted Heatmap Successfully
+2025-05-05 09:42:42,133 - INFO - Plotting Pairplot...
+2025-05-05 09:42:49,088 - INFO - Saved Pairplot to plots_2b9423e9-3552-4386-9bce-7ddf8f93a607/pairplot_numerical_features.png
+2025-05-05 09:42:49,088 - INFO - Plotted Pairplot Successfully
+2025-05-05 09:42:49,088 - INFO - Plotting Boxplot...
+2025-05-05 09:42:50,082 - INFO - Saved Boxplot to plots_2b9423e9-3552-4386-9bce-7ddf8f93a607/boxplot_numerical_features.png
+2025-05-05 09:42:50,083 - INFO - Plotted Boxplot Successfully
+2025-05-05 09:42:50,083 - INFO - Plotting Countplot for Communication ...
+2025-05-05 09:42:50,215 - INFO - Saved Countplot for Communication to plots_2b9423e9-3552-4386-9bce-7ddf8f93a607/countplot_communication.png
+2025-05-05 09:42:50,215 - INFO - Plotted Countplot for Communication Successfully
+2025-05-05 09:42:50,215 - INFO - Plotting Countplot for State of Cell...
+2025-05-05 09:42:50,336 - INFO - Saved Countplot for State of Cell to plots_2b9423e9-3552-4386-9bce-7ddf8f93a607/countplot_state_of_cell.png
+2025-05-05 09:42:50,336 - INFO - Plotted Countplot for State of Cell Successfully
+2025-05-05 09:42:50,336 - INFO - Performing trend analysis for a sample Cell ID...
+2025-05-05 09:42:50,389 - INFO - Saved Trend Analysis of Sample Cell to plots_2b9423e9-3552-4386-9bce-7ddf8f93a607/trend_analysis_sample_cell.png
+2025-05-05 09:42:50,390 - INFO - Plotted Trend Analysis of Sample Cell Successfully
+2025-05-05 09:42:50,390 - INFO - EDA completed successfully.
+2025-05-05 09:42:50,390 - INFO - Completed 'perform_eda' in 10.04 seconds
+2025-05-05 09:42:50,390 - INFO - Started execution of 'preprocess_data'
+2025-05-05 09:42:50,405 - INFO - Data preprocessing completed successfully.
+2025-05-05 09:42:50,405 - INFO - Completed 'preprocess_data' in 0.02 seconds
+2025-05-05 09:42:50,405 - INFO - Started execution of 'create_lag_features'
+2025-05-05 09:42:50,434 - INFO - Lag features created successfully for targets: ['Voltage (V)', 'Current (A)', 'Resistance (Ohms)', 'SOC (%)', 'SOD (%)', 'SOH (%)', 'Cell Temperature (°C)', 'Ambient Temperature (°C)']
+2025-05-05 09:42:50,434 - INFO - Completed 'create_lag_features' in 0.03 seconds
+2025-05-05 09:42:50,435 - INFO - Started execution of 'train_time_series_models'
+2025-05-05 09:42:50,436 - INFO - Training time-series model for Voltage (V)...
+2025-05-05 09:42:50,454 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-05 09:42:50,454 - INFO - Starting hyperparameter tuning for Voltage (V) with the following param_grid:
+2025-05-05 09:42:50,454 - INFO -     n_estimators: [50, 100, 200]
+2025-05-05 09:42:50,454 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-05 09:42:50,454 - INFO -     max_depth: [3, 5, 10]
+2025-05-05 09:51:35,631 - INFO - Hyperparameter tuning for Voltage (V) completed successfully.
+2025-05-05 09:51:35,632 - INFO - Best hyperparameters for Voltage (V): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 100}
+2025-05-05 09:51:35,632 - INFO - Completed 'tune_hyperparameters' in 525.18 seconds
+2025-05-05 09:51:35,632 - ERROR - Error during time-series model training: name 'grid_search' is not defined
+2025-05-05 09:51:35,632 - ERROR - Error in 'train_time_series_models': name 'grid_search' is not defined
+2025-05-05 09:51:35,632 - CRITICAL - Critical error: name 'grid_search' is not defined
+2025-05-05 09:59:03,889 - INFO - Job Run ID: 5dbfce93-bea4-47cc-be45-41af3d49662e
+2025-05-05 09:59:03,889 - INFO - Created folder for plots: plots_5dbfce93-bea4-47cc-be45-41af3d49662e
+2025-05-05 09:59:03,889 - INFO - Started execution of 'load_data'
+2025-05-05 09:59:04,001 - INFO - Data loaded successfully.
+2025-05-05 09:59:04,001 - INFO - Completed 'load_data' in 0.11 seconds
+2025-05-05 09:59:04,001 - INFO - Started execution of 'perform_eda'
+2025-05-05 09:59:04,001 - INFO - Performing EDA...
+2025-05-05 09:59:04,012 - INFO - Dataset Info:
+None
+2025-05-05 09:59:04,052 - INFO - Summary Statistics:
+        Voltage (V)   Current (A)  Resistance (Ohms)       SOC (%)       SOD (%)       SOH (%)  Cell Temperature (°C)  Ambient Temperature (°C)                      Timestamp
+count  99999.000000  99999.000000       99999.000000  99999.000000  99999.000000  99999.000000           99999.000000              99999.000000                          99999
+mean       3.599881      1.249560           3.328319     75.011390     24.988610     94.989010              37.007375                 38.980398  2023-12-31 14:05:33.921639424
+min        3.000000      0.500000           1.500000     50.000000      0.000000     90.000000              32.000000                 32.000000            2023-01-01 00:21:27
+25%        3.300000      0.870000           2.220000     62.000000     12.000000     92.000000              34.510000                 35.480000     2023-07-01 11:57:38.500000
+50%        3.600000      1.250000           2.880000     75.000000     25.000000     95.000000              37.010000                 38.970000            2023-12-31 08:35:59
+75%        3.900000      1.620000           4.110000     88.000000     38.000000     98.000000              39.510000                 42.470000            2024-07-01 01:13:00
+max        4.200000      2.000000           8.400000    100.000000     50.000000    100.000000              42.000000                 46.000000            2024-12-31 23:53:58
+std        0.346228      0.432905           1.418999     14.717364     14.717364      3.165165               2.886968                  4.037145                            NaN
+2025-05-05 09:59:04,060 - INFO - Missing Values:
+Battery ID                  0
+Cell ID                     0
+Voltage (V)                 0
+Current (A)                 0
+Resistance (Ohms)           0
+SOC (%)                     0
+SOD (%)                     0
+SOH (%)                     0
+Cell Temperature (°C)       0
+Ambient Temperature (°C)    0
+Timestamp                   0
+State of Cell               0
+Communication               0
+dtype: int64
+2025-05-05 09:59:04,063 - INFO - Unique Values in 'State of Cell': ['live' 'dead']
+2025-05-05 09:59:04,065 - INFO - Unique Values in 'Communication': ['yes' 'no']
+2025-05-05 09:59:04,065 - INFO - logged Summary Statistics Successfully
+2025-05-05 09:59:04,065 - INFO - Plotting histograms and correlation heatmap...
+2025-05-05 09:59:04,065 - INFO - Plotting Distribution of Numerical Features...
+2025-05-05 09:59:05,608 - INFO - Saved distribution plot to plots_5dbfce93-bea4-47cc-be45-41af3d49662e/distribution_numerical_features.png
+2025-05-05 09:59:05,608 - INFO - Plotted Summary Statistics Plot Successfully
+2025-05-05 09:59:05,608 - INFO - Plotting Heatmap...
+2025-05-05 09:59:05,714 - INFO - Saved heatmap to plots_5dbfce93-bea4-47cc-be45-41af3d49662e/correlation_heatmap.png
+2025-05-05 09:59:05,714 - INFO - Plotted Heatmap Successfully
+2025-05-05 09:59:05,714 - INFO - Plotting Pairplot...
+2025-05-05 09:59:13,835 - INFO - Saved Pairplot to plots_5dbfce93-bea4-47cc-be45-41af3d49662e/pairplot_numerical_features.png
+2025-05-05 09:59:13,835 - INFO - Plotted Pairplot Successfully
+2025-05-05 09:59:13,835 - INFO - Plotting Boxplot...
+2025-05-05 09:59:15,010 - INFO - Saved Boxplot to plots_5dbfce93-bea4-47cc-be45-41af3d49662e/boxplot_numerical_features.png
+2025-05-05 09:59:15,010 - INFO - Plotted Boxplot Successfully
+2025-05-05 09:59:15,010 - INFO - Plotting Countplot for Communication ...
+2025-05-05 09:59:15,156 - INFO - Saved Countplot for Communication to plots_5dbfce93-bea4-47cc-be45-41af3d49662e/countplot_communication.png
+2025-05-05 09:59:15,157 - INFO - Plotted Countplot for Communication Successfully
+2025-05-05 09:59:15,157 - INFO - Plotting Countplot for State of Cell...
+2025-05-05 09:59:15,312 - INFO - Saved Countplot for State of Cell to plots_5dbfce93-bea4-47cc-be45-41af3d49662e/countplot_state_of_cell.png
+2025-05-05 09:59:15,313 - INFO - Plotted Countplot for State of Cell Successfully
+2025-05-05 09:59:15,313 - INFO - Performing trend analysis for a sample Cell ID...
+2025-05-05 09:59:15,379 - INFO - Saved Trend Analysis of Sample Cell to plots_5dbfce93-bea4-47cc-be45-41af3d49662e/trend_analysis_sample_cell.png
+2025-05-05 09:59:15,379 - INFO - Plotted Trend Analysis of Sample Cell Successfully
+2025-05-05 09:59:15,379 - INFO - EDA completed successfully.
+2025-05-05 09:59:15,379 - INFO - Completed 'perform_eda' in 11.38 seconds
+2025-05-05 09:59:15,379 - INFO - Started execution of 'preprocess_data'
+2025-05-05 09:59:15,393 - INFO - Data preprocessing completed successfully.
+2025-05-05 09:59:15,393 - INFO - Completed 'preprocess_data' in 0.01 seconds
+2025-05-05 09:59:15,393 - INFO - Started execution of 'create_lag_features'
+2025-05-05 09:59:15,422 - INFO - Lag features created successfully for targets: ['Voltage (V)', 'Current (A)', 'Resistance (Ohms)', 'SOC (%)', 'SOD (%)', 'SOH (%)', 'Cell Temperature (°C)', 'Ambient Temperature (°C)']
+2025-05-05 09:59:15,422 - INFO - Completed 'create_lag_features' in 0.03 seconds
+2025-05-05 09:59:15,424 - INFO - Started execution of 'train_time_series_models'
+2025-05-05 09:59:15,424 - INFO - Training time-series model for Voltage (V)...
+2025-05-05 09:59:15,443 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-05 09:59:15,443 - INFO - Starting hyperparameter tuning for Voltage (V) with the following param_grid:
+2025-05-05 09:59:15,443 - INFO -     n_estimators: [50, 100, 200]
+2025-05-05 09:59:15,443 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-05 09:59:15,443 - INFO -     max_depth: [3, 5, 10]
+2025-05-05 10:07:45,957 - INFO - Hyperparameter tuning for Voltage (V) completed successfully.
+2025-05-05 10:07:45,957 - INFO - Best hyperparameters for Voltage (V): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 100}
+2025-05-05 10:07:45,957 - INFO - Completed 'tune_hyperparameters' in 510.51 seconds
+2025-05-05 10:07:45,957 - ERROR - Error during time-series model training: name 'grid_search' is not defined
+2025-05-05 10:07:45,957 - ERROR - Error in 'train_time_series_models': name 'grid_search' is not defined
+2025-05-05 10:07:45,957 - CRITICAL - Critical error: name 'grid_search' is not defined
+2025-05-05 10:27:45,044 - INFO - Job Run ID: 31d62a19-159e-4d05-b756-2c1ef741c739
+2025-05-05 10:27:45,044 - INFO - Created folder for plots: plots_31d62a19-159e-4d05-b756-2c1ef741c739
+2025-05-05 10:27:45,045 - INFO - Started execution of 'load_data'
+2025-05-05 10:27:45,162 - INFO - Data loaded successfully.
+2025-05-05 10:27:45,162 - INFO - Completed 'load_data' in 0.12 seconds
+2025-05-05 10:27:45,162 - INFO - Started execution of 'perform_eda'
+2025-05-05 10:27:45,162 - INFO - Performing EDA...
+2025-05-05 10:27:45,174 - INFO - Dataset Info:
+None
+2025-05-05 10:27:45,207 - INFO - Summary Statistics:
+        Voltage (V)   Current (A)  Resistance (Ohms)       SOC (%)       SOD (%)       SOH (%)  Cell Temperature (°C)  Ambient Temperature (°C)                      Timestamp
+count  99999.000000  99999.000000       99999.000000  99999.000000  99999.000000  99999.000000           99999.000000              99999.000000                          99999
+mean       3.599881      1.249560           3.328319     75.011390     24.988610     94.989010              37.007375                 38.980398  2023-12-31 14:05:33.921639424
+min        3.000000      0.500000           1.500000     50.000000      0.000000     90.000000              32.000000                 32.000000            2023-01-01 00:21:27
+25%        3.300000      0.870000           2.220000     62.000000     12.000000     92.000000              34.510000                 35.480000     2023-07-01 11:57:38.500000
+50%        3.600000      1.250000           2.880000     75.000000     25.000000     95.000000              37.010000                 38.970000            2023-12-31 08:35:59
+75%        3.900000      1.620000           4.110000     88.000000     38.000000     98.000000              39.510000                 42.470000            2024-07-01 01:13:00
+max        4.200000      2.000000           8.400000    100.000000     50.000000    100.000000              42.000000                 46.000000            2024-12-31 23:53:58
+std        0.346228      0.432905           1.418999     14.717364     14.717364      3.165165               2.886968                  4.037145                            NaN
+2025-05-05 10:27:45,216 - INFO - Missing Values:
+Battery ID                  0
+Cell ID                     0
+Voltage (V)                 0
+Current (A)                 0
+Resistance (Ohms)           0
+SOC (%)                     0
+SOD (%)                     0
+SOH (%)                     0
+Cell Temperature (°C)       0
+Ambient Temperature (°C)    0
+Timestamp                   0
+State of Cell               0
+Communication               0
+dtype: int64
+2025-05-05 10:27:45,218 - INFO - Unique Values in 'State of Cell': ['live' 'dead']
+2025-05-05 10:27:45,221 - INFO - Unique Values in 'Communication': ['yes' 'no']
+2025-05-05 10:27:45,221 - INFO - logged Summary Statistics Successfully
+2025-05-05 10:27:45,221 - INFO - Plotting histograms and correlation heatmap...
+2025-05-05 10:27:45,221 - INFO - Plotting Distribution of Numerical Features...
+2025-05-05 10:27:46,939 - INFO - Saved distribution plot to plots_31d62a19-159e-4d05-b756-2c1ef741c739/distribution_numerical_features.png
+2025-05-05 10:27:46,939 - INFO - Plotted Summary Statistics Plot Successfully
+2025-05-05 10:27:46,939 - INFO - Plotting Heatmap...
+2025-05-05 10:27:47,065 - INFO - Saved heatmap to plots_31d62a19-159e-4d05-b756-2c1ef741c739/correlation_heatmap.png
+2025-05-05 10:27:47,065 - INFO - Plotted Heatmap Successfully
+2025-05-05 10:27:47,066 - INFO - Plotting Pairplot...
+2025-05-05 10:27:55,461 - INFO - Saved Pairplot to plots_31d62a19-159e-4d05-b756-2c1ef741c739/pairplot_numerical_features.png
+2025-05-05 10:27:55,462 - INFO - Plotted Pairplot Successfully
+2025-05-05 10:27:55,462 - INFO - Plotting Boxplot...
+2025-05-05 10:27:56,611 - INFO - Saved Boxplot to plots_31d62a19-159e-4d05-b756-2c1ef741c739/boxplot_numerical_features.png
+2025-05-05 10:27:56,611 - INFO - Plotted Boxplot Successfully
+2025-05-05 10:27:56,611 - INFO - Plotting Countplot for Communication ...
+2025-05-05 10:27:56,750 - INFO - Saved Countplot for Communication to plots_31d62a19-159e-4d05-b756-2c1ef741c739/countplot_communication.png
+2025-05-05 10:27:56,751 - INFO - Plotted Countplot for Communication Successfully
+2025-05-05 10:27:56,751 - INFO - Plotting Countplot for State of Cell...
+2025-05-05 10:27:56,919 - INFO - Saved Countplot for State of Cell to plots_31d62a19-159e-4d05-b756-2c1ef741c739/countplot_state_of_cell.png
+2025-05-05 10:27:56,920 - INFO - Plotted Countplot for State of Cell Successfully
+2025-05-05 10:27:56,920 - INFO - Performing trend analysis for a sample Cell ID...
+2025-05-05 10:27:56,980 - INFO - Saved Trend Analysis of Sample Cell to plots_31d62a19-159e-4d05-b756-2c1ef741c739/trend_analysis_sample_cell.png
+2025-05-05 10:27:56,980 - INFO - Plotted Trend Analysis of Sample Cell Successfully
+2025-05-05 10:27:56,980 - INFO - EDA completed successfully.
+2025-05-05 10:27:56,980 - INFO - Completed 'perform_eda' in 11.82 seconds
+2025-05-05 10:27:56,980 - INFO - Started execution of 'preprocess_data'
+2025-05-05 10:27:57,003 - INFO - Data preprocessing completed successfully.
+2025-05-05 10:27:57,003 - INFO - Completed 'preprocess_data' in 0.02 seconds
+2025-05-05 10:27:57,003 - INFO - Started execution of 'create_lag_features'
+2025-05-05 10:27:57,038 - INFO - Lag features created successfully for targets: ['Voltage (V)', 'Current (A)', 'Resistance (Ohms)', 'SOC (%)', 'SOD (%)', 'SOH (%)', 'Cell Temperature (°C)', 'Ambient Temperature (°C)']
+2025-05-05 10:27:57,038 - INFO - Completed 'create_lag_features' in 0.03 seconds
+2025-05-05 10:27:57,039 - INFO - Started execution of 'train_time_series_models'
+2025-05-05 10:27:57,039 - INFO - Training time-series model for Voltage (V)...
+2025-05-05 10:27:57,058 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-05 10:27:57,058 - INFO - Starting hyperparameter tuning for Voltage (V) with the following param_grid:
+2025-05-05 10:27:57,058 - INFO -     n_estimators: [50, 100, 200]
+2025-05-05 10:27:57,058 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-05 10:27:57,058 - INFO -     max_depth: [3, 5, 10]
+2025-05-05 10:35:03,341 - INFO - Hyperparameter tuning for Voltage (V) completed successfully.
+2025-05-05 10:35:03,342 - INFO - Best hyperparameters for Voltage (V): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 100}
+2025-05-05 10:35:03,342 - INFO - Completed 'tune_hyperparameters' in 426.28 seconds
+2025-05-05 10:35:25,446 - INFO - Evaluation metrics for Voltage (V): MSE=0.0834, R2=-0.0001
+2025-05-05 10:35:25,446 - INFO - Training time-series model for Current (A)...
+2025-05-05 10:35:25,461 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-05 10:35:25,462 - INFO - Starting hyperparameter tuning for Current (A) with the following param_grid:
+2025-05-05 10:35:25,462 - INFO -     n_estimators: [50, 100, 200]
+2025-05-05 10:35:25,462 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-05 10:35:25,462 - INFO -     max_depth: [3, 5, 10]
+2025-05-05 10:41:13,302 - INFO - Hyperparameter tuning for Current (A) completed successfully.
+2025-05-05 10:41:13,302 - INFO - Best hyperparameters for Current (A): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-05 10:41:13,302 - INFO - Completed 'tune_hyperparameters' in 347.84 seconds
+2025-05-05 10:41:22,807 - INFO - Evaluation metrics for Current (A): MSE=0.0818, R2=-0.0000
+2025-05-05 10:41:22,807 - INFO - Training time-series model for Resistance (Ohms)...
+2025-05-05 10:41:22,824 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-05 10:41:22,824 - INFO - Starting hyperparameter tuning for Resistance (Ohms) with the following param_grid:
+2025-05-05 10:41:22,824 - INFO -     n_estimators: [50, 100, 200]
+2025-05-05 10:41:22,824 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-05 10:41:22,824 - INFO -     max_depth: [3, 5, 10]
+2025-05-05 10:46:56,937 - INFO - Hyperparameter tuning for Resistance (Ohms) completed successfully.
+2025-05-05 10:46:56,937 - INFO - Best hyperparameters for Resistance (Ohms): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-05 10:46:56,937 - INFO - Completed 'tune_hyperparameters' in 334.11 seconds
+2025-05-05 10:47:06,178 - INFO - Evaluation metrics for Resistance (Ohms): MSE=0.0414, R2=-0.0001
+2025-05-05 10:47:06,178 - INFO - Training time-series model for SOC (%)...
+2025-05-05 10:47:06,193 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-05 10:47:06,193 - INFO - Starting hyperparameter tuning for SOC (%) with the following param_grid:
+2025-05-05 10:47:06,193 - INFO -     n_estimators: [50, 100, 200]
+2025-05-05 10:47:06,193 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-05 10:47:06,193 - INFO -     max_depth: [3, 5, 10]
+2025-05-05 11:12:28,706 - INFO - Hyperparameter tuning for SOC (%) completed successfully.
+2025-05-05 11:12:28,706 - INFO - Best hyperparameters for SOC (%): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-05 11:12:28,706 - INFO - Completed 'tune_hyperparameters' in 1522.51 seconds
+2025-05-05 11:12:37,967 - INFO - Evaluation metrics for SOC (%): MSE=0.0868, R2=-0.0003
+2025-05-05 11:12:37,967 - INFO - Training time-series model for SOD (%)...
+2025-05-05 11:12:37,983 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-05 11:12:37,983 - INFO - Starting hyperparameter tuning for SOD (%) with the following param_grid:
+2025-05-05 11:12:37,983 - INFO -     n_estimators: [50, 100, 200]
+2025-05-05 11:12:37,983 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-05 11:12:37,983 - INFO -     max_depth: [3, 5, 10]
+2025-05-05 11:51:04,762 - INFO - Hyperparameter tuning for SOD (%) completed successfully.
+2025-05-05 11:51:04,762 - INFO - Best hyperparameters for SOD (%): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-05 11:51:04,762 - INFO - Completed 'tune_hyperparameters' in 2306.78 seconds
+2025-05-05 11:51:13,899 - INFO - Evaluation metrics for SOD (%): MSE=0.0868, R2=-0.0003
+2025-05-05 11:51:13,899 - INFO - Training time-series model for SOH (%)...
+2025-05-05 11:51:13,915 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-05 11:51:13,915 - INFO - Starting hyperparameter tuning for SOH (%) with the following param_grid:
+2025-05-05 11:51:13,915 - INFO -     n_estimators: [50, 100, 200]
+2025-05-05 11:51:13,915 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-05 11:51:13,915 - INFO -     max_depth: [3, 5, 10]
+2025-05-05 12:34:33,252 - INFO - Hyperparameter tuning for SOH (%) completed successfully.
+2025-05-05 12:34:33,252 - INFO - Best hyperparameters for SOH (%): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-05 12:34:33,252 - INFO - Completed 'tune_hyperparameters' in 2599.34 seconds
+2025-05-05 12:34:42,332 - INFO - Evaluation metrics for SOH (%): MSE=0.1010, R2=0.0001
+2025-05-05 12:34:42,332 - INFO - Training time-series model for Cell Temperature (°C)...
+2025-05-05 12:34:42,348 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-05 12:34:42,348 - INFO - Starting hyperparameter tuning for Cell Temperature (°C) with the following param_grid:
+2025-05-05 12:34:42,348 - INFO -     n_estimators: [50, 100, 200]
+2025-05-05 12:34:42,348 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-05 12:34:42,348 - INFO -     max_depth: [3, 5, 10]
+2025-05-05 13:02:58,115 - INFO - Hyperparameter tuning for Cell Temperature (°C) completed successfully.
+2025-05-05 13:02:58,115 - INFO - Best hyperparameters for Cell Temperature (°C): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-05 13:02:58,115 - INFO - Completed 'tune_hyperparameters' in 1695.77 seconds
+2025-05-05 13:03:07,129 - INFO - Evaluation metrics for Cell Temperature (°C): MSE=0.0836, R2=-0.0003
+2025-05-05 13:03:07,129 - INFO - Training time-series model for Ambient Temperature (°C)...
+2025-05-05 13:03:07,144 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-05 13:03:07,144 - INFO - Starting hyperparameter tuning for Ambient Temperature (°C) with the following param_grid:
+2025-05-05 13:03:07,144 - INFO -     n_estimators: [50, 100, 200]
+2025-05-05 13:03:07,144 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-05 13:03:07,144 - INFO -     max_depth: [3, 5, 10]
+2025-05-05 13:07:27,949 - INFO - Hyperparameter tuning for Ambient Temperature (°C) completed successfully.
+2025-05-05 13:07:27,949 - INFO - Best hyperparameters for Ambient Temperature (°C): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-05 13:07:27,949 - INFO - Completed 'tune_hyperparameters' in 260.81 seconds
+2025-05-05 13:07:36,984 - INFO - Evaluation metrics for Ambient Temperature (°C): MSE=0.0826, R2=-0.0004
+2025-05-05 13:07:36,984 - INFO - All time-series models trained successfully.
+2025-05-05 13:07:36,985 - INFO - Completed 'train_time_series_models' in 9579.95 seconds
+2025-05-05 13:07:36,985 - INFO - Started execution of 'predict_next_values'
+2025-05-05 13:07:36,992 - INFO - Predicted next value for Voltage (V): 0.5020
+2025-05-05 13:07:36,992 - INFO - Predicted next value for Current (A): 0.4980
+2025-05-05 13:07:36,992 - INFO - Predicted next value for Resistance (Ohms): 0.2654
+2025-05-05 13:07:36,993 - INFO - Predicted next value for SOC (%): 0.4992
+2025-05-05 13:07:36,993 - INFO - Predicted next value for SOD (%): 0.5008
+2025-05-05 13:07:36,993 - INFO - Predicted next value for SOH (%): 0.4991
+2025-05-05 13:07:36,993 - INFO - Predicted next value for Cell Temperature (°C): 0.5011
+2025-05-05 13:07:36,993 - INFO - Predicted next value for Ambient Temperature (°C): 0.5011
+2025-05-05 13:07:36,993 - INFO - Completed 'predict_next_values' in 0.01 seconds
+2025-05-05 13:07:36,993 - INFO - Predicted Next Values for Cell 1234: {'Voltage (V)': np.float64(0.5020066241014098), 'Current (A)': np.float64(0.4980072644873135), 'Resistance (Ohms)': np.float64(0.26538887952462126), 'SOC (%)': np.float64(0.49917293058844464), 'SOD (%)': np.float64(0.5008270694115552), 'SOH (%)': np.float64(0.49914536464483517), 'Cell Temperature (°C)': np.float64(0.5011326820400315), 'Ambient Temperature (°C)': np.float64(0.5011227848957621)}
+2025-05-05 13:07:36,993 - INFO - Total execution time: 9591.95 seconds
+2025-05-06 09:21:45,189 - INFO - Job Run ID: 89255afa-1324-4bc8-aae8-c72e73bf8ee8
+2025-05-06 09:21:45,189 - INFO - Created folder for plots: plots_89255afa-1324-4bc8-aae8-c72e73bf8ee8
+2025-05-06 09:21:45,189 - INFO - Started execution of 'load_data'
+2025-05-06 09:21:45,263 - INFO - Data loaded successfully.
+2025-05-06 09:21:45,263 - INFO - Completed 'load_data' in 0.07 seconds
+2025-05-06 09:21:45,263 - INFO - Started execution of 'perform_eda'
+2025-05-06 09:21:45,263 - INFO - Performing EDA...
+2025-05-06 09:21:45,272 - INFO - Dataset Info:
+None
+2025-05-06 09:21:45,295 - INFO - Summary Statistics:
+        Voltage (V)   Current (A)  ...  Ambient Temperature (°C)                      Timestamp
+count  99999.000000  99999.000000  ...              99999.000000                          99999
+mean       3.599881      1.249560  ...                 38.980398  2023-12-31 14:05:33.921639424
+min        3.000000      0.500000  ...                 32.000000            2023-01-01 00:21:27
+25%        3.300000      0.870000  ...                 35.480000     2023-07-01 11:57:38.500000
+50%        3.600000      1.250000  ...                 38.970000            2023-12-31 08:35:59
+75%        3.900000      1.620000  ...                 42.470000            2024-07-01 01:13:00
+max        4.200000      2.000000  ...                 46.000000            2024-12-31 23:53:58
+std        0.346228      0.432905  ...                  4.037145                            NaN
+
+[8 rows x 9 columns]
+2025-05-06 09:21:45,301 - INFO - Missing Values:
+Battery ID                  0
+Cell ID                     0
+Voltage (V)                 0
+Current (A)                 0
+Resistance (Ohms)           0
+SOC (%)                     0
+SOD (%)                     0
+SOH (%)                     0
+Cell Temperature (°C)       0
+Ambient Temperature (°C)    0
+Timestamp                   0
+State of Cell               0
+Communication               0
+dtype: int64
+2025-05-06 09:21:45,302 - INFO - Unique Values in 'State of Cell': ['live' 'dead']
+2025-05-06 09:21:45,304 - INFO - Unique Values in 'Communication': ['yes' 'no']
+2025-05-06 09:21:45,304 - INFO - logged Summary Statistics Successfully
+2025-05-06 09:21:45,304 - INFO - Plotting histograms and correlation heatmap...
+2025-05-06 09:21:45,304 - INFO - Plotting Distribution of Numerical Features...
+2025-05-06 09:21:46,260 - INFO - Saved distribution plot to plots_89255afa-1324-4bc8-aae8-c72e73bf8ee8/distribution_numerical_features.png
+2025-05-06 09:21:46,260 - INFO - Plotted Summary Statistics Plot Successfully
+2025-05-06 09:21:46,260 - INFO - Plotting Heatmap...
+2025-05-06 09:21:46,336 - INFO - Saved heatmap to plots_89255afa-1324-4bc8-aae8-c72e73bf8ee8/correlation_heatmap.png
+2025-05-06 09:21:46,336 - INFO - Plotted Heatmap Successfully
+2025-05-06 09:21:46,336 - INFO - Plotting Pairplot...
+2025-05-06 09:21:51,386 - INFO - Saved Pairplot to plots_89255afa-1324-4bc8-aae8-c72e73bf8ee8/pairplot_numerical_features.png
+2025-05-06 09:21:51,386 - INFO - Plotted Pairplot Successfully
+2025-05-06 09:21:51,387 - INFO - Plotting Boxplot...
+2025-05-06 09:21:52,123 - INFO - Saved Boxplot to plots_89255afa-1324-4bc8-aae8-c72e73bf8ee8/boxplot_numerical_features.png
+2025-05-06 09:21:52,123 - INFO - Plotted Boxplot Successfully
+2025-05-06 09:21:52,123 - INFO - Plotting Countplot for Communication ...
+2025-05-06 09:21:52,211 - INFO - Saved Countplot for Communication to plots_89255afa-1324-4bc8-aae8-c72e73bf8ee8/countplot_communication.png
+2025-05-06 09:21:52,211 - INFO - Plotted Countplot for Communication Successfully
+2025-05-06 09:21:52,211 - INFO - Plotting Countplot for State of Cell...
+2025-05-06 09:21:52,301 - INFO - Saved Countplot for State of Cell to plots_89255afa-1324-4bc8-aae8-c72e73bf8ee8/countplot_state_of_cell.png
+2025-05-06 09:21:52,302 - INFO - Plotted Countplot for State of Cell Successfully
+2025-05-06 09:21:52,302 - INFO - Performing trend analysis for a sample Cell ID...
+2025-05-06 09:21:52,340 - INFO - Saved Trend Analysis of Sample Cell to plots_89255afa-1324-4bc8-aae8-c72e73bf8ee8/trend_analysis_sample_cell.png
+2025-05-06 09:21:52,340 - INFO - Plotted Trend Analysis of Sample Cell Successfully
+2025-05-06 09:21:52,340 - INFO - EDA completed successfully.
+2025-05-06 09:21:52,340 - INFO - Completed 'perform_eda' in 7.08 seconds
+2025-05-06 09:21:52,340 - INFO - Started execution of 'preprocess_data'
+2025-05-06 09:21:52,347 - ERROR - Error during preprocessing: name 'scalers' is not defined
+2025-05-06 09:21:52,347 - ERROR - Error in 'preprocess_data': name 'scalers' is not defined
+2025-05-06 09:21:52,347 - CRITICAL - Critical error: name 'scalers' is not defined
+2025-05-06 09:27:23,596 - INFO - Job Run ID: 50df87d9-313f-4065-96d9-442cefa11fd6
+2025-05-06 09:27:23,596 - INFO - Created folder for plots: plots_50df87d9-313f-4065-96d9-442cefa11fd6
+2025-05-06 09:27:23,596 - INFO - Started execution of 'load_data'
+2025-05-06 09:27:23,662 - INFO - Data loaded successfully.
+2025-05-06 09:27:23,662 - INFO - Completed 'load_data' in 0.07 seconds
+2025-05-06 09:27:23,662 - INFO - Started execution of 'perform_eda'
+2025-05-06 09:27:23,662 - INFO - Performing EDA...
+2025-05-06 09:27:23,669 - INFO - Dataset Info:
+None
+2025-05-06 09:27:23,688 - INFO - Summary Statistics:
+        Voltage (V)   Current (A)  ...  Ambient Temperature (°C)                      Timestamp
+count  99999.000000  99999.000000  ...              99999.000000                          99999
+mean       3.599881      1.249560  ...                 38.980398  2023-12-31 14:05:33.921639424
+min        3.000000      0.500000  ...                 32.000000            2023-01-01 00:21:27
+25%        3.300000      0.870000  ...                 35.480000     2023-07-01 11:57:38.500000
+50%        3.600000      1.250000  ...                 38.970000            2023-12-31 08:35:59
+75%        3.900000      1.620000  ...                 42.470000            2024-07-01 01:13:00
+max        4.200000      2.000000  ...                 46.000000            2024-12-31 23:53:58
+std        0.346228      0.432905  ...                  4.037145                            NaN
+
+[8 rows x 9 columns]
+2025-05-06 09:27:23,693 - INFO - Missing Values:
+Battery ID                  0
+Cell ID                     0
+Voltage (V)                 0
+Current (A)                 0
+Resistance (Ohms)           0
+SOC (%)                     0
+SOD (%)                     0
+SOH (%)                     0
+Cell Temperature (°C)       0
+Ambient Temperature (°C)    0
+Timestamp                   0
+State of Cell               0
+Communication               0
+dtype: int64
+2025-05-06 09:27:23,694 - INFO - Unique Values in 'State of Cell': ['live' 'dead']
+2025-05-06 09:27:23,696 - INFO - Unique Values in 'Communication': ['yes' 'no']
+2025-05-06 09:27:23,696 - INFO - logged Summary Statistics Successfully
+2025-05-06 09:27:23,696 - INFO - Plotting histograms and correlation heatmap...
+2025-05-06 09:27:23,696 - INFO - Plotting Distribution of Numerical Features...
+2025-05-06 09:27:24,620 - INFO - Saved distribution plot to plots_50df87d9-313f-4065-96d9-442cefa11fd6/distribution_numerical_features.png
+2025-05-06 09:27:24,620 - INFO - Plotted Summary Statistics Plot Successfully
+2025-05-06 09:27:24,620 - INFO - Plotting Heatmap...
+2025-05-06 09:27:24,697 - INFO - Saved heatmap to plots_50df87d9-313f-4065-96d9-442cefa11fd6/correlation_heatmap.png
+2025-05-06 09:27:24,697 - INFO - Plotted Heatmap Successfully
+2025-05-06 09:27:24,697 - INFO - Plotting Pairplot...
+2025-05-06 09:27:29,809 - INFO - Saved Pairplot to plots_50df87d9-313f-4065-96d9-442cefa11fd6/pairplot_numerical_features.png
+2025-05-06 09:27:29,809 - INFO - Plotted Pairplot Successfully
+2025-05-06 09:27:29,809 - INFO - Plotting Boxplot...
+2025-05-06 09:27:30,554 - INFO - Saved Boxplot to plots_50df87d9-313f-4065-96d9-442cefa11fd6/boxplot_numerical_features.png
+2025-05-06 09:27:30,554 - INFO - Plotted Boxplot Successfully
+2025-05-06 09:27:30,554 - INFO - Plotting Countplot for Communication ...
+2025-05-06 09:27:30,642 - INFO - Saved Countplot for Communication to plots_50df87d9-313f-4065-96d9-442cefa11fd6/countplot_communication.png
+2025-05-06 09:27:30,642 - INFO - Plotted Countplot for Communication Successfully
+2025-05-06 09:27:30,642 - INFO - Plotting Countplot for State of Cell...
+2025-05-06 09:27:30,730 - INFO - Saved Countplot for State of Cell to plots_50df87d9-313f-4065-96d9-442cefa11fd6/countplot_state_of_cell.png
+2025-05-06 09:27:30,730 - INFO - Plotted Countplot for State of Cell Successfully
+2025-05-06 09:27:30,730 - INFO - Performing trend analysis for a sample Cell ID...
+2025-05-06 09:27:30,768 - INFO - Saved Trend Analysis of Sample Cell to plots_50df87d9-313f-4065-96d9-442cefa11fd6/trend_analysis_sample_cell.png
+2025-05-06 09:27:30,768 - INFO - Plotted Trend Analysis of Sample Cell Successfully
+2025-05-06 09:27:30,768 - INFO - EDA completed successfully.
+2025-05-06 09:27:30,768 - INFO - Completed 'perform_eda' in 7.11 seconds
+2025-05-06 09:27:30,768 - INFO - Started execution of 'preprocess_data'
+2025-05-06 09:27:30,777 - ERROR - Error during preprocessing: name 'scalers' is not defined
+2025-05-06 09:27:30,777 - ERROR - Error in 'preprocess_data': name 'scalers' is not defined
+2025-05-06 09:27:30,777 - CRITICAL - Critical error: name 'scalers' is not defined
+2025-05-06 09:27:48,395 - INFO - Job Run ID: 92296a75-0734-4eeb-8162-210e019ed66c
+2025-05-06 09:27:48,396 - INFO - Created folder for plots: plots_92296a75-0734-4eeb-8162-210e019ed66c
+2025-05-06 09:27:48,396 - INFO - Started execution of 'load_data'
+2025-05-06 09:27:48,464 - INFO - Data loaded successfully.
+2025-05-06 09:27:48,464 - INFO - Completed 'load_data' in 0.07 seconds
+2025-05-06 09:27:48,464 - INFO - Started execution of 'perform_eda'
+2025-05-06 09:27:48,464 - INFO - Performing EDA...
+2025-05-06 09:27:48,470 - INFO - Dataset Info:
+None
+2025-05-06 09:27:48,489 - INFO - Summary Statistics:
+        Voltage (V)   Current (A)  ...  Ambient Temperature (°C)                      Timestamp
+count  99999.000000  99999.000000  ...              99999.000000                          99999
+mean       3.599881      1.249560  ...                 38.980398  2023-12-31 14:05:33.921639424
+min        3.000000      0.500000  ...                 32.000000            2023-01-01 00:21:27
+25%        3.300000      0.870000  ...                 35.480000     2023-07-01 11:57:38.500000
+50%        3.600000      1.250000  ...                 38.970000            2023-12-31 08:35:59
+75%        3.900000      1.620000  ...                 42.470000            2024-07-01 01:13:00
+max        4.200000      2.000000  ...                 46.000000            2024-12-31 23:53:58
+std        0.346228      0.432905  ...                  4.037145                            NaN
+
+[8 rows x 9 columns]
+2025-05-06 09:27:48,494 - INFO - Missing Values:
+Battery ID                  0
+Cell ID                     0
+Voltage (V)                 0
+Current (A)                 0
+Resistance (Ohms)           0
+SOC (%)                     0
+SOD (%)                     0
+SOH (%)                     0
+Cell Temperature (°C)       0
+Ambient Temperature (°C)    0
+Timestamp                   0
+State of Cell               0
+Communication               0
+dtype: int64
+2025-05-06 09:27:48,495 - INFO - Unique Values in 'State of Cell': ['live' 'dead']
+2025-05-06 09:27:48,497 - INFO - Unique Values in 'Communication': ['yes' 'no']
+2025-05-06 09:27:48,497 - INFO - logged Summary Statistics Successfully
+2025-05-06 09:27:48,497 - INFO - Plotting histograms and correlation heatmap...
+2025-05-06 09:27:48,497 - INFO - Plotting Distribution of Numerical Features...
+2025-05-06 09:27:49,417 - INFO - Saved distribution plot to plots_92296a75-0734-4eeb-8162-210e019ed66c/distribution_numerical_features.png
+2025-05-06 09:27:49,417 - INFO - Plotted Summary Statistics Plot Successfully
+2025-05-06 09:27:49,417 - INFO - Plotting Heatmap...
+2025-05-06 09:27:49,494 - INFO - Saved heatmap to plots_92296a75-0734-4eeb-8162-210e019ed66c/correlation_heatmap.png
+2025-05-06 09:27:49,494 - INFO - Plotted Heatmap Successfully
+2025-05-06 09:27:49,494 - INFO - Plotting Pairplot...
+2025-05-06 09:27:54,607 - INFO - Saved Pairplot to plots_92296a75-0734-4eeb-8162-210e019ed66c/pairplot_numerical_features.png
+2025-05-06 09:27:54,607 - INFO - Plotted Pairplot Successfully
+2025-05-06 09:27:54,607 - INFO - Plotting Boxplot...
+2025-05-06 09:27:55,369 - INFO - Saved Boxplot to plots_92296a75-0734-4eeb-8162-210e019ed66c/boxplot_numerical_features.png
+2025-05-06 09:27:55,369 - INFO - Plotted Boxplot Successfully
+2025-05-06 09:27:55,369 - INFO - Plotting Countplot for Communication ...
+2025-05-06 09:27:55,459 - INFO - Saved Countplot for Communication to plots_92296a75-0734-4eeb-8162-210e019ed66c/countplot_communication.png
+2025-05-06 09:27:55,459 - INFO - Plotted Countplot for Communication Successfully
+2025-05-06 09:27:55,459 - INFO - Plotting Countplot for State of Cell...
+2025-05-06 09:27:55,546 - INFO - Saved Countplot for State of Cell to plots_92296a75-0734-4eeb-8162-210e019ed66c/countplot_state_of_cell.png
+2025-05-06 09:27:55,547 - INFO - Plotted Countplot for State of Cell Successfully
+2025-05-06 09:27:55,547 - INFO - Performing trend analysis for a sample Cell ID...
+2025-05-06 09:27:55,584 - INFO - Saved Trend Analysis of Sample Cell to plots_92296a75-0734-4eeb-8162-210e019ed66c/trend_analysis_sample_cell.png
+2025-05-06 09:27:55,584 - INFO - Plotted Trend Analysis of Sample Cell Successfully
+2025-05-06 09:27:55,584 - INFO - EDA completed successfully.
+2025-05-06 09:27:55,584 - INFO - Completed 'perform_eda' in 7.12 seconds
+2025-05-06 09:27:55,584 - INFO - Started execution of 'preprocess_data'
+2025-05-06 09:27:55,591 - ERROR - Error during preprocessing: name 'scalers' is not defined
+2025-05-06 09:27:55,591 - ERROR - Error in 'preprocess_data': name 'scalers' is not defined
+2025-05-06 09:27:55,591 - CRITICAL - Critical error: name 'scalers' is not defined
+2025-05-06 09:30:28,849 - INFO - Job Run ID: 9948f0f7-9eb7-4e05-adca-f58a820e3eca
+2025-05-06 09:30:28,849 - INFO - Created folder for plots: plots_9948f0f7-9eb7-4e05-adca-f58a820e3eca
+2025-05-06 09:30:28,849 - INFO - Started execution of 'load_data'
+2025-05-06 09:30:28,916 - INFO - Data loaded successfully.
+2025-05-06 09:30:28,916 - INFO - Completed 'load_data' in 0.07 seconds
+2025-05-06 09:30:28,917 - INFO - Started execution of 'perform_eda'
+2025-05-06 09:30:28,917 - INFO - Performing EDA...
+2025-05-06 09:30:28,923 - INFO - Dataset Info:
+None
+2025-05-06 09:30:28,942 - INFO - Summary Statistics:
+        Voltage (V)   Current (A)  ...  Ambient Temperature (°C)                      Timestamp
+count  99999.000000  99999.000000  ...              99999.000000                          99999
+mean       3.599881      1.249560  ...                 38.980398  2023-12-31 14:05:33.921639424
+min        3.000000      0.500000  ...                 32.000000            2023-01-01 00:21:27
+25%        3.300000      0.870000  ...                 35.480000     2023-07-01 11:57:38.500000
+50%        3.600000      1.250000  ...                 38.970000            2023-12-31 08:35:59
+75%        3.900000      1.620000  ...                 42.470000            2024-07-01 01:13:00
+max        4.200000      2.000000  ...                 46.000000            2024-12-31 23:53:58
+std        0.346228      0.432905  ...                  4.037145                            NaN
+
+[8 rows x 9 columns]
+2025-05-06 09:30:28,947 - INFO - Missing Values:
+Battery ID                  0
+Cell ID                     0
+Voltage (V)                 0
+Current (A)                 0
+Resistance (Ohms)           0
+SOC (%)                     0
+SOD (%)                     0
+SOH (%)                     0
+Cell Temperature (°C)       0
+Ambient Temperature (°C)    0
+Timestamp                   0
+State of Cell               0
+Communication               0
+dtype: int64
+2025-05-06 09:30:28,948 - INFO - Unique Values in 'State of Cell': ['live' 'dead']
+2025-05-06 09:30:28,950 - INFO - Unique Values in 'Communication': ['yes' 'no']
+2025-05-06 09:30:28,950 - INFO - logged Summary Statistics Successfully
+2025-05-06 09:30:28,950 - INFO - Plotting histograms and correlation heatmap...
+2025-05-06 09:30:28,950 - INFO - Plotting Distribution of Numerical Features...
+2025-05-06 09:30:29,881 - INFO - Saved distribution plot to plots_9948f0f7-9eb7-4e05-adca-f58a820e3eca/distribution_numerical_features.png
+2025-05-06 09:30:29,882 - INFO - Plotted Summary Statistics Plot Successfully
+2025-05-06 09:30:29,882 - INFO - Plotting Heatmap...
+2025-05-06 09:30:29,959 - INFO - Saved heatmap to plots_9948f0f7-9eb7-4e05-adca-f58a820e3eca/correlation_heatmap.png
+2025-05-06 09:30:29,959 - INFO - Plotted Heatmap Successfully
+2025-05-06 09:30:29,959 - INFO - Plotting Pairplot...
+2025-05-06 09:30:35,064 - INFO - Saved Pairplot to plots_9948f0f7-9eb7-4e05-adca-f58a820e3eca/pairplot_numerical_features.png
+2025-05-06 09:30:35,064 - INFO - Plotted Pairplot Successfully
+2025-05-06 09:30:35,064 - INFO - Plotting Boxplot...
+2025-05-06 09:30:35,829 - INFO - Saved Boxplot to plots_9948f0f7-9eb7-4e05-adca-f58a820e3eca/boxplot_numerical_features.png
+2025-05-06 09:30:35,829 - INFO - Plotted Boxplot Successfully
+2025-05-06 09:30:35,829 - INFO - Plotting Countplot for Communication ...
+2025-05-06 09:30:35,919 - INFO - Saved Countplot for Communication to plots_9948f0f7-9eb7-4e05-adca-f58a820e3eca/countplot_communication.png
+2025-05-06 09:30:35,919 - INFO - Plotted Countplot for Communication Successfully
+2025-05-06 09:30:35,919 - INFO - Plotting Countplot for State of Cell...
+2025-05-06 09:30:36,015 - INFO - Saved Countplot for State of Cell to plots_9948f0f7-9eb7-4e05-adca-f58a820e3eca/countplot_state_of_cell.png
+2025-05-06 09:30:36,015 - INFO - Plotted Countplot for State of Cell Successfully
+2025-05-06 09:30:36,015 - INFO - Performing trend analysis for a sample Cell ID...
+2025-05-06 09:30:36,053 - INFO - Saved Trend Analysis of Sample Cell to plots_9948f0f7-9eb7-4e05-adca-f58a820e3eca/trend_analysis_sample_cell.png
+2025-05-06 09:30:36,053 - INFO - Plotted Trend Analysis of Sample Cell Successfully
+2025-05-06 09:30:36,053 - INFO - EDA completed successfully.
+2025-05-06 09:30:36,053 - INFO - Completed 'perform_eda' in 7.14 seconds
+2025-05-06 09:30:36,053 - INFO - Started execution of 'preprocess_data'
+2025-05-06 09:30:36,066 - INFO - Data preprocessing completed successfully.
+2025-05-06 09:30:36,066 - INFO - Completed 'preprocess_data' in 0.01 seconds
+2025-05-06 09:30:36,066 - INFO - Started execution of 'create_lag_features'
+2025-05-06 09:30:36,086 - INFO - Lag features created successfully for targets: ['Voltage (V)', 'Current (A)', 'Resistance (Ohms)', 'SOC (%)', 'SOD (%)', 'SOH (%)', 'Cell Temperature (°C)', 'Ambient Temperature (°C)']
+2025-05-06 09:30:36,087 - INFO - Completed 'create_lag_features' in 0.02 seconds
+2025-05-06 09:30:36,088 - INFO - Started execution of 'train_time_series_models'
+2025-05-06 09:30:36,088 - INFO - Training time-series model for Voltage (V)...
+2025-05-06 09:30:36,098 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 09:30:36,099 - INFO - Starting hyperparameter tuning for Voltage (V) with the following param_grid:
+2025-05-06 09:30:36,099 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 09:30:36,099 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 09:30:36,099 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 09:34:30,282 - INFO - Hyperparameter tuning for Voltage (V) completed successfully.
+2025-05-06 09:34:30,282 - INFO - Best hyperparameters for Voltage (V): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 100}
+2025-05-06 09:34:30,282 - INFO - Completed 'tune_hyperparameters' in 234.18 seconds
+2025-05-06 09:34:47,595 - INFO - Evaluation metrics for Voltage (V): MSE=0.0834, R2=-0.0001
+2025-05-06 09:34:47,595 - INFO - Training time-series model for Current (A)...
+2025-05-06 09:34:47,607 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 09:34:47,607 - INFO - Starting hyperparameter tuning for Current (A) with the following param_grid:
+2025-05-06 09:34:47,607 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 09:34:47,607 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 09:34:47,607 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 10:24:39,871 - INFO - Hyperparameter tuning for Current (A) completed successfully.
+2025-05-06 10:24:39,871 - INFO - Best hyperparameters for Current (A): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-06 10:24:39,871 - INFO - Completed 'tune_hyperparameters' in 2992.26 seconds
+2025-05-06 10:24:48,008 - INFO - Evaluation metrics for Current (A): MSE=0.0818, R2=-0.0000
+2025-05-06 10:24:48,009 - INFO - Training time-series model for Resistance (Ohms)...
+2025-05-06 10:24:48,019 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 10:24:48,019 - INFO - Starting hyperparameter tuning for Resistance (Ohms) with the following param_grid:
+2025-05-06 10:24:48,019 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 10:24:48,019 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 10:24:48,019 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 10:28:31,386 - INFO - Hyperparameter tuning for Resistance (Ohms) completed successfully.
+2025-05-06 10:28:31,386 - INFO - Best hyperparameters for Resistance (Ohms): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-06 10:28:31,386 - INFO - Completed 'tune_hyperparameters' in 223.37 seconds
+2025-05-06 10:28:40,040 - INFO - Evaluation metrics for Resistance (Ohms): MSE=0.0414, R2=-0.0001
+2025-05-06 10:28:40,040 - INFO - Training time-series model for SOC (%)...
+2025-05-06 10:28:40,052 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 10:28:40,052 - INFO - Starting hyperparameter tuning for SOC (%) with the following param_grid:
+2025-05-06 10:28:40,052 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 10:28:40,052 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 10:28:40,052 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 10:32:29,911 - INFO - Hyperparameter tuning for SOC (%) completed successfully.
+2025-05-06 10:32:29,912 - INFO - Best hyperparameters for SOC (%): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-06 10:32:29,912 - INFO - Completed 'tune_hyperparameters' in 229.86 seconds
+2025-05-06 10:32:38,625 - INFO - Evaluation metrics for SOC (%): MSE=0.0868, R2=-0.0003
+2025-05-06 10:32:38,625 - INFO - Training time-series model for SOD (%)...
+2025-05-06 10:32:38,637 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 10:32:38,637 - INFO - Starting hyperparameter tuning for SOD (%) with the following param_grid:
+2025-05-06 10:32:38,637 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 10:32:38,637 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 10:32:38,637 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 10:55:15,537 - INFO - Hyperparameter tuning for SOD (%) completed successfully.
+2025-05-06 10:55:15,537 - INFO - Best hyperparameters for SOD (%): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-06 10:55:15,537 - INFO - Completed 'tune_hyperparameters' in 1356.90 seconds
+2025-05-06 10:55:23,971 - INFO - Evaluation metrics for SOD (%): MSE=0.0868, R2=-0.0003
+2025-05-06 10:55:23,971 - INFO - Training time-series model for SOH (%)...
+2025-05-06 10:55:23,982 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 10:55:23,982 - INFO - Starting hyperparameter tuning for SOH (%) with the following param_grid:
+2025-05-06 10:55:23,982 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 10:55:23,982 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 10:55:23,982 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 10:59:09,521 - INFO - Hyperparameter tuning for SOH (%) completed successfully.
+2025-05-06 10:59:09,521 - INFO - Best hyperparameters for SOH (%): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-06 10:59:09,521 - INFO - Completed 'tune_hyperparameters' in 225.54 seconds
+2025-05-06 10:59:18,148 - INFO - Evaluation metrics for SOH (%): MSE=0.1010, R2=0.0001
+2025-05-06 10:59:18,148 - INFO - Training time-series model for Cell Temperature (°C)...
+2025-05-06 10:59:18,160 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 10:59:18,160 - INFO - Starting hyperparameter tuning for Cell Temperature (°C) with the following param_grid:
+2025-05-06 10:59:18,160 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 10:59:18,160 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 10:59:18,160 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 11:03:02,814 - INFO - Hyperparameter tuning for Cell Temperature (°C) completed successfully.
+2025-05-06 11:03:02,814 - INFO - Best hyperparameters for Cell Temperature (°C): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-06 11:03:02,814 - INFO - Completed 'tune_hyperparameters' in 224.65 seconds
+2025-05-06 11:03:11,417 - INFO - Evaluation metrics for Cell Temperature (°C): MSE=0.0836, R2=-0.0003
+2025-05-06 11:03:11,417 - INFO - Training time-series model for Ambient Temperature (°C)...
+2025-05-06 11:03:11,429 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 11:03:11,429 - INFO - Starting hyperparameter tuning for Ambient Temperature (°C) with the following param_grid:
+2025-05-06 11:03:11,429 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 11:03:11,429 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 11:03:11,429 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 11:25:09,481 - INFO - Hyperparameter tuning for Ambient Temperature (°C) completed successfully.
+2025-05-06 11:25:09,481 - INFO - Best hyperparameters for Ambient Temperature (°C): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-06 11:25:09,481 - INFO - Completed 'tune_hyperparameters' in 1318.05 seconds
+2025-05-06 11:25:18,223 - INFO - Evaluation metrics for Ambient Temperature (°C): MSE=0.0826, R2=-0.0004
+2025-05-06 11:25:18,223 - INFO - All time-series models trained successfully.
+2025-05-06 11:25:18,223 - INFO - Completed 'train_time_series_models' in 6882.14 seconds
+2025-05-06 11:25:18,223 - INFO - Started execution of 'predict_next_values'
+2025-05-06 11:25:18,228 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 11:25:18,228 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 11:25:18,228 - INFO - Predicted next value for Voltage (V): 0.5020
+2025-05-06 11:25:18,229 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 11:25:18,229 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 11:25:18,229 - INFO - Predicted next value for Current (A): 0.4980
+2025-05-06 11:25:18,229 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 11:25:18,229 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 11:25:18,229 - INFO - Predicted next value for Resistance (Ohms): 0.2654
+2025-05-06 11:25:18,229 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 11:25:18,229 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 11:25:18,229 - INFO - Predicted next value for SOC (%): 0.4992
+2025-05-06 11:25:18,229 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 11:25:18,229 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 11:25:18,229 - INFO - Predicted next value for SOD (%): 0.5008
+2025-05-06 11:25:18,230 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 11:25:18,230 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 11:25:18,230 - INFO - Predicted next value for SOH (%): 0.4991
+2025-05-06 11:25:18,230 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 11:25:18,230 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 11:25:18,230 - INFO - Predicted next value for Cell Temperature (°C): 0.5011
+2025-05-06 11:25:18,230 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 11:25:18,230 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 11:25:18,230 - INFO - Predicted next value for Ambient Temperature (°C): 0.5011
+2025-05-06 11:25:18,230 - INFO - Completed 'predict_next_values' in 0.01 seconds
+2025-05-06 11:25:18,230 - INFO - Predicted Next Values for Cell 1234: {'Voltage (V)': np.float64(3.6024079489216922), 'Current (A)': np.float64(1.24701089673097), 'Resistance (Ohms)': np.float64(3.3311832687198866), 'SOC (%)': np.float64(74.95864652942224), 'SOD (%)': np.float64(25.04135347057776), 'SOH (%)': np.float64(94.99145364644835), 'Cell Temperature (°C)': np.float64(37.01132682040031), 'Ambient Temperature (°C)': np.float64(39.01571898854067)}
+2025-05-06 11:25:18,230 - INFO - Total execution time: 6889.38 seconds
+2025-05-06 11:36:44,676 - INFO - Job Run ID: 3cf1e92b-169e-4705-8953-61792edc94d5
+2025-05-06 11:36:44,676 - INFO - Created folder for plots: plots_3cf1e92b-169e-4705-8953-61792edc94d5
+2025-05-06 11:36:44,676 - INFO - Started execution of 'load_data'
+2025-05-06 11:36:44,744 - INFO - Data loaded successfully.
+2025-05-06 11:36:44,744 - INFO - Completed 'load_data' in 0.07 seconds
+2025-05-06 11:36:44,744 - INFO - Started execution of 'perform_eda'
+2025-05-06 11:36:44,744 - INFO - Performing EDA...
+2025-05-06 11:36:44,751 - INFO - Dataset Info:
+None
+2025-05-06 11:36:44,771 - INFO - Summary Statistics:
+        Voltage (V)   Current (A)  ...  Ambient Temperature (°C)                      Timestamp
+count  99999.000000  99999.000000  ...              99999.000000                          99999
+mean       3.599881      1.249560  ...                 38.980398  2023-12-31 14:05:33.921639424
+min        3.000000      0.500000  ...                 32.000000            2023-01-01 00:21:27
+25%        3.300000      0.870000  ...                 35.480000     2023-07-01 11:57:38.500000
+50%        3.600000      1.250000  ...                 38.970000            2023-12-31 08:35:59
+75%        3.900000      1.620000  ...                 42.470000            2024-07-01 01:13:00
+max        4.200000      2.000000  ...                 46.000000            2024-12-31 23:53:58
+std        0.346228      0.432905  ...                  4.037145                            NaN
+
+[8 rows x 9 columns]
+2025-05-06 11:36:44,776 - INFO - Missing Values:
+Battery ID                  0
+Cell ID                     0
+Voltage (V)                 0
+Current (A)                 0
+Resistance (Ohms)           0
+SOC (%)                     0
+SOD (%)                     0
+SOH (%)                     0
+Cell Temperature (°C)       0
+Ambient Temperature (°C)    0
+Timestamp                   0
+State of Cell               0
+Communication               0
+dtype: int64
+2025-05-06 11:36:44,778 - INFO - Unique Values in 'State of Cell': ['live' 'dead']
+2025-05-06 11:36:44,779 - INFO - Unique Values in 'Communication': ['yes' 'no']
+2025-05-06 11:36:44,779 - INFO - logged Summary Statistics Successfully
+2025-05-06 11:36:44,779 - INFO - Plotting histograms and correlation heatmap...
+2025-05-06 11:36:44,779 - INFO - Plotting Distribution of Numerical Features...
+2025-05-06 11:36:45,716 - INFO - Saved distribution plot to plots_3cf1e92b-169e-4705-8953-61792edc94d5/distribution_numerical_features.png
+2025-05-06 11:36:45,717 - INFO - Plotted Summary Statistics Plot Successfully
+2025-05-06 11:36:45,717 - INFO - Plotting Heatmap...
+2025-05-06 11:36:45,794 - INFO - Saved heatmap to plots_3cf1e92b-169e-4705-8953-61792edc94d5/correlation_heatmap.png
+2025-05-06 11:36:45,794 - INFO - Plotted Heatmap Successfully
+2025-05-06 11:36:45,794 - INFO - Plotting Pairplot...
+2025-05-06 11:36:50,934 - INFO - Saved Pairplot to plots_3cf1e92b-169e-4705-8953-61792edc94d5/pairplot_numerical_features.png
+2025-05-06 11:36:50,934 - INFO - Plotted Pairplot Successfully
+2025-05-06 11:36:50,934 - INFO - Plotting Boxplot...
+2025-05-06 11:36:51,721 - INFO - Saved Boxplot to plots_3cf1e92b-169e-4705-8953-61792edc94d5/boxplot_numerical_features.png
+2025-05-06 11:36:51,721 - INFO - Plotted Boxplot Successfully
+2025-05-06 11:36:51,721 - INFO - Plotting Countplot for Communication ...
+2025-05-06 11:36:51,817 - INFO - Saved Countplot for Communication to plots_3cf1e92b-169e-4705-8953-61792edc94d5/countplot_communication.png
+2025-05-06 11:36:51,817 - INFO - Plotted Countplot for Communication Successfully
+2025-05-06 11:36:51,817 - INFO - Plotting Countplot for State of Cell...
+2025-05-06 11:36:51,912 - INFO - Saved Countplot for State of Cell to plots_3cf1e92b-169e-4705-8953-61792edc94d5/countplot_state_of_cell.png
+2025-05-06 11:36:51,912 - INFO - Plotted Countplot for State of Cell Successfully
+2025-05-06 11:36:51,912 - INFO - Performing trend analysis for a sample Cell ID...
+2025-05-06 11:36:51,951 - INFO - Saved Trend Analysis of Sample Cell to plots_3cf1e92b-169e-4705-8953-61792edc94d5/trend_analysis_sample_cell.png
+2025-05-06 11:36:51,951 - INFO - Plotted Trend Analysis of Sample Cell Successfully
+2025-05-06 11:36:51,951 - INFO - EDA completed successfully.
+2025-05-06 11:36:51,951 - INFO - Completed 'perform_eda' in 7.21 seconds
+2025-05-06 11:36:51,951 - INFO - Started execution of 'preprocess_data'
+2025-05-06 11:36:51,964 - INFO - Data preprocessing completed successfully.
+2025-05-06 11:36:51,964 - INFO - Completed 'preprocess_data' in 0.01 seconds
+2025-05-06 11:36:51,964 - INFO - Started execution of 'create_lag_features'
+2025-05-06 11:36:51,984 - INFO - Lag features created successfully for targets: ['Voltage (V)', 'Current (A)', 'Resistance (Ohms)', 'SOC (%)', 'SOD (%)', 'SOH (%)', 'Cell Temperature (°C)', 'Ambient Temperature (°C)']
+2025-05-06 11:36:51,984 - INFO - Completed 'create_lag_features' in 0.02 seconds
+2025-05-06 11:36:51,986 - INFO - Started execution of 'train_time_series_models'
+2025-05-06 11:36:51,986 - INFO - Training time-series model for Voltage (V)...
+2025-05-06 11:36:51,996 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 11:36:51,996 - INFO - Starting hyperparameter tuning for Voltage (V) with the following param_grid:
+2025-05-06 11:36:51,996 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 11:36:51,996 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 11:36:51,996 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 11:40:46,503 - INFO - Hyperparameter tuning for Voltage (V) completed successfully.
+2025-05-06 11:40:46,503 - INFO - Best hyperparameters for Voltage (V): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 100}
+2025-05-06 11:40:46,503 - INFO - Completed 'tune_hyperparameters' in 234.51 seconds
+2025-05-06 11:41:03,526 - INFO - Evaluation metrics for Voltage (V): MSE=0.0834, R2=-0.0001
+2025-05-06 11:41:03,526 - INFO - Training time-series model for Current (A)...
+2025-05-06 11:41:03,537 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 11:41:03,538 - INFO - Starting hyperparameter tuning for Current (A) with the following param_grid:
+2025-05-06 11:41:03,538 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 11:41:03,538 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 11:41:03,538 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 11:44:52,297 - INFO - Hyperparameter tuning for Current (A) completed successfully.
+2025-05-06 11:44:52,297 - INFO - Best hyperparameters for Current (A): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-06 11:44:52,297 - INFO - Completed 'tune_hyperparameters' in 228.76 seconds
+2025-05-06 11:45:00,951 - INFO - Evaluation metrics for Current (A): MSE=0.0818, R2=-0.0000
+2025-05-06 11:45:00,951 - INFO - Training time-series model for Resistance (Ohms)...
+2025-05-06 11:45:00,963 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 11:45:00,963 - INFO - Starting hyperparameter tuning for Resistance (Ohms) with the following param_grid:
+2025-05-06 11:45:00,963 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 11:45:00,963 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 11:45:00,963 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 11:50:09,171 - INFO - Hyperparameter tuning for Resistance (Ohms) completed successfully.
+2025-05-06 11:50:09,171 - INFO - Best hyperparameters for Resistance (Ohms): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-06 11:50:09,171 - INFO - Completed 'tune_hyperparameters' in 308.21 seconds
+2025-05-06 11:50:17,865 - INFO - Evaluation metrics for Resistance (Ohms): MSE=0.0414, R2=-0.0001
+2025-05-06 11:50:17,865 - INFO - Training time-series model for SOC (%)...
+2025-05-06 11:50:17,877 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 11:50:17,877 - INFO - Starting hyperparameter tuning for SOC (%) with the following param_grid:
+2025-05-06 11:50:17,877 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 11:50:17,877 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 11:50:17,877 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 12:07:45,817 - INFO - Hyperparameter tuning for SOC (%) completed successfully.
+2025-05-06 12:07:45,817 - INFO - Best hyperparameters for SOC (%): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-06 12:07:45,817 - INFO - Completed 'tune_hyperparameters' in 1047.94 seconds
+2025-05-06 12:07:54,617 - INFO - Evaluation metrics for SOC (%): MSE=0.0868, R2=-0.0003
+2025-05-06 12:07:54,617 - INFO - Training time-series model for SOD (%)...
+2025-05-06 12:07:54,628 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 12:07:54,629 - INFO - Starting hyperparameter tuning for SOD (%) with the following param_grid:
+2025-05-06 12:07:54,629 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 12:07:54,629 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 12:07:54,629 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 12:11:54,165 - INFO - Hyperparameter tuning for SOD (%) completed successfully.
+2025-05-06 12:11:54,165 - INFO - Best hyperparameters for SOD (%): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-06 12:11:54,165 - INFO - Completed 'tune_hyperparameters' in 239.54 seconds
+2025-05-06 12:12:02,839 - INFO - Evaluation metrics for SOD (%): MSE=0.0868, R2=-0.0003
+2025-05-06 12:12:02,839 - INFO - Training time-series model for SOH (%)...
+2025-05-06 12:12:02,851 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 12:12:02,851 - INFO - Starting hyperparameter tuning for SOH (%) with the following param_grid:
+2025-05-06 12:12:02,851 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 12:12:02,851 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 12:12:02,851 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 12:15:59,989 - INFO - Hyperparameter tuning for SOH (%) completed successfully.
+2025-05-06 12:15:59,989 - INFO - Best hyperparameters for SOH (%): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-06 12:15:59,989 - INFO - Completed 'tune_hyperparameters' in 237.14 seconds
+2025-05-06 12:16:08,629 - INFO - Evaluation metrics for SOH (%): MSE=0.1010, R2=0.0001
+2025-05-06 12:16:08,629 - INFO - Training time-series model for Cell Temperature (°C)...
+2025-05-06 12:16:08,641 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 12:16:08,641 - INFO - Starting hyperparameter tuning for Cell Temperature (°C) with the following param_grid:
+2025-05-06 12:16:08,641 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 12:16:08,641 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 12:16:08,641 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 12:19:59,491 - INFO - Hyperparameter tuning for Cell Temperature (°C) completed successfully.
+2025-05-06 12:19:59,491 - INFO - Best hyperparameters for Cell Temperature (°C): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-06 12:19:59,491 - INFO - Completed 'tune_hyperparameters' in 230.85 seconds
+2025-05-06 12:20:08,096 - INFO - Evaluation metrics for Cell Temperature (°C): MSE=0.0836, R2=-0.0003
+2025-05-06 12:20:08,096 - INFO - Training time-series model for Ambient Temperature (°C)...
+2025-05-06 12:20:08,107 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 12:20:08,107 - INFO - Starting hyperparameter tuning for Ambient Temperature (°C) with the following param_grid:
+2025-05-06 12:20:08,107 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 12:20:08,107 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 12:20:08,107 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 12:24:17,369 - INFO - Hyperparameter tuning for Ambient Temperature (°C) completed successfully.
+2025-05-06 12:24:17,369 - INFO - Best hyperparameters for Ambient Temperature (°C): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-06 12:24:17,369 - INFO - Completed 'tune_hyperparameters' in 249.26 seconds
+2025-05-06 12:24:26,049 - INFO - Evaluation metrics for Ambient Temperature (°C): MSE=0.0826, R2=-0.0004
+2025-05-06 12:24:26,049 - INFO - All time-series models trained successfully.
+2025-05-06 12:24:26,050 - INFO - Completed 'train_time_series_models' in 2854.06 seconds
+2025-05-06 12:24:26,050 - INFO - Started execution of 'predict_next_values'
+2025-05-06 12:24:26,055 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 12:24:26,055 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 12:24:26,055 - INFO - Predicted next value for Voltage (V): 0.5020
+2025-05-06 12:24:26,055 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 12:24:26,055 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 12:24:26,055 - INFO - Predicted next value for Current (A): 0.4980
+2025-05-06 12:24:26,055 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 12:24:26,055 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 12:24:26,055 - INFO - Predicted next value for Resistance (Ohms): 0.2654
+2025-05-06 12:24:26,055 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 12:24:26,055 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 12:24:26,056 - INFO - Predicted next value for SOC (%): 0.4992
+2025-05-06 12:24:26,056 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 12:24:26,056 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 12:24:26,056 - INFO - Predicted next value for SOD (%): 0.5008
+2025-05-06 12:24:26,056 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 12:24:26,056 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 12:24:26,056 - INFO - Predicted next value for SOH (%): 0.4991
+2025-05-06 12:24:26,056 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 12:24:26,056 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 12:24:26,056 - INFO - Predicted next value for Cell Temperature (°C): 0.5011
+2025-05-06 12:24:26,056 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 12:24:26,056 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 12:24:26,056 - INFO - Predicted next value for Ambient Temperature (°C): 0.5011
+2025-05-06 12:24:26,056 - INFO - Completed 'predict_next_values' in 0.01 seconds
+2025-05-06 12:24:26,056 - INFO - Predicted Next Values for Cell 1234: {'Voltage (V)': np.float64(3.6024079489216922), 'Current (A)': np.float64(1.24701089673097), 'Resistance (Ohms)': np.float64(3.3311832687198866), 'SOC (%)': np.float64(74.95864652942224), 'SOD (%)': np.float64(25.04135347057776), 'SOH (%)': np.float64(94.99145364644835), 'Cell Temperature (°C)': np.float64(37.01132682040031), 'Ambient Temperature (°C)': np.float64(39.01571898854067)}
+2025-05-06 12:24:26,056 - INFO - Started execution of 'plot_predictions'
+2025-05-06 12:24:42,806 - INFO - Saved predicted values plot to plots_3cf1e92b-169e-4705-8953-61792edc94d5/predicted_values_plot.png
+2025-05-06 12:29:19,493 - INFO - Completed 'plot_predictions' in 293.44 seconds
+2025-05-06 12:29:19,493 - INFO - Total execution time: 3154.82 seconds
+2025-05-06 12:42:15,301 - INFO - Job Run ID: f692c4a5-f6eb-470e-a27e-edd920fb29ea
+2025-05-06 12:42:15,301 - INFO - Created folder for plots: plots_f692c4a5-f6eb-470e-a27e-edd920fb29ea
+2025-05-06 12:42:15,301 - INFO - Started execution of 'load_data'
+2025-05-06 12:42:15,367 - INFO - Data loaded successfully.
+2025-05-06 12:42:15,367 - INFO - Completed 'load_data' in 0.07 seconds
+2025-05-06 12:42:15,367 - INFO - Started execution of 'perform_eda'
+2025-05-06 12:42:15,367 - INFO - Performing EDA...
+2025-05-06 12:42:15,374 - INFO - Dataset Info:
+None
+2025-05-06 12:42:15,394 - INFO - Summary Statistics:
+        Voltage (V)   Current (A)  ...  Ambient Temperature (°C)                      Timestamp
+count  99999.000000  99999.000000  ...              99999.000000                          99999
+mean       3.599881      1.249560  ...                 38.980398  2023-12-31 14:05:33.921639424
+min        3.000000      0.500000  ...                 32.000000            2023-01-01 00:21:27
+25%        3.300000      0.870000  ...                 35.480000     2023-07-01 11:57:38.500000
+50%        3.600000      1.250000  ...                 38.970000            2023-12-31 08:35:59
+75%        3.900000      1.620000  ...                 42.470000            2024-07-01 01:13:00
+max        4.200000      2.000000  ...                 46.000000            2024-12-31 23:53:58
+std        0.346228      0.432905  ...                  4.037145                            NaN
+
+[8 rows x 9 columns]
+2025-05-06 12:42:15,398 - INFO - Missing Values:
+Battery ID                  0
+Cell ID                     0
+Voltage (V)                 0
+Current (A)                 0
+Resistance (Ohms)           0
+SOC (%)                     0
+SOD (%)                     0
+SOH (%)                     0
+Cell Temperature (°C)       0
+Ambient Temperature (°C)    0
+Timestamp                   0
+State of Cell               0
+Communication               0
+dtype: int64
+2025-05-06 12:42:15,400 - INFO - Unique Values in 'State of Cell': ['live' 'dead']
+2025-05-06 12:42:15,401 - INFO - Unique Values in 'Communication': ['yes' 'no']
+2025-05-06 12:42:15,401 - INFO - logged Summary Statistics Successfully
+2025-05-06 12:42:15,401 - INFO - Plotting histograms and correlation heatmap...
+2025-05-06 12:42:15,401 - INFO - Plotting Distribution of Numerical Features...
+2025-05-06 12:42:16,331 - INFO - Saved distribution plot to plots_f692c4a5-f6eb-470e-a27e-edd920fb29ea/distribution_numerical_features.png
+2025-05-06 12:42:16,332 - INFO - Plotted Summary Statistics Plot Successfully
+2025-05-06 12:42:16,332 - INFO - Plotting Heatmap...
+2025-05-06 12:42:16,410 - INFO - Saved heatmap to plots_f692c4a5-f6eb-470e-a27e-edd920fb29ea/correlation_heatmap.png
+2025-05-06 12:42:16,410 - INFO - Plotted Heatmap Successfully
+2025-05-06 12:42:16,411 - INFO - Plotting Pairplot...
+2025-05-06 12:42:21,515 - INFO - Saved Pairplot to plots_f692c4a5-f6eb-470e-a27e-edd920fb29ea/pairplot_numerical_features.png
+2025-05-06 12:42:21,516 - INFO - Plotted Pairplot Successfully
+2025-05-06 12:42:21,516 - INFO - Plotting Boxplot...
+2025-05-06 12:42:22,276 - INFO - Saved Boxplot to plots_f692c4a5-f6eb-470e-a27e-edd920fb29ea/boxplot_numerical_features.png
+2025-05-06 12:42:22,276 - INFO - Plotted Boxplot Successfully
+2025-05-06 12:42:22,276 - INFO - Plotting Countplot for Communication ...
+2025-05-06 12:42:22,365 - INFO - Saved Countplot for Communication to plots_f692c4a5-f6eb-470e-a27e-edd920fb29ea/countplot_communication.png
+2025-05-06 12:42:22,365 - INFO - Plotted Countplot for Communication Successfully
+2025-05-06 12:42:22,365 - INFO - Plotting Countplot for State of Cell...
+2025-05-06 12:42:22,455 - INFO - Saved Countplot for State of Cell to plots_f692c4a5-f6eb-470e-a27e-edd920fb29ea/countplot_state_of_cell.png
+2025-05-06 12:42:22,456 - INFO - Plotted Countplot for State of Cell Successfully
+2025-05-06 12:42:22,456 - INFO - Performing trend analysis for a sample Cell ID...
+2025-05-06 12:42:22,494 - INFO - Saved Trend Analysis of Sample Cell to plots_f692c4a5-f6eb-470e-a27e-edd920fb29ea/trend_analysis_sample_cell.png
+2025-05-06 12:42:22,495 - INFO - Plotted Trend Analysis of Sample Cell Successfully
+2025-05-06 12:42:22,495 - INFO - EDA completed successfully.
+2025-05-06 12:42:22,495 - INFO - Completed 'perform_eda' in 7.13 seconds
+2025-05-06 12:42:22,495 - INFO - Started execution of 'preprocess_data'
+2025-05-06 12:42:22,507 - INFO - Data preprocessing completed successfully.
+2025-05-06 12:42:22,507 - INFO - Completed 'preprocess_data' in 0.01 seconds
+2025-05-06 12:42:22,507 - INFO - Started execution of 'create_lag_features'
+2025-05-06 12:42:22,529 - INFO - Lag features created successfully for targets: ['Voltage (V)', 'Current (A)', 'Resistance (Ohms)', 'SOC (%)', 'SOD (%)', 'SOH (%)', 'Cell Temperature (°C)', 'Ambient Temperature (°C)']
+2025-05-06 12:42:22,529 - INFO - Completed 'create_lag_features' in 0.02 seconds
+2025-05-06 12:42:22,530 - INFO - Started execution of 'train_time_series_models'
+2025-05-06 12:42:22,530 - INFO - Training time-series model for Voltage (V)...
+2025-05-06 12:42:22,541 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 12:42:22,541 - INFO - Starting hyperparameter tuning for Voltage (V) with the following param_grid:
+2025-05-06 12:42:22,541 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 12:42:22,541 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 12:42:22,542 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 13:01:21,153 - INFO - Hyperparameter tuning for Voltage (V) completed successfully.
+2025-05-06 13:01:21,153 - INFO - Best hyperparameters for Voltage (V): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 100}
+2025-05-06 13:01:21,154 - INFO - Completed 'tune_hyperparameters' in 1138.61 seconds
+2025-05-06 13:16:45,290 - INFO - Evaluation metrics for Voltage (V): MSE=0.0834, R2=-0.0001
+2025-05-06 13:16:45,290 - INFO - Training time-series model for Current (A)...
+2025-05-06 13:16:45,302 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 13:16:45,302 - INFO - Starting hyperparameter tuning for Current (A) with the following param_grid:
+2025-05-06 13:16:45,302 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 13:16:45,302 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 13:16:45,302 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 16:17:27,096 - INFO - Hyperparameter tuning for Current (A) completed successfully.
+2025-05-06 16:17:27,097 - INFO - Best hyperparameters for Current (A): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-06 16:17:27,097 - INFO - Completed 'tune_hyperparameters' in 10841.79 seconds
+2025-05-06 16:32:36,759 - INFO - Evaluation metrics for Current (A): MSE=0.0818, R2=-0.0000
+2025-05-06 16:32:36,760 - INFO - Training time-series model for Resistance (Ohms)...
+2025-05-06 16:32:36,772 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 16:32:36,772 - INFO - Starting hyperparameter tuning for Resistance (Ohms) with the following param_grid:
+2025-05-06 16:32:36,772 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 16:32:36,772 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 16:32:36,772 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 19:21:04,673 - INFO - Hyperparameter tuning for Resistance (Ohms) completed successfully.
+2025-05-06 19:21:04,673 - INFO - Best hyperparameters for Resistance (Ohms): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-06 19:21:04,673 - INFO - Completed 'tune_hyperparameters' in 10107.90 seconds
+2025-05-06 19:21:18,040 - INFO - Evaluation metrics for Resistance (Ohms): MSE=0.0414, R2=-0.0001
+2025-05-06 19:21:18,040 - INFO - Training time-series model for SOC (%)...
+2025-05-06 19:21:18,051 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 19:21:18,051 - INFO - Starting hyperparameter tuning for SOC (%) with the following param_grid:
+2025-05-06 19:21:18,051 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 19:21:18,051 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 19:21:18,051 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 22:33:32,913 - INFO - Hyperparameter tuning for SOC (%) completed successfully.
+2025-05-06 22:33:32,913 - INFO - Best hyperparameters for SOC (%): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-06 22:33:32,913 - INFO - Completed 'tune_hyperparameters' in 11534.86 seconds
+2025-05-06 22:33:41,177 - INFO - Evaluation metrics for SOC (%): MSE=0.0868, R2=-0.0003
+2025-05-06 22:33:41,177 - INFO - Training time-series model for SOD (%)...
+2025-05-06 22:33:41,189 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 22:33:41,189 - INFO - Starting hyperparameter tuning for SOD (%) with the following param_grid:
+2025-05-06 22:33:41,189 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 22:33:41,189 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 22:33:41,189 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 22:37:25,208 - INFO - Hyperparameter tuning for SOD (%) completed successfully.
+2025-05-06 22:37:25,209 - INFO - Best hyperparameters for SOD (%): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-06 22:37:25,209 - INFO - Completed 'tune_hyperparameters' in 224.02 seconds
+2025-05-06 22:37:34,100 - INFO - Evaluation metrics for SOD (%): MSE=0.0868, R2=-0.0003
+2025-05-06 22:37:34,100 - INFO - Training time-series model for SOH (%)...
+2025-05-06 22:37:34,113 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 22:37:34,113 - INFO - Starting hyperparameter tuning for SOH (%) with the following param_grid:
+2025-05-06 22:37:34,113 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 22:37:34,113 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 22:37:34,114 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 22:41:24,459 - INFO - Hyperparameter tuning for SOH (%) completed successfully.
+2025-05-06 22:41:24,459 - INFO - Best hyperparameters for SOH (%): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-06 22:41:24,459 - INFO - Completed 'tune_hyperparameters' in 230.35 seconds
+2025-05-06 22:41:33,114 - INFO - Evaluation metrics for SOH (%): MSE=0.1010, R2=0.0001
+2025-05-06 22:41:33,114 - INFO - Training time-series model for Cell Temperature (°C)...
+2025-05-06 22:41:33,126 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 22:41:33,126 - INFO - Starting hyperparameter tuning for Cell Temperature (°C) with the following param_grid:
+2025-05-06 22:41:33,126 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 22:41:33,126 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 22:41:33,126 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 22:45:21,469 - INFO - Hyperparameter tuning for Cell Temperature (°C) completed successfully.
+2025-05-06 22:45:21,469 - INFO - Best hyperparameters for Cell Temperature (°C): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-06 22:45:21,469 - INFO - Completed 'tune_hyperparameters' in 228.34 seconds
+2025-05-06 22:45:30,045 - INFO - Evaluation metrics for Cell Temperature (°C): MSE=0.0836, R2=-0.0003
+2025-05-06 22:45:30,045 - INFO - Training time-series model for Ambient Temperature (°C)...
+2025-05-06 22:45:30,057 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 22:45:30,057 - INFO - Starting hyperparameter tuning for Ambient Temperature (°C) with the following param_grid:
+2025-05-06 22:45:30,057 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 22:45:30,057 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 22:45:30,057 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 22:49:18,615 - INFO - Hyperparameter tuning for Ambient Temperature (°C) completed successfully.
+2025-05-06 22:49:18,615 - INFO - Best hyperparameters for Ambient Temperature (°C): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-06 22:49:18,615 - INFO - Completed 'tune_hyperparameters' in 228.56 seconds
+2025-05-06 22:49:27,233 - INFO - Evaluation metrics for Ambient Temperature (°C): MSE=0.0826, R2=-0.0004
+2025-05-06 22:49:27,233 - INFO - All time-series models trained successfully.
+2025-05-06 22:49:27,234 - INFO - Completed 'train_time_series_models' in 36424.70 seconds
+2025-05-06 22:49:27,234 - INFO - Started execution of 'predict_next_values'
+2025-05-06 22:49:27,239 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 22:49:27,239 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 22:49:27,239 - INFO - Predicted next value for Voltage (V): 0.5020
+2025-05-06 22:49:27,239 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 22:49:27,239 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 22:49:27,239 - INFO - Predicted next value for Current (A): 0.4980
+2025-05-06 22:49:27,239 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 22:49:27,240 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 22:49:27,240 - INFO - Predicted next value for Resistance (Ohms): 0.2654
+2025-05-06 22:49:27,240 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 22:49:27,240 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 22:49:27,240 - INFO - Predicted next value for SOC (%): 0.4992
+2025-05-06 22:49:27,240 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 22:49:27,240 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 22:49:27,240 - INFO - Predicted next value for SOD (%): 0.5008
+2025-05-06 22:49:27,240 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 22:49:27,240 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 22:49:27,240 - INFO - Predicted next value for SOH (%): 0.4991
+2025-05-06 22:49:27,240 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 22:49:27,240 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 22:49:27,240 - INFO - Predicted next value for Cell Temperature (°C): 0.5011
+2025-05-06 22:49:27,241 - INFO - Started execution of 'reverse_scaling'
+2025-05-06 22:49:27,241 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-06 22:49:27,241 - INFO - Predicted next value for Ambient Temperature (°C): 0.5011
+2025-05-06 22:49:27,241 - INFO - Completed 'predict_next_values' in 0.01 seconds
+2025-05-06 22:49:27,241 - INFO - Predicted Next Values for Cell 1234: {'Voltage (V)': np.float64(3.6024079489216922), 'Current (A)': np.float64(1.24701089673097), 'Resistance (Ohms)': np.float64(3.3311832687198866), 'SOC (%)': np.float64(74.95864652942224), 'SOD (%)': np.float64(25.04135347057776), 'SOH (%)': np.float64(94.99145364644835), 'Cell Temperature (°C)': np.float64(37.01132682040031), 'Ambient Temperature (°C)': np.float64(39.01571898854067)}
+2025-05-06 22:49:27,241 - CRITICAL - Critical error: name 'cell_id' is not defined
+2025-05-06 22:57:25,965 - INFO - Job Run ID: e349c747-c5da-4460-aa45-223375ac135b
+2025-05-06 22:57:25,966 - INFO - Created folder for plots: plots_e349c747-c5da-4460-aa45-223375ac135b
+2025-05-06 22:57:25,966 - INFO - Started execution of 'load_data'
+2025-05-06 22:57:26,032 - INFO - Data loaded successfully.
+2025-05-06 22:57:26,032 - INFO - Completed 'load_data' in 0.07 seconds
+2025-05-06 22:57:26,032 - INFO - Started execution of 'perform_eda'
+2025-05-06 22:57:26,032 - INFO - Performing EDA...
+2025-05-06 22:57:26,039 - INFO - Dataset Info:
+None
+2025-05-06 22:57:26,057 - INFO - Summary Statistics:
+        Voltage (V)   Current (A)  ...  Ambient Temperature (°C)                      Timestamp
+count  99999.000000  99999.000000  ...              99999.000000                          99999
+mean       3.599881      1.249560  ...                 38.980398  2023-12-31 14:05:33.921639424
+min        3.000000      0.500000  ...                 32.000000            2023-01-01 00:21:27
+25%        3.300000      0.870000  ...                 35.480000     2023-07-01 11:57:38.500000
+50%        3.600000      1.250000  ...                 38.970000            2023-12-31 08:35:59
+75%        3.900000      1.620000  ...                 42.470000            2024-07-01 01:13:00
+max        4.200000      2.000000  ...                 46.000000            2024-12-31 23:53:58
+std        0.346228      0.432905  ...                  4.037145                            NaN
+
+[8 rows x 9 columns]
+2025-05-06 22:57:26,062 - INFO - Missing Values:
+Battery ID                  0
+Cell ID                     0
+Voltage (V)                 0
+Current (A)                 0
+Resistance (Ohms)           0
+SOC (%)                     0
+SOD (%)                     0
+SOH (%)                     0
+Cell Temperature (°C)       0
+Ambient Temperature (°C)    0
+Timestamp                   0
+State of Cell               0
+Communication               0
+dtype: int64
+2025-05-06 22:57:26,063 - INFO - Unique Values in 'State of Cell': ['live' 'dead']
+2025-05-06 22:57:26,065 - INFO - Unique Values in 'Communication': ['yes' 'no']
+2025-05-06 22:57:26,065 - INFO - logged Summary Statistics Successfully
+2025-05-06 22:57:26,065 - INFO - Plotting histograms and correlation heatmap...
+2025-05-06 22:57:26,065 - INFO - Plotting Distribution of Numerical Features...
+2025-05-06 22:57:26,987 - INFO - Saved distribution plot to plots_e349c747-c5da-4460-aa45-223375ac135b/distribution_numerical_features.png
+2025-05-06 22:57:26,987 - INFO - Plotted Summary Statistics Plot Successfully
+2025-05-06 22:57:26,987 - INFO - Plotting Heatmap...
+2025-05-06 22:57:27,063 - INFO - Saved heatmap to plots_e349c747-c5da-4460-aa45-223375ac135b/correlation_heatmap.png
+2025-05-06 22:57:27,063 - INFO - Plotted Heatmap Successfully
+2025-05-06 22:57:27,063 - INFO - Plotting Pairplot...
+2025-05-06 22:57:32,114 - INFO - Saved Pairplot to plots_e349c747-c5da-4460-aa45-223375ac135b/pairplot_numerical_features.png
+2025-05-06 22:57:32,114 - INFO - Plotted Pairplot Successfully
+2025-05-06 22:57:32,114 - INFO - Plotting Boxplot...
+2025-05-06 22:57:32,879 - INFO - Saved Boxplot to plots_e349c747-c5da-4460-aa45-223375ac135b/boxplot_numerical_features.png
+2025-05-06 22:57:32,879 - INFO - Plotted Boxplot Successfully
+2025-05-06 22:57:32,879 - INFO - Plotting Countplot for Communication ...
+2025-05-06 22:57:32,969 - INFO - Saved Countplot for Communication to plots_e349c747-c5da-4460-aa45-223375ac135b/countplot_communication.png
+2025-05-06 22:57:32,969 - INFO - Plotted Countplot for Communication Successfully
+2025-05-06 22:57:32,970 - INFO - Plotting Countplot for State of Cell...
+2025-05-06 22:57:33,061 - INFO - Saved Countplot for State of Cell to plots_e349c747-c5da-4460-aa45-223375ac135b/countplot_state_of_cell.png
+2025-05-06 22:57:33,061 - INFO - Plotted Countplot for State of Cell Successfully
+2025-05-06 22:57:33,062 - INFO - Performing trend analysis for a sample Cell ID...
+2025-05-06 22:57:33,100 - INFO - Saved Trend Analysis of Sample Cell to plots_e349c747-c5da-4460-aa45-223375ac135b/trend_analysis_sample_cell.png
+2025-05-06 22:57:33,100 - INFO - Plotted Trend Analysis of Sample Cell Successfully
+2025-05-06 22:57:33,100 - INFO - EDA completed successfully.
+2025-05-06 22:57:33,100 - INFO - Completed 'perform_eda' in 7.07 seconds
+2025-05-06 22:57:33,100 - INFO - Started execution of 'preprocess_data'
+2025-05-06 22:57:33,113 - INFO - Data preprocessing completed successfully.
+2025-05-06 22:57:33,113 - INFO - Completed 'preprocess_data' in 0.01 seconds
+2025-05-06 22:57:33,113 - INFO - Started execution of 'create_lag_features'
+2025-05-06 22:57:33,135 - INFO - Lag features created successfully for targets: ['Voltage (V)', 'Current (A)', 'Resistance (Ohms)', 'SOC (%)', 'SOD (%)', 'SOH (%)', 'Cell Temperature (°C)', 'Ambient Temperature (°C)']
+2025-05-06 22:57:33,135 - INFO - Completed 'create_lag_features' in 0.02 seconds
+2025-05-06 22:57:33,137 - INFO - Started execution of 'train_time_series_models'
+2025-05-06 22:57:33,137 - INFO - Training time-series model for Voltage (V)...
+2025-05-06 22:57:33,148 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 22:57:33,148 - INFO - Starting hyperparameter tuning for Voltage (V) with the following param_grid:
+2025-05-06 22:57:33,148 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 22:57:33,148 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 22:57:33,148 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 23:01:29,760 - INFO - Hyperparameter tuning for Voltage (V) completed successfully.
+2025-05-06 23:01:29,760 - INFO - Best hyperparameters for Voltage (V): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 100}
+2025-05-06 23:01:29,760 - INFO - Completed 'tune_hyperparameters' in 236.61 seconds
+2025-05-06 23:01:47,140 - INFO - Evaluation metrics for Voltage (V): MSE=0.0834, R2=-0.0001
+2025-05-06 23:01:47,140 - INFO - Training time-series model for Current (A)...
+2025-05-06 23:01:47,153 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 23:01:47,153 - INFO - Starting hyperparameter tuning for Current (A) with the following param_grid:
+2025-05-06 23:01:47,153 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 23:01:47,153 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 23:01:47,153 - INFO -     max_depth: [3, 5, 10]
+2025-05-06 23:05:38,564 - INFO - Hyperparameter tuning for Current (A) completed successfully.
+2025-05-06 23:05:38,565 - INFO - Best hyperparameters for Current (A): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-06 23:05:38,565 - INFO - Completed 'tune_hyperparameters' in 231.41 seconds
+2025-05-06 23:05:47,170 - INFO - Evaluation metrics for Current (A): MSE=0.0818, R2=-0.0000
+2025-05-06 23:05:47,170 - INFO - Training time-series model for Resistance (Ohms)...
+2025-05-06 23:05:47,182 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-06 23:05:47,182 - INFO - Starting hyperparameter tuning for Resistance (Ohms) with the following param_grid:
+2025-05-06 23:05:47,182 - INFO -     n_estimators: [50, 100, 200]
+2025-05-06 23:05:47,182 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-06 23:05:47,182 - INFO -     max_depth: [3, 5, 10]
+2025-05-07 00:47:33,175 - INFO - Hyperparameter tuning for Resistance (Ohms) completed successfully.
+2025-05-07 00:47:33,175 - INFO - Best hyperparameters for Resistance (Ohms): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-07 00:47:33,175 - INFO - Completed 'tune_hyperparameters' in 6105.99 seconds
+2025-05-07 00:56:54,202 - INFO - Evaluation metrics for Resistance (Ohms): MSE=0.0414, R2=-0.0001
+2025-05-07 00:56:54,202 - INFO - Training time-series model for SOC (%)...
+2025-05-07 00:56:54,212 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-07 00:56:54,212 - INFO - Starting hyperparameter tuning for SOC (%) with the following param_grid:
+2025-05-07 00:56:54,212 - INFO -     n_estimators: [50, 100, 200]
+2025-05-07 00:56:54,212 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-07 00:56:54,212 - INFO -     max_depth: [3, 5, 10]
+2025-05-07 04:03:54,041 - INFO - Hyperparameter tuning for SOC (%) completed successfully.
+2025-05-07 04:03:54,041 - INFO - Best hyperparameters for SOC (%): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-07 04:03:54,041 - INFO - Completed 'tune_hyperparameters' in 11219.83 seconds
+2025-05-07 04:04:01,893 - INFO - Evaluation metrics for SOC (%): MSE=0.0868, R2=-0.0003
+2025-05-07 04:04:01,893 - INFO - Training time-series model for SOD (%)...
+2025-05-07 04:04:01,904 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-07 04:04:01,904 - INFO - Starting hyperparameter tuning for SOD (%) with the following param_grid:
+2025-05-07 04:04:01,904 - INFO -     n_estimators: [50, 100, 200]
+2025-05-07 04:04:01,904 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-07 04:04:01,904 - INFO -     max_depth: [3, 5, 10]
+2025-05-07 07:18:03,497 - INFO - Hyperparameter tuning for SOD (%) completed successfully.
+2025-05-07 07:18:03,497 - INFO - Best hyperparameters for SOD (%): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-07 07:18:03,497 - INFO - Completed 'tune_hyperparameters' in 11641.59 seconds
+2025-05-07 07:18:11,432 - INFO - Evaluation metrics for SOD (%): MSE=0.0868, R2=-0.0003
+2025-05-07 07:18:11,433 - INFO - Training time-series model for SOH (%)...
+2025-05-07 07:18:11,445 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-07 07:18:11,445 - INFO - Starting hyperparameter tuning for SOH (%) with the following param_grid:
+2025-05-07 07:18:11,445 - INFO -     n_estimators: [50, 100, 200]
+2025-05-07 07:18:11,445 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-07 07:18:11,445 - INFO -     max_depth: [3, 5, 10]
+2025-05-07 09:45:00,400 - INFO - Hyperparameter tuning for SOH (%) completed successfully.
+2025-05-07 09:45:00,400 - INFO - Best hyperparameters for SOH (%): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-07 09:45:00,401 - INFO - Completed 'tune_hyperparameters' in 8808.96 seconds
+2025-05-07 09:47:44,386 - INFO - Evaluation metrics for SOH (%): MSE=0.1010, R2=0.0001
+2025-05-07 09:47:44,386 - INFO - Training time-series model for Cell Temperature (°C)...
+2025-05-07 09:47:44,399 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-07 09:47:44,399 - INFO - Starting hyperparameter tuning for Cell Temperature (°C) with the following param_grid:
+2025-05-07 09:47:44,399 - INFO -     n_estimators: [50, 100, 200]
+2025-05-07 09:47:44,399 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-07 09:47:44,399 - INFO -     max_depth: [3, 5, 10]
+2025-05-07 09:51:56,967 - INFO - Hyperparameter tuning for Cell Temperature (°C) completed successfully.
+2025-05-07 09:51:56,967 - INFO - Best hyperparameters for Cell Temperature (°C): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-07 09:51:56,967 - INFO - Completed 'tune_hyperparameters' in 252.57 seconds
+2025-05-07 09:52:05,691 - INFO - Evaluation metrics for Cell Temperature (°C): MSE=0.0836, R2=-0.0003
+2025-05-07 09:52:05,691 - INFO - Training time-series model for Ambient Temperature (°C)...
+2025-05-07 09:52:05,704 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-07 09:52:05,704 - INFO - Starting hyperparameter tuning for Ambient Temperature (°C) with the following param_grid:
+2025-05-07 09:52:05,704 - INFO -     n_estimators: [50, 100, 200]
+2025-05-07 09:52:05,704 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-07 09:52:05,704 - INFO -     max_depth: [3, 5, 10]
+2025-05-07 09:55:55,781 - INFO - Hyperparameter tuning for Ambient Temperature (°C) completed successfully.
+2025-05-07 09:55:55,781 - INFO - Best hyperparameters for Ambient Temperature (°C): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-07 09:55:55,781 - INFO - Completed 'tune_hyperparameters' in 230.08 seconds
+2025-05-07 09:56:04,499 - INFO - Evaluation metrics for Ambient Temperature (°C): MSE=0.0826, R2=-0.0004
+2025-05-07 09:56:04,499 - INFO - All time-series models trained successfully.
+2025-05-07 09:56:04,499 - INFO - Completed 'train_time_series_models' in 39511.36 seconds
+2025-05-07 09:56:04,499 - INFO - Started execution of 'predict_next_values'
+2025-05-07 09:56:04,503 - INFO - Started execution of 'reverse_scaling'
+2025-05-07 09:56:04,503 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-07 09:56:04,503 - INFO - Predicted next value for Voltage (V): 0.5020
+2025-05-07 09:56:04,503 - INFO - Started execution of 'reverse_scaling'
+2025-05-07 09:56:04,503 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-07 09:56:04,503 - INFO - Predicted next value for Current (A): 0.4980
+2025-05-07 09:56:04,503 - INFO - Started execution of 'reverse_scaling'
+2025-05-07 09:56:04,503 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-07 09:56:04,503 - INFO - Predicted next value for Resistance (Ohms): 0.2654
+2025-05-07 09:56:04,503 - INFO - Started execution of 'reverse_scaling'
+2025-05-07 09:56:04,503 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-07 09:56:04,503 - INFO - Predicted next value for SOC (%): 0.4992
+2025-05-07 09:56:04,504 - INFO - Started execution of 'reverse_scaling'
+2025-05-07 09:56:04,504 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-07 09:56:04,504 - INFO - Predicted next value for SOD (%): 0.5008
+2025-05-07 09:56:04,504 - INFO - Started execution of 'reverse_scaling'
+2025-05-07 09:56:04,504 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-07 09:56:04,504 - INFO - Predicted next value for SOH (%): 0.4991
+2025-05-07 09:56:04,504 - INFO - Started execution of 'reverse_scaling'
+2025-05-07 09:56:04,504 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-07 09:56:04,504 - INFO - Predicted next value for Cell Temperature (°C): 0.5011
+2025-05-07 09:56:04,504 - INFO - Started execution of 'reverse_scaling'
+2025-05-07 09:56:04,504 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-07 09:56:04,504 - INFO - Predicted next value for Ambient Temperature (°C): 0.5011
+2025-05-07 09:56:04,504 - INFO - Completed 'predict_next_values' in 0.01 seconds
+2025-05-07 09:56:04,504 - INFO - Predicted Next Values for Cell 1234: {'Voltage (V)': np.float64(3.6024079489216922), 'Current (A)': np.float64(1.24701089673097), 'Resistance (Ohms)': np.float64(3.3311832687198866), 'SOC (%)': np.float64(74.95864652942224), 'SOD (%)': np.float64(25.04135347057776), 'SOH (%)': np.float64(94.99145364644835), 'Cell Temperature (°C)': np.float64(37.01132682040031), 'Ambient Temperature (°C)': np.float64(39.01571898854067)}
+2025-05-07 09:56:04,505 - INFO - Cell ID CELL1234 found in the DataFrame.
+2025-05-07 09:56:04,505 - INFO - Started execution of 'plot_predictions'
+2025-05-07 09:56:04,505 - ERROR - Error in 'plot_predictions': plot_predictions() missing 1 required positional argument: 'cell_id'
+2025-05-07 09:56:04,505 - CRITICAL - Critical error: plot_predictions() missing 1 required positional argument: 'cell_id'
+2025-05-07 10:16:11,374 - INFO - Job Run ID: 9cede91b-7775-4343-96be-d71587503be7
+2025-05-07 10:16:11,375 - INFO - Created folder for plots: plots_9cede91b-7775-4343-96be-d71587503be7
+2025-05-07 10:16:11,375 - INFO - Started execution of 'load_data'
+2025-05-07 10:16:11,378 - INFO - Data loaded successfully.
+2025-05-07 10:16:11,378 - INFO - Completed 'load_data' in 0.00 seconds
+2025-05-07 10:16:11,378 - INFO - Started execution of 'perform_eda'
+2025-05-07 10:16:11,378 - INFO - Performing EDA...
+2025-05-07 10:16:11,380 - INFO - Dataset Info:
+None
+2025-05-07 10:16:11,387 - INFO - Summary Statistics:
+       Voltage (V)  Current (A)  ...  Ambient Temperature (°C)                      Timestamp
+count   999.000000   999.000000  ...                999.000000                            999
+mean      3.620591     1.255906  ...                 39.062262  2024-01-07 02:39:53.604604672
+min       3.000000     0.500000  ...                 32.010000            2023-01-02 02:02:41
+25%       3.330000     0.870000  ...                 35.630000            2023-07-23 09:20:58
+50%       3.630000     1.250000  ...                 39.100000            2024-01-11 19:48:47
+75%       3.900000     1.630000  ...                 42.500000            2024-07-02 11:36:41
+max       4.200000     2.000000  ...                 45.980000            2024-12-31 19:58:29
+std       0.339683     0.436926  ...                  3.997080                            NaN
+
+[8 rows x 9 columns]
+2025-05-07 10:16:11,387 - INFO - Missing Values:
+Battery ID                  0
+Cell ID                     0
+Voltage (V)                 0
+Current (A)                 0
+Resistance (Ohms)           0
+SOC (%)                     0
+SOD (%)                     0
+SOH (%)                     0
+Cell Temperature (°C)       0
+Ambient Temperature (°C)    0
+Timestamp                   0
+State of Cell               0
+Communication               0
+dtype: int64
+2025-05-07 10:16:11,387 - INFO - Unique Values in 'State of Cell': ['live' 'dead']
+2025-05-07 10:16:11,387 - INFO - Unique Values in 'Communication': ['no' 'yes']
+2025-05-07 10:16:11,387 - INFO - logged Summary Statistics Successfully
+2025-05-07 10:16:11,387 - INFO - Plotting histograms and correlation heatmap...
+2025-05-07 10:16:11,387 - INFO - Plotting Distribution of Numerical Features...
+2025-05-07 10:16:11,595 - INFO - Saved distribution plot to plots_9cede91b-7775-4343-96be-d71587503be7/distribution_numerical_features.png
+2025-05-07 10:16:11,595 - INFO - Plotted Summary Statistics Plot Successfully
+2025-05-07 10:16:11,596 - INFO - Plotting Heatmap...
+2025-05-07 10:16:11,670 - INFO - Saved heatmap to plots_9cede91b-7775-4343-96be-d71587503be7/correlation_heatmap.png
+2025-05-07 10:16:11,670 - INFO - Plotted Heatmap Successfully
+2025-05-07 10:16:11,670 - INFO - Plotting Pairplot...
+2025-05-07 10:16:14,365 - INFO - Saved Pairplot to plots_9cede91b-7775-4343-96be-d71587503be7/pairplot_numerical_features.png
+2025-05-07 10:16:14,365 - INFO - Plotted Pairplot Successfully
+2025-05-07 10:16:14,365 - INFO - Plotting Boxplot...
+2025-05-07 10:16:14,427 - INFO - Saved Boxplot to plots_9cede91b-7775-4343-96be-d71587503be7/boxplot_numerical_features.png
+2025-05-07 10:16:14,427 - INFO - Plotted Boxplot Successfully
+2025-05-07 10:16:14,427 - INFO - Plotting Countplot for Communication ...
+2025-05-07 10:16:14,456 - INFO - Saved Countplot for Communication to plots_9cede91b-7775-4343-96be-d71587503be7/countplot_communication.png
+2025-05-07 10:16:14,456 - INFO - Plotted Countplot for Communication Successfully
+2025-05-07 10:16:14,456 - INFO - Plotting Countplot for State of Cell...
+2025-05-07 10:16:14,484 - INFO - Saved Countplot for State of Cell to plots_9cede91b-7775-4343-96be-d71587503be7/countplot_state_of_cell.png
+2025-05-07 10:16:14,484 - INFO - Plotted Countplot for State of Cell Successfully
+2025-05-07 10:16:14,484 - INFO - Performing trend analysis for a sample Cell ID...
+2025-05-07 10:16:14,520 - INFO - Saved Trend Analysis of Sample Cell to plots_9cede91b-7775-4343-96be-d71587503be7/trend_analysis_sample_cell.png
+2025-05-07 10:16:14,520 - INFO - Plotted Trend Analysis of Sample Cell Successfully
+2025-05-07 10:16:14,520 - INFO - EDA completed successfully.
+2025-05-07 10:16:14,520 - INFO - Completed 'perform_eda' in 3.14 seconds
+2025-05-07 10:16:14,520 - INFO - Started execution of 'preprocess_data'
+2025-05-07 10:16:14,526 - INFO - Data preprocessing completed successfully.
+2025-05-07 10:16:14,526 - INFO - Completed 'preprocess_data' in 0.01 seconds
+2025-05-07 10:16:14,526 - INFO - Started execution of 'create_lag_features'
+2025-05-07 10:16:14,528 - INFO - Lag features created successfully for targets: ['Voltage (V)', 'Current (A)', 'Resistance (Ohms)', 'SOC (%)', 'SOD (%)', 'SOH (%)', 'Cell Temperature (°C)', 'Ambient Temperature (°C)']
+2025-05-07 10:16:14,528 - INFO - Completed 'create_lag_features' in 0.00 seconds
+2025-05-07 10:16:14,528 - INFO - Started execution of 'train_time_series_models'
+2025-05-07 10:16:14,528 - INFO - Training time-series model for Voltage (V)...
+2025-05-07 10:16:14,529 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-07 10:16:14,529 - INFO - Starting hyperparameter tuning for Voltage (V) with the following param_grid:
+2025-05-07 10:16:14,529 - INFO -     n_estimators: [50, 100, 200]
+2025-05-07 10:16:14,529 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-07 10:16:14,529 - INFO -     max_depth: [3, 5, 10]
+2025-05-07 10:16:17,856 - INFO - Hyperparameter tuning for Voltage (V) completed successfully.
+2025-05-07 10:16:17,856 - INFO - Best hyperparameters for Voltage (V): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-07 10:16:17,857 - INFO - Completed 'tune_hyperparameters' in 3.33 seconds
+2025-05-07 10:16:17,961 - INFO - Evaluation metrics for Voltage (V): MSE=0.0688, R2=-0.0149
+2025-05-07 10:16:17,961 - INFO - Training time-series model for Current (A)...
+2025-05-07 10:16:17,962 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-07 10:16:17,962 - INFO - Starting hyperparameter tuning for Current (A) with the following param_grid:
+2025-05-07 10:16:17,962 - INFO -     n_estimators: [50, 100, 200]
+2025-05-07 10:16:17,962 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-07 10:16:17,962 - INFO -     max_depth: [3, 5, 10]
+2025-05-07 10:16:20,672 - INFO - Hyperparameter tuning for Current (A) completed successfully.
+2025-05-07 10:16:20,672 - INFO - Best hyperparameters for Current (A): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-07 10:16:20,672 - INFO - Completed 'tune_hyperparameters' in 2.71 seconds
+2025-05-07 10:16:20,777 - INFO - Evaluation metrics for Current (A): MSE=0.0863, R2=-0.0091
+2025-05-07 10:16:20,777 - INFO - Training time-series model for Resistance (Ohms)...
+2025-05-07 10:16:20,778 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-07 10:16:20,778 - INFO - Starting hyperparameter tuning for Resistance (Ohms) with the following param_grid:
+2025-05-07 10:16:20,778 - INFO -     n_estimators: [50, 100, 200]
+2025-05-07 10:16:20,778 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-07 10:16:20,778 - INFO -     max_depth: [3, 5, 10]
+2025-05-07 10:16:23,569 - INFO - Hyperparameter tuning for Resistance (Ohms) completed successfully.
+2025-05-07 10:16:23,569 - INFO - Best hyperparameters for Resistance (Ohms): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-07 10:16:23,569 - INFO - Completed 'tune_hyperparameters' in 2.79 seconds
+2025-05-07 10:16:23,677 - INFO - Evaluation metrics for Resistance (Ohms): MSE=0.0441, R2=-0.0028
+2025-05-07 10:16:23,677 - INFO - Training time-series model for SOC (%)...
+2025-05-07 10:16:23,678 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-07 10:16:23,678 - INFO - Starting hyperparameter tuning for SOC (%) with the following param_grid:
+2025-05-07 10:16:23,678 - INFO -     n_estimators: [50, 100, 200]
+2025-05-07 10:16:23,678 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-07 10:16:23,678 - INFO -     max_depth: [3, 5, 10]
+2025-05-07 10:16:26,448 - INFO - Hyperparameter tuning for SOC (%) completed successfully.
+2025-05-07 10:16:26,448 - INFO - Best hyperparameters for SOC (%): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-07 10:16:26,448 - INFO - Completed 'tune_hyperparameters' in 2.77 seconds
+2025-05-07 10:16:26,554 - INFO - Evaluation metrics for SOC (%): MSE=0.0791, R2=-0.0204
+2025-05-07 10:16:26,554 - INFO - Training time-series model for SOD (%)...
+2025-05-07 10:16:26,555 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-07 10:16:26,555 - INFO - Starting hyperparameter tuning for SOD (%) with the following param_grid:
+2025-05-07 10:16:26,555 - INFO -     n_estimators: [50, 100, 200]
+2025-05-07 10:16:26,555 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-07 10:16:26,555 - INFO -     max_depth: [3, 5, 10]
+2025-05-07 10:16:29,258 - INFO - Hyperparameter tuning for SOD (%) completed successfully.
+2025-05-07 10:16:29,258 - INFO - Best hyperparameters for SOD (%): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-07 10:16:29,258 - INFO - Completed 'tune_hyperparameters' in 2.70 seconds
+2025-05-07 10:16:29,366 - INFO - Evaluation metrics for SOD (%): MSE=0.0791, R2=-0.0204
+2025-05-07 10:16:29,366 - INFO - Training time-series model for SOH (%)...
+2025-05-07 10:16:29,367 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-07 10:16:29,367 - INFO - Starting hyperparameter tuning for SOH (%) with the following param_grid:
+2025-05-07 10:16:29,367 - INFO -     n_estimators: [50, 100, 200]
+2025-05-07 10:16:29,367 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-07 10:16:29,367 - INFO -     max_depth: [3, 5, 10]
+2025-05-07 10:16:32,121 - INFO - Hyperparameter tuning for SOH (%) completed successfully.
+2025-05-07 10:16:32,121 - INFO - Best hyperparameters for SOH (%): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-07 10:16:32,121 - INFO - Completed 'tune_hyperparameters' in 2.75 seconds
+2025-05-07 10:16:32,231 - INFO - Evaluation metrics for SOH (%): MSE=0.0993, R2=-0.0230
+2025-05-07 10:16:32,231 - INFO - Training time-series model for Cell Temperature (°C)...
+2025-05-07 10:16:32,232 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-07 10:16:32,232 - INFO - Starting hyperparameter tuning for Cell Temperature (°C) with the following param_grid:
+2025-05-07 10:16:32,232 - INFO -     n_estimators: [50, 100, 200]
+2025-05-07 10:16:32,232 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-07 10:16:32,232 - INFO -     max_depth: [3, 5, 10]
+2025-05-07 10:16:34,909 - INFO - Hyperparameter tuning for Cell Temperature (°C) completed successfully.
+2025-05-07 10:16:34,909 - INFO - Best hyperparameters for Cell Temperature (°C): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-07 10:16:34,909 - INFO - Completed 'tune_hyperparameters' in 2.68 seconds
+2025-05-07 10:16:35,017 - INFO - Evaluation metrics for Cell Temperature (°C): MSE=0.0887, R2=-0.0208
+2025-05-07 10:16:35,017 - INFO - Training time-series model for Ambient Temperature (°C)...
+2025-05-07 10:16:35,018 - INFO - Started execution of 'tune_hyperparameters'
+2025-05-07 10:16:35,018 - INFO - Starting hyperparameter tuning for Ambient Temperature (°C) with the following param_grid:
+2025-05-07 10:16:35,018 - INFO -     n_estimators: [50, 100, 200]
+2025-05-07 10:16:35,018 - INFO -     learning_rate: [0.01, 0.1, 0.2]
+2025-05-07 10:16:35,018 - INFO -     max_depth: [3, 5, 10]
+2025-05-07 10:16:37,790 - INFO - Hyperparameter tuning for Ambient Temperature (°C) completed successfully.
+2025-05-07 10:16:37,790 - INFO - Best hyperparameters for Ambient Temperature (°C): {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 50}
+2025-05-07 10:16:37,790 - INFO - Completed 'tune_hyperparameters' in 2.77 seconds
+2025-05-07 10:16:37,899 - INFO - Evaluation metrics for Ambient Temperature (°C): MSE=0.0757, R2=-0.0112
+2025-05-07 10:16:37,899 - INFO - All time-series models trained successfully.
+2025-05-07 10:16:37,899 - INFO - Completed 'train_time_series_models' in 23.37 seconds
+2025-05-07 10:16:37,899 - INFO - Started execution of 'predict_next_values'
+2025-05-07 10:16:37,902 - INFO - Started execution of 'reverse_scaling'
+2025-05-07 10:16:37,903 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-07 10:16:37,903 - INFO - Predicted next value for Voltage (V): 0.5771
+2025-05-07 10:16:37,903 - INFO - Started execution of 'reverse_scaling'
+2025-05-07 10:16:37,903 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-07 10:16:37,903 - INFO - Predicted next value for Current (A): 0.5261
+2025-05-07 10:16:37,903 - INFO - Started execution of 'reverse_scaling'
+2025-05-07 10:16:37,903 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-07 10:16:37,903 - INFO - Predicted next value for Resistance (Ohms): 0.2654
+2025-05-07 10:16:37,903 - INFO - Started execution of 'reverse_scaling'
+2025-05-07 10:16:37,903 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-07 10:16:37,903 - INFO - Predicted next value for SOC (%): 0.5072
+2025-05-07 10:16:37,903 - INFO - Started execution of 'reverse_scaling'
+2025-05-07 10:16:37,904 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-07 10:16:37,904 - INFO - Predicted next value for SOD (%): 0.4928
+2025-05-07 10:16:37,904 - INFO - Started execution of 'reverse_scaling'
+2025-05-07 10:16:37,904 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-07 10:16:37,904 - INFO - Predicted next value for SOH (%): 0.5078
+2025-05-07 10:16:37,904 - INFO - Started execution of 'reverse_scaling'
+2025-05-07 10:16:37,904 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-07 10:16:37,904 - INFO - Predicted next value for Cell Temperature (°C): 0.4771
+2025-05-07 10:16:37,904 - INFO - Started execution of 'reverse_scaling'
+2025-05-07 10:16:37,904 - INFO - Completed 'reverse_scaling' in 0.00 seconds
+2025-05-07 10:16:37,904 - INFO - Predicted next value for Ambient Temperature (°C): 0.5295
+2025-05-07 10:16:37,904 - INFO - Completed 'predict_next_values' in 0.01 seconds
+2025-05-07 10:16:37,904 - INFO - Predicted Next Values for Cell 1234: {'Voltage (V)': np.float64(3.692515743461102), 'Current (A)': np.float64(1.2892225485792563), 'Resistance (Ohms)': np.float64(3.2898387568787464), 'SOC (%)': np.float64(75.3581639260178), 'SOD (%)': np.float64(24.64183607398221), 'SOH (%)': np.float64(95.07804087588326), 'Cell Temperature (°C)': np.float64(36.792177097521005), 'Ambient Temperature (°C)': np.float64(39.40687353969611)}
+2025-05-07 10:16:37,904 - ERROR - Cell ID CELL1234 not found in the DataFrame.
+2025-05-07 10:16:37,904 - CRITICAL - Critical error: Cell ID CELL1234 not found in the DataFrame.
