@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:6
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_data:/data/db
+  backend:
+    build: ./backend
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/battery_monitor
+      - JWT_SECRET=your_jwt_secret
+      - EMAIL_HOST=smtp.example.com
+      - EMAIL_USER=your_email@example.com
+      - EMAIL_PASS=yourpassword
+      - EMAIL_FROM=noreply@yourdomain.com
+      - FRONTEND_URL=http://localhost:3000
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mongo
+  frontend:
+    build: ./frontend
+    environment:
+      - REACT_APP_API_URL=http://localhost:4000/api
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+volumes:
+  mongo_data:
