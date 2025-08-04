@@ -4,128 +4,164 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
   Activity,
-  AlertTriangle,
-  BarChart3,
-  Cpu,
-  Database,
-  Gauge,
-  HardDrive,
-  LineChart,
-  Monitor,
-  Network,
-  Play,
-  Server,
-  Shield,
-  Square,
-  TrendingDown,
   TrendingUp,
-  Zap
+  AlertTriangle,
+  CheckCircle,
+  Clock,
+  Database,
+  GitBranch,
+  Zap,
+  BarChart3,
+  Settings,
+  Monitor,
+  ArrowLeft,
+  Play,
+  Pause,
+  RotateCcw
 } from 'lucide-react'
 import Link from 'next/link'
 
-// Sample data for charts
+// Sample MLOps data
+const pipelineMetrics = {
+  totalRuns: 47,
+  successRate: 94.2,
+  avgExecutionTime: 127,
+  modelsDeployed: 12,
+  activePipelines: 3,
+  lastRun: '2 minutes ago'
+}
 
-const driftData = [
-  { time: '00:00', voltage: 0.05, temperature: 0.03, current: 0.08 },
-  { time: '04:00', voltage: 0.07, temperature: 0.04, current: 0.12 },
-  { time: '08:00', voltage: 0.09, temperature: 0.06, current: 0.15 },
-  { time: '12:00', voltage: 0.11, temperature: 0.08, current: 0.18 },
-  { time: '16:00', voltage: 0.12, temperature: 0.09, current: 0.21 },
-  { time: '20:00', voltage: 0.13, temperature: 0.10, current: 0.23 },
-  { time: '24:00', voltage: 0.12, temperature: 0.08, current: 0.22 }
+const modelPerformance = [
+  {
+    name: 'Anomaly Detection',
+    version: 'v2.1.0',
+    accuracy: 0.947,
+    precision: 0.923,
+    recall: 0.981,
+    f1Score: 0.951,
+    drift: 'none',
+    status: 'production',
+    lastTrained: '2024-01-15 09:30:00'
+  },
+  {
+    name: 'Cell Health Prediction',
+    version: 'v1.8.2',
+    accuracy: 0.912,
+    precision: 0.889,
+    recall: 0.934,
+    f1Score: 0.911,
+    drift: 'low',
+    status: 'production',
+    lastTrained: '2024-01-14 16:45:00'
+  },
+  {
+    name: 'Forecasting Model',
+    version: 'v3.0.1',
+    accuracy: 0.876,
+    precision: 0.901,
+    recall: 0.845,
+    f1Score: 0.872,
+    drift: 'medium',
+    status: 'staging',
+    lastTrained: '2024-01-15 11:20:00'
+  }
 ]
 
-const performanceData = [
-  { time: '00:00', accuracy: 94.2, latency: 45, throughput: 1200 },
-  { time: '04:00', accuracy: 93.8, latency: 48, throughput: 1180 },
-  { time: '08:00', accuracy: 94.5, latency: 42, throughput: 1250 },
-  { time: '12:00', accuracy: 93.9, latency: 50, throughput: 1150 },
-  { time: '16:00', accuracy: 94.1, latency: 46, throughput: 1220 },
-  { time: '20:00', accuracy: 94.3, latency: 44, throughput: 1240 },
-  { time: '24:00', accuracy: 94.0, latency: 47, throughput: 1210 }
+const pipelineHistory = [
+  {
+    id: 'cd4ml_1705314600_batch_training',
+    status: 'completed',
+    startTime: '2024-01-15 10:30:00',
+    duration: '8m 42s',
+    modelsTrained: 3,
+    dataQuality: 0.95,
+    efficiency: 0.88
+  },
+  {
+    id: 'cd4ml_1705310400_model_validation',
+    status: 'completed',
+    startTime: '2024-01-15 09:20:00',
+    duration: '5m 18s',
+    modelsTrained: 1,
+    dataQuality: 0.92,
+    efficiency: 0.91
+  },
+  {
+    id: 'cd4ml_1705306800_drift_detection',
+    status: 'warning',
+    startTime: '2024-01-15 08:20:00',
+    duration: '12m 05s',
+    modelsTrained: 0,
+    dataQuality: 0.89,
+    efficiency: 0.75
+  },
+  {
+    id: 'cd4ml_1705303200_retrain_forecast',
+    status: 'failed',
+    startTime: '2024-01-15 07:20:00',
+    duration: '3m 22s',
+    modelsTrained: 0,
+    dataQuality: 0.87,
+    efficiency: 0.42
+  }
+]
+
+const alerts = [
+  {
+    id: 1,
+    type: 'warning',
+    message: 'Model drift detected in Forecasting Model',
+    timestamp: '5 minutes ago',
+    severity: 'medium'
+  },
+  {
+    id: 2,
+    type: 'info',
+    message: 'CD4ML pipeline completed successfully',
+    timestamp: '12 minutes ago',
+    severity: 'low'
+  },
+  {
+    id: 3,
+    type: 'error',
+    message: 'Data quality check failed for device 104',
+    timestamp: '1 hour ago',
+    severity: 'high'
+  }
 ]
 
 export default function MLOpsDashboard() {
-  const [isClient, setIsClient] = useState(false)
-  const [mlopsData, setMlopsData] = useState({
-    monitoring_active: false,
-    systemHealth: {
-      status: "healthy",
-      uptime: "99.8%",
-      latency: "45ms",
-      throughput: "1250 req/s",
-      errorRate: "0.02%",
-      cpuUsage: "23%",
-      memoryUsage: "67%",
-      gpuUsage: "12%"
-    },
-    modelPerformance: {
-      anomalyDetector: { accuracy: 94.2, f1Score: 0.91, latency: 12 },
-      cellPredictor: { accuracy: 89.7, f1Score: 0.87, latency: 8 },
-      forecaster: { mse: 0.023, mae: 0.045, latency: 15 }
-    },
-    dataDrift: {
-      voltage: { driftScore: 0.12, status: "normal", trend: "stable" },
-      temperature: { driftScore: 0.08, status: "normal", trend: "stable" },
-      current: { driftScore: 0.23, status: "warning", trend: "increasing" }
-    },
-    alerts: [
-      { id: 1, type: "drift", severity: "warning", message: "Current data drift detected", time: "2 min ago" },
-      { id: 2, type: "performance", severity: "info", message: "Model retraining completed", time: "15 min ago" },
-      { id: 3, type: "system", severity: "info", message: "Backup completed successfully", time: "1 hour ago" }
-    ],
-    metrics: {
-      totalPredictions: 15420,
-      successfulPredictions: 15380,
-      failedPredictions: 40,
-      avgResponseTime: 45,
-      dataQualityScore: 98.5,
-      modelAccuracy: 92.3
-    }
-  })
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
-
-  useEffect(() => {
-    const fetchMlopsData = async () => {
-      try {
-        const response = await fetch('/api/mlops/status');
-        if (response.ok) {
-          const data = await response.json();
-          setMlopsData(data);
-        }
-      } catch (error) {
-        console.error('Error fetching MLOps data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMlopsData();
-    
-    // Refresh data every 30 seconds
-    const interval = setInterval(fetchMlopsData, 30000);
-    return () => clearInterval(interval);
-  }, []);
+  const [isMonitoring, setIsMonitoring] = useState(true)
+  const [selectedModel, setSelectedModel] = useState(modelPerformance[0])
+  const [pipelineStatus, setPipelineStatus] = useState('running')
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'healthy': return 'text-green-400'
-      case 'warning': return 'text-yellow-400'
-      case 'critical': return 'text-red-400'
+      case 'production': return 'text-green-400 bg-green-500/20 border-green-500/30'
+      case 'staging': return 'text-yellow-400 bg-yellow-500/20 border-yellow-500/30'
+      case 'training': return 'text-blue-400 bg-blue-500/20 border-blue-500/30'
+      case 'deprecated': return 'text-gray-400 bg-gray-500/20 border-gray-500/30'
+      default: return 'text-gray-400 bg-gray-500/20 border-gray-500/30'
+    }
+  }
+
+  const getDriftColor = (drift: string) => {
+    switch (drift) {
+      case 'none': return 'text-green-400'
+      case 'low': return 'text-yellow-400'
+      case 'medium': return 'text-orange-400'
+      case 'high': return 'text-red-400'
       default: return 'text-gray-400'
     }
   }
 
-  const getSeverityColor = (severity: string) => {
-    switch (severity) {
-      case 'critical': return 'bg-red-500/20 text-red-400 border-red-500/30'
-      case 'warning': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
-      case 'info': return 'bg-blue-500/20 text-blue-400 border-blue-500/30'
-      default: return 'bg-gray-500/20 text-gray-400 border-gray-500/30'
+  const getPipelineStatusColor = (status: string) => {
+    switch (status) {
+      case 'completed': return 'text-green-400 bg-green-500/20'
+      case 'running': return 'text-blue-400 bg-blue-500/20'
+      case 'warning': return 'text-yellow-400 bg-yellow-500/20'
+      case 'failed': return 'text-red-400 bg-red-500/20'
+      default: return 'text-gray-400 bg-gray-500/20'
     }
   }
 
@@ -136,89 +172,56 @@ export default function MLOpsDashboard() {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-4">
-              <Link href="/">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg animate-glow cursor-pointer">
+              <Link href="/" className="btn-secondary flex items-center space-x-2">
+                <ArrowLeft className="h-4 w-4" />
+                <span>Back</span>
+              </Link>
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg animate-glow">
                   <Monitor className="h-7 w-7 text-white" />
                 </div>
-              </Link>
-              <div>
-                <h1 className="text-2xl font-bold gradient-text tracking-tight">MLOps Dashboard</h1>
-                <p className="text-sm text-white/70 font-medium">Monitoring & Observability</p>
+                <div>
+                  <h1 className="text-2xl font-bold gradient-text tracking-tight">MLOps Dashboard</h1>
+                  <p className="text-sm text-white/70 font-medium">CD4ML Pipeline Monitoring & Model Management</p>
+                </div>
               </div>
             </div>
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-3">
-                <div className={`w-3 h-3 rounded-full ${mlopsData.monitoring_active ? 'bg-green-400' : 'bg-red-400'} animate-pulse`}></div>
+                <div className={`w-3 h-3 rounded-full ${isMonitoring ? 'bg-green-400' : 'bg-red-400'}`}></div>
                 <span className="text-sm font-medium text-white/80">
-                  {mlopsData.monitoring_active ? 'Monitoring Active' : 'Monitoring Inactive'}
+                  {isMonitoring ? 'Monitoring Active' : 'Monitoring Paused'}
                 </span>
               </div>
-              <div className="flex items-center space-x-3">
-                <button 
-                  onClick={async () => {
-                    try {
-                      const response = await fetch('/api/mlops/start-monitoring', { method: 'POST' });
-                      if (response.ok) {
-                        window.location.reload();
-                      }
-                    } catch (error) {
-                      console.error('Error starting monitoring:', error);
-                    }
-                  }}
-                  className="btn-primary flex items-center space-x-2 group"
-                  disabled={mlopsData.monitoring_active}
-                >
-                  <Play className="h-4 w-4 group-hover:scale-110 transition-transform" />
-                  <span>Start Monitoring</span>
-                </button>
-                <button 
-                  onClick={async () => {
-                    try {
-                      const response = await fetch('/api/mlops/stop-monitoring', { method: 'POST' });
-                      if (response.ok) {
-                        window.location.reload();
-                      }
-                    } catch (error) {
-                      console.error('Error stopping monitoring:', error);
-                    }
-                  }}
-                  className="btn-secondary flex items-center space-x-2 group"
-                  disabled={!mlopsData.monitoring_active}
-                >
-                  <Square className="h-4 w-4 group-hover:scale-110 transition-transform" />
-                  <span>Stop Monitoring</span>
-                </button>
-              </div>
-              <Link href="/">
-                <button className="btn-secondary flex items-center space-x-2 group">
-                  <BarChart3 className="h-5 w-5 group-hover:scale-110 transition-transform" />
-                  <span>Back to Dashboard</span>
-                </button>
-              </Link>
+              <button 
+                onClick={() => setIsMonitoring(!isMonitoring)}
+                className="btn-secondary flex items-center space-x-2"
+              >
+                {isMonitoring ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+                <span>{isMonitoring ? 'Pause' : 'Resume'}</span>
+              </button>
             </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-6">
-        {/* System Health Overview - Compact Horizontal Layout */}
-        <div className="flex flex-wrap items-center gap-4 mb-6">
+      <main className="max-w-7xl mx-auto px-6 py-8">
+        {/* Overview Metrics */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="stat-card flex-shrink-0"
+            className="stat-card"
           >
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
-                <Server className="h-4 w-4 text-green-400" />
+              <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                <GitBranch className="h-5 w-5 text-blue-400" />
               </div>
               <div>
-                <p className="text-xs font-medium text-white/70 uppercase tracking-wide">System Status</p>
-                <p className={`text-lg font-bold ${getStatusColor(mlopsData.systemHealth.status)}`}>
-                  {mlopsData.systemHealth.status.charAt(0).toUpperCase() + mlopsData.systemHealth.status.slice(1)}
-                </p>
+                <p className="text-xs font-medium text-white/70 uppercase tracking-wide">Pipeline Runs</p>
+                <p className="text-xl font-bold text-white">{pipelineMetrics.totalRuns}</p>
               </div>
             </div>
           </motion.div>
@@ -227,15 +230,15 @@ export default function MLOpsDashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="stat-card flex-shrink-0"
+            className="stat-card"
           >
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                <Gauge className="h-4 w-4 text-blue-400" />
+              <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
+                <CheckCircle className="h-5 w-5 text-green-400" />
               </div>
               <div>
-                <p className="text-xs font-medium text-white/70 uppercase tracking-wide">Avg Response</p>
-                <p className="text-lg font-bold text-white">{mlopsData.systemHealth.latency}</p>
+                <p className="text-xs font-medium text-white/70 uppercase tracking-wide">Success Rate</p>
+                <p className="text-xl font-bold gradient-text-success">{pipelineMetrics.successRate}%</p>
               </div>
             </div>
           </motion.div>
@@ -244,15 +247,15 @@ export default function MLOpsDashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="stat-card flex-shrink-0"
+            className="stat-card"
           >
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                <Zap className="h-4 w-4 text-purple-400" />
+              <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                <Clock className="h-5 w-5 text-purple-400" />
               </div>
               <div>
-                <p className="text-xs font-medium text-white/70 uppercase tracking-wide">Throughput</p>
-                <p className="text-lg font-bold text-white">{mlopsData.systemHealth.throughput}</p>
+                <p className="text-xs font-medium text-white/70 uppercase tracking-wide">Avg Execution</p>
+                <p className="text-xl font-bold text-white">{pipelineMetrics.avgExecutionTime}s</p>
               </div>
             </div>
           </motion.div>
@@ -261,66 +264,32 @@ export default function MLOpsDashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="stat-card flex-shrink-0"
+            className="stat-card"
           >
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center">
-                <AlertTriangle className="h-4 w-4 text-red-400" />
+              <div className="w-10 h-10 bg-indigo-500/20 rounded-lg flex items-center justify-center">
+                <Database className="h-5 w-5 text-indigo-400" />
               </div>
               <div>
-                <p className="text-xs font-medium text-white/70 uppercase tracking-wide">Error Rate</p>
-                <p className="text-lg font-bold text-white">{mlopsData.systemHealth.errorRate}</p>
+                <p className="text-xs font-medium text-white/70 uppercase tracking-wide">Models Deployed</p>
+                <p className="text-xl font-bold text-white">{pipelineMetrics.modelsDeployed}</p>
               </div>
             </div>
           </motion.div>
-        </div>
 
-        {/* Resource Usage & Model Performance - Compact Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="chart-container"
+            className="stat-card"
           >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-white">Resource Usage</h3>
-              <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                <Cpu className="h-4 w-4 text-blue-400" />
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+                <Activity className="h-5 w-5 text-yellow-400" />
               </div>
-            </div>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-white/70 text-sm">CPU Usage</span>
-                <span className="text-white font-semibold text-sm">{mlopsData.systemHealth.cpuUsage}</span>
-              </div>
-              <div className="w-full bg-white/10 rounded-full h-1.5">
-                <div 
-                  className="bg-gradient-to-r from-blue-500 to-purple-600 h-1.5 rounded-full transition-all duration-300"
-                  style={{ width: mlopsData.systemHealth.cpuUsage }}
-                ></div>
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <span className="text-white/70 text-sm">Memory Usage</span>
-                <span className="text-white font-semibold text-sm">{mlopsData.systemHealth.memoryUsage}</span>
-              </div>
-              <div className="w-full bg-white/10 rounded-full h-1.5">
-                <div 
-                  className="bg-gradient-to-r from-green-500 to-blue-600 h-1.5 rounded-full transition-all duration-300"
-                  style={{ width: mlopsData.systemHealth.memoryUsage }}
-                ></div>
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <span className="text-white/70 text-sm">GPU Usage</span>
-                <span className="text-white font-semibold text-sm">{mlopsData.systemHealth.gpuUsage}</span>
-              </div>
-              <div className="w-full bg-white/10 rounded-full h-1.5">
-                <div 
-                  className="bg-gradient-to-r from-purple-500 to-pink-600 h-1.5 rounded-full transition-all duration-300"
-                  style={{ width: mlopsData.systemHealth.gpuUsage }}
-                ></div>
+              <div>
+                <p className="text-xs font-medium text-white/70 uppercase tracking-wide">Active Pipelines</p>
+                <p className="text-xl font-bold text-white">{pipelineMetrics.activePipelines}</p>
               </div>
             </div>
           </motion.div>
@@ -329,50 +298,23 @@ export default function MLOpsDashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="chart-container"
+            className="stat-card"
           >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-white">Model Performance</h3>
-              <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
-                <BarChart3 className="h-4 w-4 text-green-400" />
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center">
+                <Zap className="h-5 w-5 text-red-400" />
               </div>
-            </div>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-white/70 text-sm">Anomaly Detector</span>
-                <span className="text-white font-semibold text-sm">{mlopsData.modelPerformance.anomalyDetector.accuracy}%</span>
-              </div>
-              <div className="w-full bg-white/10 rounded-full h-1.5">
-                <div 
-                  className="bg-gradient-to-r from-green-500 to-emerald-600 h-1.5 rounded-full transition-all duration-300"
-                  style={{ width: `${mlopsData.modelPerformance.anomalyDetector.accuracy}%` }}
-                ></div>
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <span className="text-white/70 text-sm">Cell Predictor</span>
-                <span className="text-white font-semibold text-sm">{mlopsData.modelPerformance.cellPredictor.accuracy}%</span>
-              </div>
-              <div className="w-full bg-white/10 rounded-full h-1.5">
-                <div 
-                  className="bg-gradient-to-r from-blue-500 to-cyan-600 h-1.5 rounded-full transition-all duration-300"
-                  style={{ width: `${mlopsData.modelPerformance.cellPredictor.accuracy}%` }}
-                ></div>
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <span className="text-white/70 text-sm">Forecaster (MSE)</span>
-                <span className="text-white font-semibold text-sm">{mlopsData.modelPerformance.forecaster.mse}</span>
-              </div>
-              <div className="w-full bg-white/10 rounded-full h-1.5">
-                <div 
-                  className="bg-gradient-to-r from-purple-500 to-violet-600 h-1.5 rounded-full transition-all duration-300"
-                  style={{ width: `${(1 - mlopsData.modelPerformance.forecaster.mse) * 100}%` }}
-                ></div>
+              <div>
+                <p className="text-xs font-medium text-white/70 uppercase tracking-wide">Last Run</p>
+                <p className="text-sm font-bold text-white">{pipelineMetrics.lastRun}</p>
               </div>
             </div>
           </motion.div>
+        </div>
 
+        {/* Model Performance & Pipeline Status */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          {/* Model Performance */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -380,249 +322,152 @@ export default function MLOpsDashboard() {
             className="chart-container"
           >
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold text-white">Data Drift</h3>
-              <div className="w-10 h-10 bg-yellow-500/20 rounded-xl flex items-center justify-center">
-                <TrendingDown className="h-5 w-5 text-yellow-400" />
+              <h3 className="text-xl font-semibold text-white">Model Performance</h3>
+              <div className="w-10 h-10 bg-green-500/20 rounded-xl flex items-center justify-center">
+                <BarChart3 className="h-5 w-5 text-green-400" />
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-4">
-              {/* Voltage */}
-              <div className="flex flex-col space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-white/70 text-sm">Voltage</span>
-                  <span className={`font-semibold text-sm ${getStatusColor(mlopsData.dataDrift.voltage.status)}`}>
-                    {mlopsData.dataDrift.voltage.driftScore}
-                  </span>
+            <div className="space-y-4">
+              {modelPerformance.map((model, index) => (
+                <div 
+                  key={index}
+                  className={`p-4 rounded-lg border transition-all duration-300 cursor-pointer ${
+                    selectedModel?.name === model.name 
+                      ? 'bg-white/10 border-blue-500/50' 
+                      : 'bg-white/5 border-white/10 hover:bg-white/8'
+                  }`}
+                  onClick={() => setSelectedModel(model)}
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <div>
+                      <h4 className="font-semibold text-white">{model.name}</h4>
+                      <p className="text-xs text-white/60">Version {model.version}</p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className={`px-2 py-1 rounded-full text-xs border ${getStatusColor(model.status)}`}>
+                        {model.status}
+                      </span>
+                      <span className={`text-xs font-medium ${getDriftColor(model.drift)}`}>
+                        {model.drift === 'none' ? 'No Drift' : `${model.drift} Drift`}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-4 gap-4 text-sm">
+                    <div>
+                      <p className="text-white/60">Accuracy</p>
+                      <p className="font-semibold text-white">{(model.accuracy * 100).toFixed(1)}%</p>
+                    </div>
+                    <div>
+                      <p className="text-white/60">Precision</p>
+                      <p className="font-semibold text-white">{(model.precision * 100).toFixed(1)}%</p>
+                    </div>
+                    <div>
+                      <p className="text-white/60">Recall</p>
+                      <p className="font-semibold text-white">{(model.recall * 100).toFixed(1)}%</p>
+                    </div>
+                    <div>
+                      <p className="text-white/60">F1 Score</p>
+                      <p className="font-semibold text-white">{(model.f1Score * 100).toFixed(1)}%</p>
+                    </div>
+                  </div>
                 </div>
-                <div className="w-full bg-white/10 rounded-full h-2">
-                  <div 
-                    className={`h-2 rounded-full transition-all duration-300 ${
-                      mlopsData.dataDrift.voltage.status === 'warning' 
-                        ? 'bg-gradient-to-r from-yellow-500 to-orange-600'
-                        : 'bg-gradient-to-r from-green-500 to-emerald-600'
-                    }`}
-                    style={{ width: `${mlopsData.dataDrift.voltage.driftScore * 400}%` }}
-                  ></div>
-                </div>
-              </div>
-              
-              {/* Temperature */}
-              <div className="flex flex-col space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-white/70 text-sm">Temperature</span>
-                  <span className={`font-semibold text-sm ${getStatusColor(mlopsData.dataDrift.temperature.status)}`}>
-                    {mlopsData.dataDrift.temperature.driftScore}
-                  </span>
-                </div>
-                <div className="w-full bg-white/10 rounded-full h-2">
-                  <div 
-                    className={`h-2 rounded-full transition-all duration-300 ${
-                      mlopsData.dataDrift.temperature.status === 'warning' 
-                        ? 'bg-gradient-to-r from-yellow-500 to-orange-600'
-                        : 'bg-gradient-to-r from-green-500 to-emerald-600'
-                    }`}
-                    style={{ width: `${mlopsData.dataDrift.temperature.driftScore * 400}%` }}
-                  ></div>
-                </div>
-              </div>
-              
-              {/* Current */}
-              <div className="flex flex-col space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-white/70 text-sm">Current</span>
-                  <span className={`font-semibold text-sm ${getStatusColor(mlopsData.dataDrift.current.status)}`}>
-                    {mlopsData.dataDrift.current.driftScore}
-                  </span>
-                </div>
-                <div className="w-full bg-white/10 rounded-full h-2">
-                  <div 
-                    className={`h-2 rounded-full transition-all duration-300 ${
-                      mlopsData.dataDrift.current.status === 'warning' 
-                        ? 'bg-gradient-to-r from-yellow-500 to-orange-600'
-                        : 'bg-gradient-to-r from-green-500 to-emerald-600'
-                    }`}
-                    style={{ width: `${mlopsData.dataDrift.current.driftScore * 400}%` }}
-                  ></div>
-                </div>
-              </div>
+              ))}
             </div>
           </motion.div>
-        </div>
 
-        {/* Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          {/* Pipeline Status */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
             className="chart-container"
           >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-white">Data Drift Trend</h3>
-              <div className="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center">
-                <TrendingDown className="h-4 w-4 text-red-400" />
-              </div>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-semibold text-white">Pipeline History</h3>
+              <button className="btn-secondary flex items-center space-x-2">
+                <RotateCcw className="h-4 w-4" />
+                <span>Refresh</span>
+              </button>
             </div>
-            <div className="h-48 bg-white/5 rounded-xl flex items-center justify-center p-4">
-              {isClient ? (
-                <div className="w-full h-full flex items-end justify-between space-x-2">
-                  {driftData.map((point, index) => (
-                    <div key={index} className="flex flex-col items-center space-y-2">
-                      <div className="flex flex-col space-y-1">
-                        <div 
-                          className="w-8 bg-gradient-to-t from-blue-500 to-purple-600 rounded-t"
-                          style={{ height: `${point.voltage * 150}px` }}
-                        ></div>
-                        <div 
-                          className="w-8 bg-gradient-to-t from-green-500 to-emerald-600 rounded-t"
-                          style={{ height: `${point.temperature * 150}px` }}
-                        ></div>
-                        <div 
-                          className="w-8 bg-gradient-to-t from-yellow-500 to-orange-600 rounded-t"
-                          style={{ height: `${point.current * 150}px` }}
-                        ></div>
-                      </div>
-                      <span className="text-xs text-white/60">{point.time}</span>
+            <div className="space-y-3">
+              {pipelineHistory.map((run, index) => (
+                <div key={run.id} className="p-4 bg-white/5 rounded-lg border border-white/10">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center space-x-3">
+                      <span className={`w-3 h-3 rounded-full ${getPipelineStatusColor(run.status)}`}></span>
+                      <span className="text-sm font-medium text-white">{run.id}</span>
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
-                </div>
-              )}
-            </div>
-            <div className="flex justify-center space-x-6 mt-4">
-              <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                <span className="text-xs text-white/70">Voltage</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <span className="text-xs text-white/70">Temperature</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                <span className="text-xs text-white/70">Current</span>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9 }}
-            className="chart-container"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-white">Performance Metrics</h3>
-              <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
-                <TrendingUp className="h-4 w-4 text-green-400" />
-              </div>
-            </div>
-            <div className="h-48 bg-white/5 rounded-xl flex items-center justify-center p-4">
-              {isClient ? (
-                <div className="w-full h-full flex items-end justify-between space-x-2">
-                  {performanceData.map((point, index) => (
-                    <div key={index} className="flex flex-col items-center space-y-2">
-                      <div className="flex flex-col space-y-1">
-                        <div 
-                          className="w-8 bg-gradient-to-t from-green-500 to-emerald-600 rounded-t"
-                          style={{ height: `${point.accuracy - 90}px` }}
-                        ></div>
-                        <div 
-                          className="w-8 bg-gradient-to-t from-blue-500 to-cyan-600 rounded-t"
-                          style={{ height: `${point.latency / 2}px` }}
-                        ></div>
-                      </div>
-                      <span className="text-xs text-white/60">{point.time}</span>
+                    <span className="text-xs text-white/60">{run.startTime}</span>
+                  </div>
+                  <div className="grid grid-cols-4 gap-4 text-xs">
+                    <div>
+                      <p className="text-white/60">Duration</p>
+                      <p className="font-semibold text-white">{run.duration}</p>
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-400"></div>
-                </div>
-              )}
-            </div>
-            <div className="flex justify-center space-x-6 mt-4">
-              <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <span className="text-xs text-white/70">Accuracy (%)</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                <span className="text-xs text-white/70">Latency (ms)</span>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Alerts and Metrics */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.0 }}
-            className="lg:col-span-2 data-table"
-          >
-            <div className="px-6 py-4 border-b border-white/10">
-              <h3 className="text-xl font-semibold text-white">Recent Alerts</h3>
-            </div>
-            <div className="p-6">
-              <div className="space-y-4">
-                {mlopsData.alerts.map((alert) => (
-                  <div 
-                    key={alert.id}
-                    className={`p-4 rounded-lg border ${getSeverityColor(alert.severity)}`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <AlertTriangle className="h-5 w-5" />
-                        <span className="font-medium">{alert.message}</span>
-                      </div>
-                      <span className="text-sm opacity-70">{alert.time}</span>
+                    <div>
+                      <p className="text-white/60">Models</p>
+                      <p className="font-semibold text-white">{run.modelsTrained}</p>
+                    </div>
+                    <div>
+                      <p className="text-white/60">Data Quality</p>
+                      <p className="font-semibold text-white">{(run.dataQuality * 100).toFixed(0)}%</p>
+                    </div>
+                    <div>
+                      <p className="text-white/60">Efficiency</p>
+                      <p className="font-semibold text-white">{(run.efficiency * 100).toFixed(0)}%</p>
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.1 }}
-            className="chart-container"
-          >
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold text-white">Key Metrics</h3>
-              <div className="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center">
-                <Activity className="h-5 w-5 text-purple-400" />
-              </div>
-            </div>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                <span className="text-white/70">Total Predictions</span>
-                <span className="text-white font-semibold">{mlopsData.metrics.totalPredictions.toLocaleString()}</span>
-              </div>
-              <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                <span className="text-white/70">Success Rate</span>
-                <span className="text-green-400 font-semibold">
-                  {((mlopsData.metrics.successfulPredictions / mlopsData.metrics.totalPredictions) * 100).toFixed(1)}%
-                </span>
-              </div>
-              <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                <span className="text-white/70">Data Quality</span>
-                <span className="text-blue-400 font-semibold">{mlopsData.metrics.dataQualityScore}%</span>
-              </div>
-              <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                <span className="text-white/70">Model Accuracy</span>
-                <span className="text-purple-400 font-semibold">{mlopsData.metrics.modelAccuracy}%</span>
-              </div>
+                </div>
+              ))}
             </div>
           </motion.div>
         </div>
+
+        {/* Alerts & Actions */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.9 }}
+          className="data-table"
+        >
+          <div className="px-6 py-4 border-b border-white/10">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xl font-semibold text-white">Recent Alerts & Actions</h3>
+              <div className="flex items-center space-x-4">
+                <button className="btn-primary">
+                  Trigger Pipeline
+                </button>
+                <Link href="/llm" className="btn-secondary">
+                  LLM Dashboard
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="p-6">
+            <div className="space-y-3">
+              {alerts.map((alert) => (
+                <div key={alert.id} className="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/10">
+                  <div className="flex items-center space-x-3">
+                    {alert.type === 'warning' && <AlertTriangle className="h-5 w-5 text-yellow-400" />}
+                    {alert.type === 'error' && <AlertTriangle className="h-5 w-5 text-red-400" />}
+                    {alert.type === 'info' && <CheckCircle className="h-5 w-5 text-blue-400" />}
+                    <div>
+                      <p className="text-white font-medium">{alert.message}</p>
+                      <p className="text-xs text-white/60">{alert.timestamp}</p>
+                    </div>
+                  </div>
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                    alert.severity === 'high' ? 'bg-red-500/20 text-red-300' :
+                    alert.severity === 'medium' ? 'bg-yellow-500/20 text-yellow-300' :
+                    'bg-blue-500/20 text-blue-300'
+                  }`}>
+                    {alert.severity}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
       </main>
     </div>
   )
