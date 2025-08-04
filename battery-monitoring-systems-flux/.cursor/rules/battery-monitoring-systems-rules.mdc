@@ -1,0 +1,245 @@
+---
+alwaysApply: true
+---
+rules:
+
+  # -----------------------------
+  # 🔐 Security & Compliance Rules
+  # -----------------------------
+  - pattern: '(["\'])(bolt|https?)://[^"\']*(neo4j|admin|token|apikey|secret|user|pwd)[^"\']*(["\'])'
+    message: "⚠️ Avoid hardcoded URLs or credentials. Use environment variables or secret managers (e.g., Azure Key Vault, AWS Secrets Manager)."
+
+  - pattern: '(?i)(password|secret|token|apikey)\s*=\s*[\'\"].+[\'\"]'
+    message: "⚠️ Hardcoded secrets detected. Store secrets securely using environment variables or secret management services."
+
+  - pattern: '(?i)import\s+pickle'
+    message: "⚠️ Avoid using 'pickle' with untrusted data. Use JSON, YAML, or other safe serialization formats."
+
+  - pattern: '(?i)import\s+eval'
+    message: "⚠️ Avoid using 'eval' due to security risks. Use safer alternatives."
+
+  - pattern: 'open\s*\(.*[\'\"](config|secret|key|credential)[\'\"].*\)'
+    message: "⚠️ Sensitive config files should be encrypted and access-controlled."
+
+  - pattern: 'def\s+\w+\(.*\):\n(.*\n)*?.*os\.system\('
+    message: "⚠️ Avoid os.system for shell commands. Use subprocess with input validation."
+
+  # -----------------------------
+  # 🧠 Code Maintainability & Documentation
+  # -----------------------------
+  - pattern: 'def\s+\w+\(.*\):\n(?: {4}.*\n){20,}'
+    message: "🧠 Function too long. Split into smaller, testable pieces."
+
+  - pattern: '#\s*TODO'
+    message: "🚧 Clear out TODOs before production release."
+
+  - pattern: 'def\s+\w+\(.*\):\n(?!\s+""")'
+    message: "💡 Add docstring to describe function purpose, inputs, and outputs."
+
+  - pattern: 'class\s+\w+\(.*\):\n(?!\s+""")'
+    message: "📚 Add class-level docstring to improve documentation."
+
+  - pattern: 'def\s+\w+\(.*\):\n(?!.*print|logger)'
+    message: "🔍 Add logging inside function for better traceability."
+
+  - pattern: 'def\s+test_'
+    message: "✅ You're writing a test. Good! Ensure coverage of edge cases and use mocks for external dependencies."
+
+  - pattern: 'def\s+\w+\(.*\):\n(?!.*type hints)'
+    message: "💡 Add type hints to all function signatures for clarity and static analysis."
+
+  # -----------------------------
+  # ⚙️ Data Engineering & Analytics Best Practices
+  # -----------------------------
+  - pattern: 'df\s*=\s*spark\.sql\([^)]+\)'
+    condition: 'not contains "df.cache()" or "df.count()"'
+    message: "⚠️ Cache or count the DataFrame to avoid lazy evaluation issues."
+
+  - pattern: '\.collect\(\)'
+    message: "⚠️ Avoid .collect() on large datasets. Prefer .toLocalIterator() or limit rows."
+
+  - pattern: 'df\.iterrows\(\)'
+    message: "⚠️ .iterrows() is slow. Use vectorized operations or .itertuples()."
+
+  - pattern: 'read_csv\('
+    condition: 'not contains "dtype"'
+    message: "💡 Specify dtypes when reading CSVs for memory efficiency and data integrity."
+
+  - pattern: 'pd\.merge\('
+    condition: 'not contains "on="'
+    message: "💡 Always specify 'on' columns explicitly in merges to avoid ambiguous joins."
+
+  - pattern: '.*'
+    condition: 'analytics logic embedded directly in UI code'
+    message: "📊 Decouple analytics logic from UI. Place analytics functions in a dedicated module."
+
+  - pattern: '.*'
+    condition: 'job or transformation lacks timestamp or metadata'
+    message: "⏱️ Add timestamp or job metadata to analytics pipelines for traceability."
+
+  # -----------------------------
+  # 🧪 Testing, Logging & Observability
+  # -----------------------------
+  - pattern: 'def\s+\w+\(.*\):\n(?!.*logger)'
+    message: "🔍 Add logging inside function for better traceability."
+
+  - pattern: 'logging\.basicConfig\('
+    condition: 'not contains "filename="'
+    message: "💡 Log to a file for persistent traceability (e.g., data_pipeline.log, ml_training.log)."
+
+  - pattern: '.*'
+    condition: 'no master log file (project_master.log) detected'
+    message: "🗂️ Maintain a master log file aggregating all module logs for unified observability."
+
+  - pattern: '.*'
+    condition: 'critical operation lacks resource usage logging'
+    message: "📊 Log CPU and memory usage for critical operations."
+
+  - pattern: '.*'
+    condition: 'test folder missing for a phase/module'
+    message: "🧪 Each phase/module should have its own tests folder for robust modular testing."
+
+  # -----------------------------
+  # 🔧 General Engineering Best Practices
+  # -----------------------------
+  - pattern: '[A-Z]{2,}'
+    condition: 'in variable name'
+    message: "🔤 Use snake_case for variable names (unless it's a constant)."
+
+  - pattern: '[a-z]+_VERSION\s*=\s*'
+    message: "📌 Constants should be in UPPER_CASE (e.g., API_VERSION)."
+
+  - pattern: 'import\s+.*(os|sys).*\n(?!.*logging)'
+    message: "🔍 Consider adding logging for better observability."
+
+  - pattern: '.*'
+    condition: 'file is script with > 500 lines and not modular'
+    message: "🧩 Consider modularizing large scripts into packages (e.g., lineage/, utils/, core/)."
+
+  - pattern: '.*'
+    condition: 'project missing README-local.md or README-production.md'
+    message: "📘 Include both README-local.md and README-production.md for local and production instructions."
+
+  - pattern: '.*'
+    condition: 'project missing config_local.yaml or config_prod.yaml'
+    message: "⚙️ Include both config_local.yaml and config_prod.yaml for environment-specific configuration."
+
+  - pattern: '.*'
+    condition: 'no versioning system (e.g., git) detected'
+    message: "🔁 Use Git or similar version control system for tracking."
+
+  - pattern: '.*'
+    condition: 'main app missing entry point'
+    message: "▶️ Add entrypoint script (e.g., app.py or main.py) to start the project clearly."
+
+  - pattern: '.*'
+    condition: 'project contains many unused or temporary files'
+    message: "🗂️ Avoid unnecessary file clutter. Clean up and keep file count manageable."
+
+  - pattern: '.*'
+    condition: 'dead code remains in versioned files'
+    message: "🧹 Remove dead code to keep the project clean and maintainable."
+
+  - pattern: '.*'
+    condition: 'major changes not integrated across all dependent modules'
+    message: "🔗 After modular changes, ensure integration across the project and verify end-to-end execution."
+
+  - pattern: '.*'
+    condition: 'project structure not updated after new modules are added'
+    message: "📁 Keep the overall structure clean and up to date when introducing new components."
+
+  - pattern: '.*'
+    condition: 'code changes not followed by project execution'
+    message: "🧪 Always test your project after changes to ensure it runs correctly."
+
+  # -----------------------------
+  # 🤖 ML, LLM, and MLOps/DevOps Best Practices
+  # -----------------------------
+  - pattern: 'fit\('
+    condition: 'not contains "random_state"'
+    message: "🎲 Set random_state for reproducibility in ML experiments."
+
+  - pattern: '.*'
+    condition: 'ML/LLM model code lacks input/output validation'
+    message: "🛡️ Validate and sanitize all model inputs and outputs."
+
+  - pattern: '.*'
+    condition: 'ML pipeline missing versioning or model registry integration'
+    message: "🏷️ Integrate model versioning and registry (e.g., MLflow, DVC) for traceability."
+
+  - pattern: '.*'
+    condition: 'ML/LLM code lacks test coverage'
+    message: "🧪 Add unit and integration tests for all ML/LLM modules."
+
+  - pattern: '.*'
+    condition: 'ML/LLM code lacks resource usage logging'
+    message: "📊 Log resource utilization (CPU, memory, GPU) during model training and inference."
+
+  - pattern: '.*'
+    condition: 'ML/LLM code lacks feature flag/config toggle for production features'
+    message: "🚦 Use feature flags or config toggles to enable/disable production features safely."
+
+  - pattern: '.*'
+    condition: 'ML/LLM code lacks commented production integration blocks'
+    message: "📝 Include commented code for production integrations (e.g., cloud endpoints, Docker, CI/CD) with clear activation instructions."
+
+  # -----------------------------
+  # 🌐 Web Application & API Rules
+  # -----------------------------
+  - pattern: 'app\.run\('
+    condition: 'not contains "host="'
+    message: "🌐 Specify host='0.0.0.0' for web apps to be accessible in production environments."
+
+  - pattern: '.*'
+    condition: 'API endpoint lacks authentication/authorization'
+    message: "🔒 Implement authentication and authorization for all API endpoints."
+
+  - pattern: '.*'
+    condition: 'API endpoint lacks input validation'
+    message: "🛡️ Validate and sanitize all API inputs to prevent security vulnerabilities."
+
+  - pattern: '.*'
+    condition: 'API lacks OpenAPI/Swagger documentation'
+    message: "📄 Document all API endpoints using OpenAPI/Swagger for clarity and client integration."
+
+  # -----------------------------
+  # 🏗️ Modular & Scalable Architecture
+  # -----------------------------
+  - pattern: '.*'
+    condition: 'new module added without updating main integration file'
+    message: "🔗 Integrate new modules in the main project entry point to maintain workflow cohesion."
+
+  - pattern: '.*'
+    condition: 'module lacks clear interface or contract'
+    message: "📐 Define clear interfaces (function signatures, input/output types) for all modules."
+
+  - pattern: '.*'
+    condition: 'module lacks unit, integration, and regression tests'
+    message: "🧪 Write robust unit, integration, and regression tests for every significant feature."
+
+  - pattern: '.*'
+    condition: 'module lacks sample data or mock services for local testing'
+    message: "🧪 Provide sample data and mock services to enable local testing of all modules."
+
+  - pattern: '.*'
+    condition: 'project not runnable from a single entry point'
+    message: "▶️ Ensure all workflows can be triggered from a single entry point (e.g., python main.py)."
+
+  # -----------------------------
+  # 🛡️ Production-Readiness & Future-Proofing
+  # -----------------------------
+  - pattern: '.*'
+    condition: 'production code lacks commented cloud integration blocks'
+    message: "☁️ Include commented code for cloud connectors (Azure, AWS, GCP, Docker) with activation instructions."
+
+  - pattern: '.*'
+    condition: 'production code lacks security best practices'
+    message: "🔐 Follow security best practices: secure credentials, IAM, encrypted connections, and compliance (GDPR, HIPAA, etc.)."
+
+  - pattern: '.*'
+    condition: 'production code lacks monitoring/analytics integration'
+    message: "📈 Include placeholders for monitoring, analytics, and CI/CD integrations."
+
+  - pattern: '.*'
+    condition: 'project lacks changelog in README'
+    message: "📝 Maintain a changelog section in README-local.md and README-production.md for major updates."

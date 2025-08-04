@@ -1,0 +1,315 @@
+# Production Configuration for Battery Monitoring System
+# This file contains all configuration settings for production deployment
+
+# Application Settings
+app:
+  name: "Battery Monitoring System"
+  version: "1.0.0"
+  debug: false
+  host: "0.0.0.0"
+  port: 8000
+  websocket_port: 8001
+  reload: false
+  workers: 4
+
+# Database Configuration
+database:
+  type: "postgresql"
+  host: "${DB_HOST}"
+  port: 5432
+  database: "${DB_NAME}"
+  username: "${DB_USER}"
+  password: "${DB_PASSWORD}"
+  pool_size: 20
+  max_overflow: 30
+  pool_timeout: 30
+  pool_recycle: 3600
+
+# ML Model Configuration
+ml:
+  # Model paths (use cloud storage in production)
+  models_dir: "${MODELS_DIR}"
+  anomaly_model_path: "${MODELS_DIR}/anomaly_detection.pkl"
+  prediction_model_path: "${MODELS_DIR}/cell_prediction.pkl"
+  forecasting_model_path: "${MODELS_DIR}/forecasting.pkl"
+  
+  # Training parameters
+  test_size: 0.2
+  random_state: 42
+  cv_folds: 5
+  
+  # Anomaly detection
+  anomaly:
+    contamination: 0.05
+    n_estimators: 200
+    max_samples: "auto"
+  
+  # Prediction thresholds
+  prediction:
+    confidence_threshold: 0.8
+    dead_cell_threshold: 0.2
+    alive_cell_threshold: 0.8
+  
+  # Forecasting
+  forecasting:
+    forecast_steps: 25
+    lookback_window: 100
+    min_samples: 500
+
+# LLM Configuration
+llm:
+  provider: "ollama"
+  model: "llama2:7b"
+  base_url: "${OLLAMA_URL}"
+  temperature: 0.5
+  max_tokens: 1000
+  timeout: 60
+  
+  # Prompts
+  prompts:
+    system: "You are an AI assistant for battery monitoring systems. You help analyze battery data and provide insights."
+    anomaly_analysis: "Analyze the following battery cell data for anomalies in voltage, temperature, and specific gravity:"
+    prediction_analysis: "Based on the battery cell patterns, predict if the cell is likely to be dead or alive:"
+    forecasting_analysis: "Analyze the battery cell trends and predict future values:"
+
+# MLOps Configuration
+mlops:
+  # MLflow
+  mlflow:
+    tracking_uri: "${MLFLOW_TRACKING_URI}"
+    experiment_name: "battery_monitoring_prod"
+    artifact_location: "${MLFLOW_ARTIFACT_LOCATION}"
+    registry_uri: "${MLFLOW_REGISTRY_URI}"
+  
+  # Model monitoring
+  monitoring:
+    drift_threshold: 0.05
+    performance_threshold: 0.85
+    alert_interval: 60  # 1 minute
+    retention_days: 90
+  
+  # Metrics
+  metrics:
+    - "accuracy"
+    - "precision"
+    - "recall"
+    - "f1_score"
+    - "mae"
+    - "rmse"
+    - "mape"
+    - "drift_score"
+    - "data_quality_score"
+  
+  # Alerting
+  alerting:
+    email_enabled: true
+    slack_enabled: true
+    webhook_enabled: true
+    alert_channels:
+      - "email"
+      - "slack"
+      - "webhook"
+
+# Logging Configuration
+logging:
+  level: "WARNING"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "/var/log/battery_monitoring/project_master.log"
+  max_size: 104857600  # 100MB
+  backup_count: 10
+  
+  # Module-specific logs
+  modules:
+    data_processing: "/var/log/battery_monitoring/data_processing.log"
+    ml_training: "/var/log/battery_monitoring/ml_training.log"
+    anomaly_detection: "/var/log/battery_monitoring/anomaly_detection.log"
+    prediction: "/var/log/battery_monitoring/prediction.log"
+    forecasting: "/var/log/battery_monitoring/forecasting.log"
+    web_app: "/var/log/battery_monitoring/web_app.log"
+    llm: "/var/log/battery_monitoring/llm.log"
+    mlops: "/var/log/battery_monitoring/mlops.log"
+
+# Data Configuration
+data:
+  input_file: "${DATA_INPUT_FILE}"
+  processed_dir: "${DATA_PROCESSED_DIR}"
+  features_dir: "${DATA_FEATURES_DIR}"
+  
+  # Key columns for analysis
+  key_columns:
+    - "CellNumber"
+    - "CellVoltage"
+    - "CellTemperature"
+    - "CellSpecificGravity"
+    - "DeviceID"
+    - "SerialNumber"
+    - "PacketDateTime"
+  
+  # Data validation
+  validation:
+    voltage_range: [2.0, 4.2]
+    temperature_range: [0, 60]
+    specific_gravity_range: [1.0, 1.3]
+    max_missing_percentage: 0.05
+
+# Web Application Configuration
+web_app:
+  # Frontend
+  frontend:
+    port: 3000
+    api_url: "${API_URL}"
+    websocket_url: "${WEBSOCKET_URL}"
+  
+  # Backend API
+  api:
+    title: "Battery Monitoring API"
+    description: "Production API for battery monitoring system with ML/LLM capabilities"
+    version: "1.0.0"
+    docs_url: "/docs"
+    redoc_url: "/redoc"
+  
+  # WebSocket
+  websocket:
+    ping_interval: 30
+    ping_timeout: 30
+    max_connections: 1000
+
+# Security Configuration
+security:
+  secret_key: "${SECRET_KEY}"
+  algorithm: "HS256"
+  access_token_expire_minutes: 15
+  
+  # CORS
+  cors:
+    origins: ["${FRONTEND_URL}"]
+    methods: ["GET", "POST", "PUT", "DELETE"]
+    headers: ["*"]
+  
+  # Rate limiting
+  rate_limit:
+    requests_per_minute: 100
+    burst_size: 20
+
+# Performance Configuration
+performance:
+  # Timeouts
+  request_timeout: 60
+  model_inference_timeout: 120
+  data_processing_timeout: 600
+  
+  # Batch processing
+  batch_size: 5000
+  max_workers: 8
+  
+  # Caching
+  cache_ttl: 1800  # 30 minutes
+  cache_max_size: 10000
+  
+  # Connection pooling
+  connection_pool_size: 20
+  connection_pool_timeout: 30
+
+# Monitoring and Observability
+monitoring:
+  # Prometheus
+  prometheus:
+    enabled: true
+    port: 9090
+    metrics_path: "/metrics"
+  
+  # Grafana
+  grafana:
+    enabled: true
+    url: "${GRAFANA_URL}"
+    api_key: "${GRAFANA_API_KEY}"
+  
+  # Health checks
+  health_checks:
+    enabled: true
+    interval: 30
+    timeout: 10
+  
+  # Distributed tracing
+  tracing:
+    enabled: true
+    jaeger_url: "${JAEGER_URL}"
+
+# Cloud Integration (Commented for future use)
+# cloud:
+#   # Azure
+#   azure:
+#     subscription_id: "${AZURE_SUBSCRIPTION_ID}"
+#     resource_group: "${AZURE_RESOURCE_GROUP}"
+#     workspace_name: "${AZURE_WORKSPACE_NAME}"
+#     storage_account: "${AZURE_STORAGE_ACCOUNT}"
+#     container_name: "${AZURE_CONTAINER_NAME}"
+#   
+#   # AWS
+#   aws:
+#     region: "${AWS_REGION}"
+#     s3_bucket: "${AWS_S3_BUCKET}"
+#     dynamodb_table: "${AWS_DYNAMODB_TABLE}"
+#     lambda_function: "${AWS_LAMBDA_FUNCTION}"
+#   
+#   # GCP
+#   gcp:
+#     project_id: "${GCP_PROJECT_ID}"
+#     bucket_name: "${GCP_BUCKET_NAME}"
+#     bigquery_dataset: "${GCP_BIGQUERY_DATASET}"
+
+# CI/CD Configuration
+cicd:
+  # Docker
+  docker:
+    image_name: "battery-monitoring-system"
+    image_tag: "${IMAGE_TAG}"
+    registry: "${DOCKER_REGISTRY}"
+  
+  # Kubernetes
+  kubernetes:
+    namespace: "battery-monitoring"
+    replicas: 3
+    resource_limits:
+      cpu: "2"
+      memory: "4Gi"
+    resource_requests:
+      cpu: "1"
+      memory: "2Gi"
+  
+  # Deployment
+  deployment:
+    strategy: "RollingUpdate"
+    max_surge: 1
+    max_unavailable: 0
+    health_check_path: "/health"
+    readiness_probe:
+      path: "/ready"
+      initial_delay: 30
+      period: 10
+    liveness_probe:
+      path: "/health"
+      initial_delay: 60
+      period: 30
+
+# Backup and Recovery
+backup:
+  enabled: true
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  retention_days: 30
+  storage:
+    type: "s3"
+    bucket: "${BACKUP_BUCKET}"
+    path: "backups/"
+
+# Compliance and Audit
+compliance:
+  # Data retention
+  data_retention_days: 2555  # 7 years
+  audit_log_enabled: true
+  audit_log_path: "/var/log/battery_monitoring/audit.log"
+  
+  # Privacy
+  gdpr_compliant: true
+  data_encryption: true
+  pii_detection: true 
