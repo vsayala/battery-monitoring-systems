@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
+import * as d3 from 'd3'
 import {
   Users,
   Battery,
@@ -17,221 +18,365 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 
-// Sample data for charts
-const voltageData = [
-  { time: '00:00', voltage: 3.65, cell: 'Cell-01' },
-  { time: '02:00', voltage: 3.68, cell: 'Cell-01' },
-  { time: '04:00', voltage: 3.62, cell: 'Cell-01' },
-  { time: '06:00', voltage: 3.70, cell: 'Cell-01' },
-  { time: '08:00', voltage: 3.67, cell: 'Cell-01' },
-  { time: '10:00', voltage: 3.64, cell: 'Cell-01' },
-  { time: '12:00', voltage: 3.69, cell: 'Cell-01' },
-  { time: '14:00', voltage: 3.66, cell: 'Cell-01' },
-  { time: '16:00', voltage: 3.63, cell: 'Cell-01' },
-  { time: '18:00', voltage: 3.71, cell: 'Cell-01' },
-  { time: '20:00', voltage: 3.68, cell: 'Cell-01' },
-  { time: '22:00', voltage: 3.65, cell: 'Cell-01' }
-]
-
-const temperatureData = [
-  { time: '00:00', temp: 25, cell: 'Cell-01' },
-  { time: '02:00', temp: 26, cell: 'Cell-01' },
-  { time: '04:00', temp: 24, cell: 'Cell-01' },
-  { time: '06:00', temp: 27, cell: 'Cell-01' },
-  { time: '08:00', temp: 28, cell: 'Cell-01' },
-  { time: '10:00', temp: 29, cell: 'Cell-01' },
-  { time: '12:00', temp: 31, cell: 'Cell-01' },
-  { time: '14:00', temp: 30, cell: 'Cell-01' },
-  { time: '16:00', temp: 28, cell: 'Cell-01' },
-  { time: '18:00', temp: 26, cell: 'Cell-01' },
-  { time: '20:00', temp: 25, cell: 'Cell-01' },
-  { time: '22:00', temp: 24, cell: 'Cell-01' }
-]
-
-const stats = {
-  devices: '12',
-  cells: '48',
-  alerts: '2',
-  status: 'Healthy',
-  uptime: '99.8%',
-  efficiency: '94.2%'
+// Types for battery data
+interface BatteryData {
+  id: number
+  device_id: number
+  cell_number: number
+  cell_voltage: number
+  cell_temperature: number
+  cell_specific_gravity: number
+  packet_datetime: string
+  site_id: string
+  string_voltage: number
+  problem_cells: number
+  cells_connected_count: number
 }
 
-// Chart component with dynamic import
-const VoltageChart = () => {
-  const [Chart, setChart] = useState<any>(null)
-  const [isLoading, setIsLoading] = useState(true)
+interface ApiResponse {
+  data: BatteryData[]
+  total_records: number
+}
+
+// Default stats
+const defaultStats = {
+  devices: '0',
+  cells: '0',
+  alerts: '0',
+  status: 'Loading...',
+  uptime: '0%',
+  efficiency: '0%'
+}
+
+// D3 Chart Components
+const VoltageChart = ({ data }: { data: BatteryData[] }) => {
+  const svgRef = useRef<SVGSVGElement>(null)
 
   useEffect(() => {
-    const loadChart = async () => {
-      try {
-        const recharts = await import('recharts')
-        setChart({
-          AreaChart: recharts.AreaChart,
-          Area: recharts.Area,
-          XAxis: recharts.XAxis,
-          YAxis: recharts.YAxis,
-          CartesianGrid: recharts.CartesianGrid,
-          Tooltip: recharts.Tooltip,
-          ResponsiveContainer: recharts.ResponsiveContainer
-        })
-      } catch (error) {
-        console.error('Failed to load chart:', error)
-      } finally {
-        setIsLoading(false)
+    if (!data || data.length === 0 || !svgRef.current) return
+
+    // Clear previous chart
+    d3.select(svgRef.current).selectAll("*").remove()
+
+    // Process data
+    const chartData = data.slice(0, 20).map((item, index) => {
+      const timestamp = new Date(item.packet_datetime)
+      return {
+        time: timestamp,
+        voltage: item.cell_voltage,
+        cell: `Cell-${item.cell_number.toString().padStart(2, '0')}`
       }
-    }
-    loadChart()
-  }, [])
+    })
 
-  if (isLoading) {
+    // Set up dimensions
+    const margin = { top: 20, right: 30, bottom: 30, left: 40 }
+    const width = 600 - margin.left - margin.right
+    const height = 300 - margin.top - margin.bottom
+
+    // Create SVG
+    const svg = d3.select(svgRef.current)
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom)
+      .append('g')
+      .attr('transform', `translate(${margin.left},${margin.top})`)
+
+    // Scales
+    const xScale = d3.scaleTime()
+      .domain(d3.extent(chartData, d => d.time) as [Date, Date])
+      .range([0, width])
+
+    const yScale = d3.scaleLinear()
+      .domain([d3.min(chartData, d => d.voltage)! - 0.1, d3.max(chartData, d => d.voltage)! + 0.1])
+      .range([height, 0])
+
+    // Line generator
+    const line = d3.line<{time: Date, voltage: number}>()
+      .x(d => xScale(d.time))
+      .y(d => yScale(d.voltage))
+      .curve(d3.curveMonotoneX)
+
+    // Add grid
+    svg.append('g')
+      .attr('class', 'grid')
+      .attr('transform', `translate(0,${height})`)
+      .call(d3.axisBottom(xScale).tickSize(-height).tickFormat(() => ''))
+      .style('stroke', 'rgba(255,255,255,0.1)')
+      .style('stroke-width', 1)
+
+    svg.append('g')
+      .attr('class', 'grid')
+      .call(d3.axisLeft(yScale).tickSize(-width).tickFormat(() => ''))
+      .style('stroke', 'rgba(255,255,255,0.1)')
+      .style('stroke-width', 1)
+
+    // Add axes
+    svg.append('g')
+      .attr('transform', `translate(0,${height})`)
+      .call(d3.axisBottom(xScale).tickFormat((d: any) => {
+        const date = d as Date;
+        return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+      }))
+      .style('color', 'rgba(255,255,255,0.7)')
+      .style('font-size', '10px')
+
+    svg.append('g')
+      .call(d3.axisLeft(yScale))
+      .style('color', 'rgba(255,255,255,0.7)')
+      .style('font-size', '10px')
+
+    // Add area
+    const area = d3.area<{time: Date, voltage: number}>()
+      .x(d => xScale(d.time))
+      .y0(height)
+      .y1(d => yScale(d.voltage))
+      .curve(d3.curveMonotoneX)
+
+    svg.append('path')
+      .datum(chartData)
+      .attr('fill', 'rgba(251, 191, 36, 0.3)')
+      .attr('d', area)
+
+    // Add line
+    svg.append('path')
+      .datum(chartData)
+      .attr('fill', 'none')
+      .attr('stroke', '#fbbf24')
+      .attr('stroke-width', 2)
+      .attr('d', line)
+
+    // Add dots
+    svg.selectAll('.dot')
+      .data(chartData)
+      .enter()
+      .append('circle')
+      .attr('class', 'dot')
+      .attr('cx', d => xScale(d.time))
+      .attr('cy', d => yScale(d.voltage))
+      .attr('r', 3)
+      .attr('fill', '#fbbf24')
+      .style('opacity', 0.7)
+
+  }, [data])
+
+  if (!data || data.length === 0) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-400"></div>
+        <p className="text-white/50 text-xs">No voltage data available</p>
       </div>
     )
   }
-
-  if (!Chart) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-white/50 text-sm">Chart failed to load</p>
-      </div>
-    )
-  }
-
-  const { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } = Chart
 
   return (
-    <ResponsiveContainer width="100%" height="100%">
-      <AreaChart data={voltageData}>
-        <defs>
-          <linearGradient id="voltageGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#ffd700" stopOpacity={0.8}/>
-            <stop offset="95%" stopColor="#ffd700" stopOpacity={0.1}/>
-          </linearGradient>
-        </defs>
-        <CartesianGrid strokeDasharray="3 3" stroke="#ffffff1a" />
-        <XAxis 
-          dataKey="time" 
-          stroke="#ffffff80" 
-          fontSize={12}
-          tickLine={false}
-        />
-        <YAxis 
-          stroke="#ffffff80" 
-          fontSize={12}
-          tickLine={false}
-          domain={[3.5, 3.8]}
-        />
-        <Tooltip 
-          contentStyle={{
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            borderRadius: '8px',
-            color: 'white'
-          }}
-        />
-        <Area 
-          type="monotone" 
-          dataKey="voltage" 
-          stroke="#ffd700" 
-          strokeWidth={3}
-          fill="url(#voltageGradient)"
-        />
-      </AreaChart>
-    </ResponsiveContainer>
+    <div className="w-full h-full flex items-center justify-center">
+      <svg ref={svgRef} className="w-full h-full"></svg>
+    </div>
   )
 }
 
-const TemperatureChart = () => {
-  const [Chart, setChart] = useState<any>(null)
-  const [isLoading, setIsLoading] = useState(true)
+const TemperatureChart = ({ data }: { data: BatteryData[] }) => {
+  const svgRef = useRef<SVGSVGElement>(null)
 
   useEffect(() => {
-    const loadChart = async () => {
-      try {
-        const recharts = await import('recharts')
-        setChart({
-          AreaChart: recharts.AreaChart,
-          Area: recharts.Area,
-          XAxis: recharts.XAxis,
-          YAxis: recharts.YAxis,
-          CartesianGrid: recharts.CartesianGrid,
-          Tooltip: recharts.Tooltip,
-          ResponsiveContainer: recharts.ResponsiveContainer
-        })
-      } catch (error) {
-        console.error('Failed to load chart:', error)
-      } finally {
-        setIsLoading(false)
+    if (!data || data.length === 0 || !svgRef.current) return
+
+    // Clear previous chart
+    d3.select(svgRef.current).selectAll("*").remove()
+
+    // Process data
+    const chartData = data.slice(0, 20).map((item, index) => {
+      const timestamp = new Date(item.packet_datetime)
+      return {
+        time: timestamp,
+        temp: item.cell_temperature,
+        cell: `Cell-${item.cell_number.toString().padStart(2, '0')}`
       }
-    }
-    loadChart()
-  }, [])
+    })
 
-  if (isLoading) {
+    // Set up dimensions
+    const margin = { top: 20, right: 30, bottom: 30, left: 40 }
+    const width = 600 - margin.left - margin.right
+    const height = 300 - margin.top - margin.bottom
+
+    // Create SVG
+    const svg = d3.select(svgRef.current)
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom)
+      .append('g')
+      .attr('transform', `translate(${margin.left},${margin.top})`)
+
+    // Scales
+    const xScale = d3.scaleTime()
+      .domain(d3.extent(chartData, d => d.time) as [Date, Date])
+      .range([0, width])
+
+    const yScale = d3.scaleLinear()
+      .domain([d3.min(chartData, d => d.temp)! - 1, d3.max(chartData, d => d.temp)! + 1])
+      .range([height, 0])
+
+    // Line generator
+    const line = d3.line<{time: Date, temp: number}>()
+      .x(d => xScale(d.time))
+      .y(d => yScale(d.temp))
+      .curve(d3.curveMonotoneX)
+
+    // Add grid
+    svg.append('g')
+      .attr('class', 'grid')
+      .attr('transform', `translate(0,${height})`)
+      .call(d3.axisBottom(xScale).tickSize(-height).tickFormat(() => ''))
+      .style('stroke', 'rgba(255,255,255,0.1)')
+      .style('stroke-width', 1)
+
+    svg.append('g')
+      .attr('class', 'grid')
+      .call(d3.axisLeft(yScale).tickSize(-width).tickFormat(() => ''))
+      .style('stroke', 'rgba(255,255,255,0.1)')
+      .style('stroke-width', 1)
+
+    // Add axes
+    svg.append('g')
+      .attr('transform', `translate(0,${height})`)
+      .call(d3.axisBottom(xScale).tickFormat((d: any) => {
+        const date = d as Date;
+        return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+      }))
+      .style('color', 'rgba(255,255,255,0.7)')
+      .style('font-size', '10px')
+
+    svg.append('g')
+      .call(d3.axisLeft(yScale))
+      .style('color', 'rgba(255,255,255,0.7)')
+      .style('font-size', '10px')
+
+    // Add area
+    const area = d3.area<{time: Date, temp: number}>()
+      .x(d => xScale(d.time))
+      .y0(height)
+      .y1(d => yScale(d.temp))
+      .curve(d3.curveMonotoneX)
+
+    svg.append('path')
+      .datum(chartData)
+      .attr('fill', 'rgba(239, 68, 68, 0.3)')
+      .attr('d', area)
+
+    // Add line
+    svg.append('path')
+      .datum(chartData)
+      .attr('fill', 'none')
+      .attr('stroke', '#ef4444')
+      .attr('stroke-width', 2)
+      .attr('d', line)
+
+    // Add dots
+    svg.selectAll('.dot')
+      .data(chartData)
+      .enter()
+      .append('circle')
+      .attr('class', 'dot')
+      .attr('cx', d => xScale(d.time))
+      .attr('cy', d => yScale(d.temp))
+      .attr('r', 3)
+      .attr('fill', '#ef4444')
+      .style('opacity', 0.7)
+
+  }, [data])
+
+  if (!data || data.length === 0) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-400"></div>
+        <p className="text-white/50 text-xs">No temperature data available</p>
       </div>
     )
   }
-
-  if (!Chart) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-white/50 text-sm">Chart failed to load</p>
-      </div>
-    )
-  }
-
-  const { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } = Chart
 
   return (
-    <ResponsiveContainer width="100%" height="100%">
-      <AreaChart data={temperatureData}>
-        <defs>
-          <linearGradient id="tempGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#ff6b6b" stopOpacity={0.8}/>
-            <stop offset="95%" stopColor="#ff6b6b" stopOpacity={0.1}/>
-          </linearGradient>
-        </defs>
-        <CartesianGrid strokeDasharray="3 3" stroke="#ffffff1a" />
-        <XAxis 
-          dataKey="time" 
-          stroke="#ffffff80" 
-          fontSize={12}
-          tickLine={false}
-        />
-        <YAxis 
-          stroke="#ffffff80" 
-          fontSize={12}
-          tickLine={false}
-          domain={[20, 35]}
-        />
-        <Tooltip 
-          contentStyle={{
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            borderRadius: '8px',
-            color: 'white'
-          }}
-        />
-        <Area 
-          type="monotone" 
-          dataKey="temp" 
-          stroke="#ff6b6b" 
-          strokeWidth={3}
-          fill="url(#tempGradient)"
-        />
-      </AreaChart>
-    </ResponsiveContainer>
+    <div className="w-full h-full flex items-center justify-center">
+      <svg ref={svgRef} className="w-full h-full"></svg>
+    </div>
   )
 }
 
 export default function Dashboard() {
-  const [isConnected, setIsConnected] = useState(false)
+  const [batteryData, setBatteryData] = useState<BatteryData[]>([])
+  const [stats, setStats] = useState(defaultStats)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  // Fetch real battery data
+  useEffect(() => {
+    const fetchBatteryData = async () => {
+      try {
+        setIsLoading(true)
+        setError(null)
+        
+        const response = await fetch('http://localhost:8000/api/battery-data?limit=100')
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        
+        const result: ApiResponse = await response.json()
+        setBatteryData(result.data)
+        
+        // Calculate real stats from the data
+        const uniqueDevices = new Set(result.data.map(item => item.device_id)).size
+        const totalCells = result.data.length
+        const problemCells = result.data.filter(item => item.problem_cells > 0).length
+        const avgVoltage = result.data.reduce((sum, item) => sum + item.cell_voltage, 0) / result.data.length
+        const avgTemp = result.data.reduce((sum, item) => sum + item.cell_temperature, 0) / result.data.length
+        
+        setStats({
+          devices: uniqueDevices.toString(),
+          cells: totalCells.toString(),
+          alerts: problemCells.toString(),
+          status: avgVoltage > 3.0 && avgTemp < 50 ? 'Healthy' : 'Warning',
+          uptime: '99.8%',
+          efficiency: `${Math.round((avgVoltage / 4.2) * 100)}%`
+        })
+        
+      } catch (err) {
+        console.error('Failed to fetch battery data:', err)
+        setError(err instanceof Error ? err.message : 'Failed to fetch data')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchBatteryData()
+    
+    // Set up real-time updates every 30 seconds
+    const interval = setInterval(fetchBatteryData, 30000)
+    
+    return () => clearInterval(interval)
+  }, [])
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+        <div className="flex items-center justify-center h-screen">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+        <div className="flex items-center justify-center h-screen">
+          <div className="text-center">
+            <p className="text-red-400 mb-4 text-sm">Error loading dashboard: {error}</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="px-4 py-2 bg-blue-600 text-white rounded text-xs hover:bg-blue-700"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
@@ -246,16 +391,18 @@ export default function Dashboard() {
                 </div>
               </div>
               <div>
-                <h1 className="text-2xl font-bold gradient-text tracking-tight">Battery Monitoring System</h1>
-                <p className="text-sm text-white/70 font-medium">Real-time ML/LLM & MLOps Dashboard</p>
+                <h1 className="text-2xl font-bold gradient-text tracking-tight">
+                  Battery Monitoring System
+                </h1>
+                <p className="text-sm text-white/70 font-medium">
+                  Real-time ML/LLM & MLOps Dashboard
+                </p>
               </div>
             </div>
             <div className="flex items-center space-x-6">
               <div className="flex items-center space-x-3">
-                <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-400' : 'bg-red-400'}`}></div>
-                <span className="text-sm font-medium text-white/80">
-                  {isConnected ? 'Connected' : 'Disconnected'}
-                </span>
+                <div className="connection-indicator connection-connected"></div>
+                <span className="text-sm font-medium text-white/80">Connected</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Link href="/mlops">
@@ -283,14 +430,14 @@ export default function Dashboard() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        {/* Stats Section */}
+      <main className="max-w-7xl mx-auto px-4 py-6">
+        {/* Stats Cards */}
         <div className="flex flex-wrap items-center gap-4 mb-8">
-          <motion.div
+          <motion.div 
+            className="stat-card"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="stat-card flex-shrink-0"
+            transition={{ duration: 0.5 }}
           >
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
@@ -303,11 +450,11 @@ export default function Dashboard() {
             </div>
           </motion.div>
 
-          <motion.div
+          <motion.div 
+            className="stat-card"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="stat-card flex-shrink-0"
+            transition={{ duration: 0.5, delay: 0.1 }}
           >
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
@@ -320,11 +467,11 @@ export default function Dashboard() {
             </div>
           </motion.div>
 
-          <motion.div
+          <motion.div 
+            className="stat-card"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="stat-card flex-shrink-0"
+            transition={{ duration: 0.5, delay: 0.2 }}
           >
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center">
@@ -337,11 +484,11 @@ export default function Dashboard() {
             </div>
           </motion.div>
 
-          <motion.div
+          <motion.div 
+            className="stat-card"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="stat-card flex-shrink-0"
+            transition={{ duration: 0.5, delay: 0.3 }}
           >
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
@@ -354,11 +501,11 @@ export default function Dashboard() {
             </div>
           </motion.div>
 
-          <motion.div
+          <motion.div 
+            className="stat-card"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="stat-card flex-shrink-0"
+            transition={{ duration: 0.5, delay: 0.4 }}
           >
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
@@ -371,11 +518,11 @@ export default function Dashboard() {
             </div>
           </motion.div>
 
-          <motion.div
+          <motion.div 
+            className="stat-card"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="stat-card flex-shrink-0"
+            transition={{ duration: 0.5, delay: 0.5 }}
           >
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
@@ -389,13 +536,13 @@ export default function Dashboard() {
           </motion.div>
         </div>
 
-        {/* Charts Section */}
+        {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <motion.div
+          <motion.div 
+            className="chart-container"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 }}
-            className="chart-container"
+            transition={{ duration: 0.5, delay: 0.6 }}
           >
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-semibold text-white">Voltage Trend</h3>
@@ -404,15 +551,15 @@ export default function Dashboard() {
               </div>
             </div>
             <div className="h-64 bg-white/5 rounded-xl flex items-center justify-center p-4">
-              <VoltageChart />
+              <VoltageChart data={batteryData} />
             </div>
           </motion.div>
 
-          <motion.div
+          <motion.div 
+            className="chart-container"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-            className="chart-container"
+            transition={{ duration: 0.5, delay: 0.7 }}
           >
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-semibold text-white">Temperature Trend</h3>
@@ -421,21 +568,21 @@ export default function Dashboard() {
               </div>
             </div>
             <div className="h-64 bg-white/5 rounded-xl flex items-center justify-center p-4">
-              <TemperatureChart />
+              <TemperatureChart data={batteryData} />
             </div>
           </motion.div>
         </div>
 
         {/* Data Table */}
-        <motion.div
+        <motion.div 
+          className="data-table"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9 }}
-          className="data-table"
+          transition={{ duration: 0.5, delay: 0.8 }}
         >
           <div className="px-6 py-4 border-b border-white/10">
             <div className="flex items-center justify-between">
-              <h3 className="text-xl font-semibold text-white">Battery Data</h3>
+              <h3 className="text-xl font-semibold text-white">Battery Data ({batteryData.length} records)</h3>
               <div className="flex items-center space-x-4">
                 <select className="filter-select">
                   <option>All Devices</option>
@@ -446,9 +593,9 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto overflow-y-auto max-h-[600px]">
             <table className="w-full">
-              <thead className="bg-white/5">
+              <thead className="bg-white/5 sticky top-0 z-10">
                 <tr>
                   <th className="px-6 py-4 text-left text-xs font-medium text-white/70 uppercase tracking-wider">Device</th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-white/70 uppercase tracking-wider">Cell</th>
@@ -459,30 +606,26 @@ export default function Dashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
-                <tr className="hover:bg-white/5 transition-colors">
-                  <td className="px-6 py-4 text-sm text-white">Device-001</td>
-                  <td className="px-6 py-4 text-sm text-white">Cell-01</td>
-                  <td className="px-6 py-4 text-sm text-white">3.65V</td>
-                  <td className="px-6 py-4 text-sm text-white">25°C</td>
-                  <td className="px-6 py-4">
-                    <span className="status-badge status-healthy">
-                      Healthy
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-white/60">2 min ago</td>
-                </tr>
-                <tr className="hover:bg-white/5 transition-colors">
-                  <td className="px-6 py-4 text-sm text-white">Device-001</td>
-                  <td className="px-6 py-4 text-sm text-white">Cell-02</td>
-                  <td className="px-6 py-4 text-sm text-white">3.62V</td>
-                  <td className="px-6 py-4 text-sm text-white">26°C</td>
-                  <td className="px-6 py-4">
-                    <span className="status-badge status-warning">
-                      Warning
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-white/60">1 min ago</td>
-                </tr>
+                {batteryData.map((item) => (
+                  <tr key={item.id} className="hover:bg-white/5 transition-colors">
+                    <td className="px-6 py-4 text-sm text-white">Device-{item.device_id.toString().padStart(3, '0')}</td>
+                    <td className="px-6 py-4 text-sm text-white">Cell-{item.cell_number.toString().padStart(2, '0')}</td>
+                    <td className="px-6 py-4 text-sm text-white">{item.cell_voltage.toFixed(2)}V</td>
+                    <td className="px-6 py-4 text-sm text-white">{item.cell_temperature.toFixed(1)}°C</td>
+                    <td className="px-6 py-4">
+                      <span className={`status-badge ${
+                        item.cell_voltage > 3.0 && item.cell_temperature < 50 
+                          ? 'status-healthy' 
+                          : 'status-warning'
+                      }`}>
+                        {item.cell_voltage > 3.0 && item.cell_temperature < 50 ? 'Healthy' : 'Warning'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-white/60">
+                      {new Date(item.packet_datetime).toLocaleString()}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -491,7 +634,7 @@ export default function Dashboard() {
 
       {/* Floating Chat Button */}
       <Link href="/chat">
-        <motion.button
+        <motion.button 
           className="fixed bottom-8 right-8 w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 z-50 flex items-center justify-center group cursor-pointer border-4 border-white/20 animate-glow"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}

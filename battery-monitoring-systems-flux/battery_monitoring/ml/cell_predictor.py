@@ -78,34 +78,34 @@ class CellPredictor:
             features = df[numeric_columns].copy()
             
             # Add derived features for numeric columns only
-            if 'CellVoltage' in features.columns:
-                features['voltage_mean'] = features['CellVoltage'].mean()
-                features['voltage_std'] = features['CellVoltage'].std()
-                features['voltage_min'] = features['CellVoltage'].min()
-                features['voltage_max'] = features['CellVoltage'].max()
-                features['voltage_range'] = features['CellVoltage'].max() - features['CellVoltage'].min()
-                features['voltage_trend'] = features['CellVoltage'].diff().mean()
+            if 'cell_voltage' in features.columns:
+                features['voltage_mean'] = features['cell_voltage'].mean()
+                features['voltage_std'] = features['cell_voltage'].std()
+                features['voltage_min'] = features['cell_voltage'].min()
+                features['voltage_max'] = features['cell_voltage'].max()
+                features['voltage_range'] = features['cell_voltage'].max() - features['cell_voltage'].min()
+                features['voltage_trend'] = features['cell_voltage'].diff().mean()
             
-            if 'CellTemperature' in features.columns:
-                features['temp_mean'] = features['CellTemperature'].mean()
-                features['temp_std'] = features['CellTemperature'].std()
-                features['temp_min'] = features['CellTemperature'].min()
-                features['temp_max'] = features['CellTemperature'].max()
-                features['temp_range'] = features['CellTemperature'].max() - features['CellTemperature'].min()
-                features['temp_trend'] = features['CellTemperature'].diff().mean()
+            if 'cell_temperature' in features.columns:
+                features['temp_mean'] = features['cell_temperature'].mean()
+                features['temp_std'] = features['cell_temperature'].std()
+                features['temp_min'] = features['cell_temperature'].min()
+                features['temp_max'] = features['cell_temperature'].max()
+                features['temp_range'] = features['cell_temperature'].max() - features['cell_temperature'].min()
+                features['temp_trend'] = features['cell_temperature'].diff().mean()
             
-            if 'CellSpecificGravity' in features.columns:
-                features['gravity_mean'] = features['CellSpecificGravity'].mean()
-                features['gravity_std'] = features['CellSpecificGravity'].std()
-                features['gravity_min'] = features['CellSpecificGravity'].min()
-                features['gravity_max'] = features['CellSpecificGravity'].max()
-                features['gravity_range'] = features['CellSpecificGravity'].max() - features['CellSpecificGravity'].min()
-                features['gravity_trend'] = features['CellSpecificGravity'].diff().mean()
+            if 'cell_specific_gravity' in features.columns:
+                features['gravity_mean'] = features['cell_specific_gravity'].mean()
+                features['gravity_std'] = features['cell_specific_gravity'].std()
+                features['gravity_min'] = features['cell_specific_gravity'].min()
+                features['gravity_max'] = features['cell_specific_gravity'].max()
+                features['gravity_range'] = features['cell_specific_gravity'].max() - features['cell_specific_gravity'].min()
+                features['gravity_trend'] = features['cell_specific_gravity'].diff().mean()
             
             # Add time-based features if available
-            if 'PacketDateTime' in df.columns:
+            if 'packet_datetime' in df.columns:
                 try:
-                    dt = pd.to_datetime(df['PacketDateTime'])
+                    dt = pd.to_datetime(df['packet_datetime'])
                     features['hour'] = dt.dt.hour
                     features['day_of_week'] = dt.dt.dayofweek
                     features['is_weekend'] = dt.dt.dayofweek >= 5
@@ -140,18 +140,18 @@ class CellPredictor:
             Array of labels ('alive' or 'dead')
         """
         try:
-            if 'CellVoltage' not in df.columns:
-                raise ModelError("CellVoltage column required for label creation")
+            if 'cell_voltage' not in df.columns:
+                raise ModelError("cell_voltage column required for label creation")
             
             # Create labels based on voltage thresholds
             dead_threshold = self.config.ml.dead_cell_threshold
             alive_threshold = self.config.ml.alive_cell_threshold
             
             # Group by device and cell to get average voltage per cell
-            if 'DeviceID' in df.columns and 'CellNumber' in df.columns:
-                cell_voltages = df.groupby(['DeviceID', 'CellNumber'])['CellVoltage'].mean()
+            if 'device_id' in df.columns and 'cell_number' in df.columns:
+                cell_voltages = df.groupby(['device_id', 'cell_number'])['cell_voltage'].mean()
             else:
-                cell_voltages = df.groupby('CellNumber')['CellVoltage'].mean()
+                cell_voltages = df.groupby('cell_number')['cell_voltage'].mean()
             
             # Create labels
             labels = []
@@ -191,12 +191,12 @@ class CellPredictor:
             labels = self.create_labels(df)
             
             # Prepare features for each cell (group by device and cell)
-            if 'DeviceID' in df.columns and 'CellNumber' in df.columns:
+            if 'device_id' in df.columns and 'cell_number' in df.columns:
                 # Group by device and cell, then prepare features
                 cell_features = []
                 cell_labels = []
                 
-                for (device_id, cell_num), group in df.groupby(['DeviceID', 'CellNumber']):
+                for (device_id, cell_num), group in df.groupby(['device_id', 'cell_number']):
                     if len(group) > 0:
                         # Prepare features for this cell group
                         cell_feat = self.prepare_features(group)
