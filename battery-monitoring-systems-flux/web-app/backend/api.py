@@ -30,6 +30,13 @@ from battery_monitoring.ml.anomaly_detector import AnomalyDetector
 from battery_monitoring.ml.cell_predictor import CellPredictor
 from battery_monitoring.ml.forecaster import Forecaster
 from battery_monitoring.llm.chatbot import BatteryChatbot
+# Import alerting system with error handling
+try:
+    from battery_monitoring.mlops.alerting_system import get_alerting_system
+    alerting_system_available = True
+except Exception as e:
+    print(f"Warning: Alerting system not available: {e}")
+    alerting_system_available = False
 
 
 class ChatRequest(BaseModel):
@@ -52,6 +59,12 @@ anomaly_detector = AnomalyDetector()
 cell_predictor = CellPredictor()
 forecaster = Forecaster()
 chatbot = BatteryChatbot()
+
+# Initialize alerting system
+if alerting_system_available:
+    alerting_system = get_alerting_system()
+else:
+    alerting_system = None
 
 # Create FastAPI app
 app = FastAPI(
@@ -737,6 +750,9 @@ async def stop_mlops_monitoring():
     except Exception as e:
         logger.error(f"Error stopping MLOps monitoring: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+
 
 
 @app.exception_handler(Exception)

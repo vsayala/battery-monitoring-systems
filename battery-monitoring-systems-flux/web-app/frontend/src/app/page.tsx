@@ -2,7 +2,19 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import * as d3 from 'd3'
+import dynamic from 'next/dynamic'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+} from 'chart.js'
+import { Line } from 'react-chartjs-2'
 import {
   Users,
   Battery,
@@ -14,9 +26,27 @@ import {
   Thermometer,
   MessageCircle,
   Monitor,
-  Brain
+  Brain,
+  Globe,
+  MapPin,
+  Activity
 } from 'lucide-react'
 import Link from 'next/link'
+
+// Register Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+)
+
+// Dynamically import the map component to avoid SSR issues
+const BasicMap = dynamic(() => import('./geo-dashboard/components/BasicMap'), { ssr: false })
 
 // Types for battery data
 interface BatteryData {
@@ -48,115 +78,123 @@ const defaultStats = {
   efficiency: '0%'
 }
 
-// D3 Chart Components
+// Mock geographic data for battery sites
+const mockSiteLocations = [
+  { site_id: 'SITE001', name: 'Battery Farm Alpha', lat: 37.7749, lng: -122.4194, city: 'San Francisco', state: 'CA' },
+  { site_id: 'SITE002', name: 'Power Station Beta', lat: 34.0522, lng: -118.2437, city: 'Los Angeles', state: 'CA' },
+  { site_id: 'SITE003', name: 'Energy Hub Gamma', lat: 40.7128, lng: -74.0060, city: 'New York', state: 'NY' },
+  { site_id: 'SITE004', name: 'Grid Center Delta', lat: 41.8781, lng: -87.6298, city: 'Chicago', state: 'IL' },
+  { site_id: 'SITE005', name: 'Renewable Station Epsilon', lat: 29.7604, lng: -95.3698, city: 'Houston', state: 'TX' },
+  { site_id: 'SITE006', name: 'Smart Grid Zeta', lat: 33.7490, lng: -84.3880, city: 'Atlanta', state: 'GA' },
+  { site_id: 'SITE007', name: 'Battery Complex Eta', lat: 25.7617, lng: -80.1918, city: 'Miami', state: 'FL' },
+  { site_id: 'SITE008', name: 'Power Network Theta', lat: 47.6062, lng: -122.3321, city: 'Seattle', state: 'WA' }
+]
+
+// Chart.js Components
 const VoltageChart = ({ data }: { data: BatteryData[] }) => {
-  const svgRef = useRef<SVGSVGElement>(null)
+  // Process data for Chart.js
+  const chartData = data.slice(-15).map((item, index) => ({
+    time: new Date(item.packet_datetime).toLocaleTimeString('en-US', { 
+      hour: '2-digit', 
+      minute: '2-digit', 
+      hour12: false 
+    }),
+    voltage: parseFloat(item.cell_voltage.toString()),
+    cell: `Cell-${item.cell_number.toString().padStart(2, '0')}`,
+    device: `Device-${item.device_id.toString().padStart(3, '0')}`
+  }))
 
-  useEffect(() => {
-    if (!data || data.length === 0 || !svgRef.current) return
-
-    // Clear previous chart
-    d3.select(svgRef.current).selectAll("*").remove()
-
-    // Process data
-    const chartData = data.slice(0, 20).map((item, index) => {
-      const timestamp = new Date(item.packet_datetime)
-      return {
-        time: timestamp,
-        voltage: item.cell_voltage,
-        cell: `Cell-${item.cell_number.toString().padStart(2, '0')}`
+  const chartConfig = {
+    data: {
+      labels: chartData.map(d => d.time),
+      datasets: [
+        {
+          label: 'Voltage (V)',
+          data: chartData.map(d => d.voltage),
+          borderColor: '#fbbf24',
+          backgroundColor: 'rgba(251, 191, 36, 0.2)',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: '#fbbf24',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 2,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          pointHoverBackgroundColor: '#fbbf24',
+          pointHoverBorderColor: '#ffffff',
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          titleColor: '#ffffff',
+          bodyColor: '#ffffff',
+          borderColor: '#fbbf24',
+          borderWidth: 1,
+          cornerRadius: 8,
+          displayColors: false,
+          callbacks: {
+            title: function(context: any) {
+              const index = context[0].dataIndex
+              const item = chartData[index]
+              return `${item.device} - ${item.cell}`
+            },
+            label: function(context: any) {
+              return `Voltage: ${context.parsed.y.toFixed(2)}V`
+            },
+            afterLabel: function(context: any) {
+              const index = context.dataIndex
+              const item = chartData[index]
+              return `Time: ${item.time}`
+            }
+          }
+        }
+      },
+             scales: {
+         x: {
+           display: true,
+           grid: {
+             color: 'rgba(255, 255, 255, 0.1)',
+             drawBorder: false
+           },
+           ticks: {
+             color: 'rgba(255, 255, 255, 0.8)',
+             font: {
+               size: 10
+             }
+           }
+         },
+         y: {
+           display: true,
+           grid: {
+             color: 'rgba(255, 255, 255, 0.1)',
+             drawBorder: false
+           },
+           ticks: {
+             color: 'rgba(255, 255, 255, 0.8)',
+             font: {
+               size: 10
+             },
+             callback: function(value: any) {
+               return `${Number(value).toFixed(2)}V`
+             }
+           }
+         }
+       },
+      interaction: {
+        intersect: false,
+        mode: 'index' as const
       }
-    })
-
-    // Set up dimensions
-    const margin = { top: 20, right: 30, bottom: 30, left: 40 }
-    const width = 600 - margin.left - margin.right
-    const height = 300 - margin.top - margin.bottom
-
-    // Create SVG
-    const svg = d3.select(svgRef.current)
-      .attr('width', width + margin.left + margin.right)
-      .attr('height', height + margin.top + margin.bottom)
-      .append('g')
-      .attr('transform', `translate(${margin.left},${margin.top})`)
-
-    // Scales
-    const xScale = d3.scaleTime()
-      .domain(d3.extent(chartData, d => d.time) as [Date, Date])
-      .range([0, width])
-
-    const yScale = d3.scaleLinear()
-      .domain([d3.min(chartData, d => d.voltage)! - 0.1, d3.max(chartData, d => d.voltage)! + 0.1])
-      .range([height, 0])
-
-    // Line generator
-    const line = d3.line<{time: Date, voltage: number}>()
-      .x(d => xScale(d.time))
-      .y(d => yScale(d.voltage))
-      .curve(d3.curveMonotoneX)
-
-    // Add grid
-    svg.append('g')
-      .attr('class', 'grid')
-      .attr('transform', `translate(0,${height})`)
-      .call(d3.axisBottom(xScale).tickSize(-height).tickFormat(() => ''))
-      .style('stroke', 'rgba(255,255,255,0.1)')
-      .style('stroke-width', 1)
-
-    svg.append('g')
-      .attr('class', 'grid')
-      .call(d3.axisLeft(yScale).tickSize(-width).tickFormat(() => ''))
-      .style('stroke', 'rgba(255,255,255,0.1)')
-      .style('stroke-width', 1)
-
-    // Add axes
-    svg.append('g')
-      .attr('transform', `translate(0,${height})`)
-      .call(d3.axisBottom(xScale).tickFormat((d: any) => {
-        const date = d as Date;
-        return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-      }))
-      .style('color', 'rgba(255,255,255,0.7)')
-      .style('font-size', '10px')
-
-    svg.append('g')
-      .call(d3.axisLeft(yScale))
-      .style('color', 'rgba(255,255,255,0.7)')
-      .style('font-size', '10px')
-
-    // Add area
-    const area = d3.area<{time: Date, voltage: number}>()
-      .x(d => xScale(d.time))
-      .y0(height)
-      .y1(d => yScale(d.voltage))
-      .curve(d3.curveMonotoneX)
-
-    svg.append('path')
-      .datum(chartData)
-      .attr('fill', 'rgba(251, 191, 36, 0.3)')
-      .attr('d', area)
-
-    // Add line
-    svg.append('path')
-      .datum(chartData)
-      .attr('fill', 'none')
-      .attr('stroke', '#fbbf24')
-      .attr('stroke-width', 2)
-      .attr('d', line)
-
-    // Add dots
-    svg.selectAll('.dot')
-      .data(chartData)
-      .enter()
-      .append('circle')
-      .attr('class', 'dot')
-      .attr('cx', d => xScale(d.time))
-      .attr('cy', d => yScale(d.voltage))
-      .attr('r', 3)
-      .attr('fill', '#fbbf24')
-      .style('opacity', 0.7)
-
-  }, [data])
+    }
+  }
 
   if (!data || data.length === 0) {
     return (
@@ -167,120 +205,116 @@ const VoltageChart = ({ data }: { data: BatteryData[] }) => {
   }
 
   return (
-    <div className="w-full h-full flex items-center justify-center">
-      <svg ref={svgRef} className="w-full h-full"></svg>
+    <div className="w-full h-full">
+      <Line data={chartConfig.data} options={chartConfig.options} />
     </div>
   )
 }
 
 const TemperatureChart = ({ data }: { data: BatteryData[] }) => {
-  const svgRef = useRef<SVGSVGElement>(null)
+  // Process data for Chart.js
+  const chartData = data.slice(-15).map((item, index) => ({
+    time: new Date(item.packet_datetime).toLocaleTimeString('en-US', { 
+      hour: '2-digit', 
+      minute: '2-digit', 
+      hour12: false 
+    }),
+    temperature: parseFloat(item.cell_temperature.toString()),
+    cell: `Cell-${item.cell_number.toString().padStart(2, '0')}`,
+    device: `Device-${item.device_id.toString().padStart(3, '0')}`
+  }))
 
-  useEffect(() => {
-    if (!data || data.length === 0 || !svgRef.current) return
-
-    // Clear previous chart
-    d3.select(svgRef.current).selectAll("*").remove()
-
-    // Process data
-    const chartData = data.slice(0, 20).map((item, index) => {
-      const timestamp = new Date(item.packet_datetime)
-      return {
-        time: timestamp,
-        temp: item.cell_temperature,
-        cell: `Cell-${item.cell_number.toString().padStart(2, '0')}`
+  const chartConfig = {
+    data: {
+      labels: chartData.map(d => d.time),
+      datasets: [
+        {
+          label: 'Temperature (°C)',
+          data: chartData.map(d => d.temperature),
+          borderColor: '#ef4444',
+          backgroundColor: 'rgba(239, 68, 68, 0.2)',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: '#ef4444',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 2,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          pointHoverBackgroundColor: '#ef4444',
+          pointHoverBorderColor: '#ffffff',
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          titleColor: '#ffffff',
+          bodyColor: '#ffffff',
+          borderColor: '#ef4444',
+          borderWidth: 1,
+          cornerRadius: 8,
+          displayColors: false,
+          callbacks: {
+            title: function(context: any) {
+              const index = context[0].dataIndex
+              const item = chartData[index]
+              return `${item.device} - ${item.cell}`
+            },
+            label: function(context: any) {
+              return `Temperature: ${context.parsed.y.toFixed(1)}°C`
+            },
+            afterLabel: function(context: any) {
+              const index = context.dataIndex
+              const item = chartData[index]
+              return `Time: ${item.time}`
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          display: true,
+          grid: {
+            color: 'rgba(255, 255, 255, 0.1)',
+            drawBorder: false
+          },
+          ticks: {
+            color: 'rgba(255, 255, 255, 0.8)',
+            font: {
+              size: 10
+            }
+          }
+        },
+        y: {
+          display: true,
+          grid: {
+            color: 'rgba(255, 255, 255, 0.1)',
+            drawBorder: false
+          },
+          ticks: {
+            color: 'rgba(255, 255, 255, 0.8)',
+            font: {
+              size: 10
+            },
+            callback: function(value: any) {
+              return `${Number(value).toFixed(1)}°C`
+            }
+          }
+        }
+      },
+      interaction: {
+        intersect: false,
+        mode: 'index' as const
       }
-    })
-
-    // Set up dimensions
-    const margin = { top: 20, right: 30, bottom: 30, left: 40 }
-    const width = 600 - margin.left - margin.right
-    const height = 300 - margin.top - margin.bottom
-
-    // Create SVG
-    const svg = d3.select(svgRef.current)
-      .attr('width', width + margin.left + margin.right)
-      .attr('height', height + margin.top + margin.bottom)
-      .append('g')
-      .attr('transform', `translate(${margin.left},${margin.top})`)
-
-    // Scales
-    const xScale = d3.scaleTime()
-      .domain(d3.extent(chartData, d => d.time) as [Date, Date])
-      .range([0, width])
-
-    const yScale = d3.scaleLinear()
-      .domain([d3.min(chartData, d => d.temp)! - 1, d3.max(chartData, d => d.temp)! + 1])
-      .range([height, 0])
-
-    // Line generator
-    const line = d3.line<{time: Date, temp: number}>()
-      .x(d => xScale(d.time))
-      .y(d => yScale(d.temp))
-      .curve(d3.curveMonotoneX)
-
-    // Add grid
-    svg.append('g')
-      .attr('class', 'grid')
-      .attr('transform', `translate(0,${height})`)
-      .call(d3.axisBottom(xScale).tickSize(-height).tickFormat(() => ''))
-      .style('stroke', 'rgba(255,255,255,0.1)')
-      .style('stroke-width', 1)
-
-    svg.append('g')
-      .attr('class', 'grid')
-      .call(d3.axisLeft(yScale).tickSize(-width).tickFormat(() => ''))
-      .style('stroke', 'rgba(255,255,255,0.1)')
-      .style('stroke-width', 1)
-
-    // Add axes
-    svg.append('g')
-      .attr('transform', `translate(0,${height})`)
-      .call(d3.axisBottom(xScale).tickFormat((d: any) => {
-        const date = d as Date;
-        return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-      }))
-      .style('color', 'rgba(255,255,255,0.7)')
-      .style('font-size', '10px')
-
-    svg.append('g')
-      .call(d3.axisLeft(yScale))
-      .style('color', 'rgba(255,255,255,0.7)')
-      .style('font-size', '10px')
-
-    // Add area
-    const area = d3.area<{time: Date, temp: number}>()
-      .x(d => xScale(d.time))
-      .y0(height)
-      .y1(d => yScale(d.temp))
-      .curve(d3.curveMonotoneX)
-
-    svg.append('path')
-      .datum(chartData)
-      .attr('fill', 'rgba(239, 68, 68, 0.3)')
-      .attr('d', area)
-
-    // Add line
-    svg.append('path')
-      .datum(chartData)
-      .attr('fill', 'none')
-      .attr('stroke', '#ef4444')
-      .attr('stroke-width', 2)
-      .attr('d', line)
-
-    // Add dots
-    svg.selectAll('.dot')
-      .data(chartData)
-      .enter()
-      .append('circle')
-      .attr('class', 'dot')
-      .attr('cx', d => xScale(d.time))
-      .attr('cy', d => yScale(d.temp))
-      .attr('r', 3)
-      .attr('fill', '#ef4444')
-      .style('opacity', 0.7)
-
-  }, [data])
+    }
+  }
 
   if (!data || data.length === 0) {
     return (
@@ -291,10 +325,45 @@ const TemperatureChart = ({ data }: { data: BatteryData[] }) => {
   }
 
   return (
-    <div className="w-full h-full flex items-center justify-center">
-      <svg ref={svgRef} className="w-full h-full"></svg>
+    <div className="w-full h-full">
+      <Line data={chartConfig.data} options={chartConfig.options} />
     </div>
   )
+}
+
+// Helper functions for map
+const getSiteStats = (siteId: string, batteryData: BatteryData[]) => {
+  const siteData = batteryData.filter(item => item.site_id === siteId)
+  if (siteData.length === 0) return null
+
+  const totalDevices = new Set(siteData.map(item => item.device_id)).size
+  const totalCells = siteData.length
+  const avgVoltage = siteData.reduce((sum, item) => sum + item.cell_voltage, 0) / siteData.length
+  const avgTemp = siteData.reduce((sum, item) => sum + item.cell_temperature, 0) / siteData.length
+  const problemCells = siteData.filter(item => item.problem_cells > 0).length
+  const status = avgVoltage > 3.0 && avgTemp < 50 ? 'Healthy' : 'Warning'
+
+  return {
+    totalDevices,
+    totalCells,
+    avgVoltage,
+    avgTemp,
+    problemCells,
+    status
+  }
+}
+
+const getMarkerColor = (status: string) => {
+  switch (status) {
+    case 'Healthy': return '#10b981'
+    case 'Warning': return '#f59e0b'
+    case 'Critical': return '#ef4444'
+    default: return '#6b7280'
+  }
+}
+
+const getMarkerSize = (deviceCount: number) => {
+  return Math.max(8, Math.min(20, deviceCount * 2))
 }
 
 export default function Dashboard() {
@@ -302,6 +371,8 @@ export default function Dashboard() {
   const [stats, setStats] = useState(defaultStats)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [selectedDevice, setSelectedDevice] = useState<string>('all')
+  const [selectedCell, setSelectedCell] = useState<string>('all')
 
   // Fetch real battery data
   useEffect(() => {
@@ -349,6 +420,17 @@ export default function Dashboard() {
     
     return () => clearInterval(interval)
   }, [])
+
+  // Get unique devices and cells for dropdowns
+  const uniqueDevices = Array.from(new Set(batteryData.map(item => item.device_id))).sort((a, b) => a - b)
+  const uniqueCells = Array.from(new Set(batteryData.map(item => item.cell_number))).sort((a, b) => a - b)
+
+  // Filter data based on selected device and cell
+  const filteredData = batteryData.filter(item => {
+    const deviceMatch = selectedDevice === 'all' || item.device_id.toString() === selectedDevice
+    const cellMatch = selectedCell === 'all' || item.cell_number.toString() === selectedCell
+    return deviceMatch && cellMatch
+  })
 
   if (isLoading) {
     return (
@@ -417,6 +499,12 @@ export default function Dashboard() {
                     <span>LLM</span>
                   </button>
                 </Link>
+                <Link href="/geo-dashboard">
+                  <button className="btn-secondary flex items-center space-x-2 group">
+                    <Globe className="h-5 w-5 group-hover:scale-110 transition-transform" />
+                    <span>Geo Dashboard</span>
+                  </button>
+                </Link>
                 <Link href="/chat">
                   <button className="btn-primary flex items-center space-x-2 group">
                     <MessageCircle className="h-5 w-5 group-hover:scale-110 transition-transform" />
@@ -431,169 +519,246 @@ export default function Dashboard() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-6">
-        {/* Stats Cards */}
-        <div className="flex flex-wrap items-center gap-4 mb-8">
-          <motion.div 
-            className="stat-card"
+        {/* Battery Stats Cards */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ delay: 0.1 }}
+            className="stat-card"
           >
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                <Users className="h-5 w-5 text-blue-400" />
+                <Battery className="h-5 w-5 text-blue-400" />
               </div>
               <div>
                 <p className="text-xs font-medium text-white/70 uppercase tracking-wide">Total Devices</p>
-                <p className="text-xl font-bold text-white">{stats.devices}</p>
+                <p className="text-xl font-bold text-white">{uniqueDevices.length}</p>
               </div>
             </div>
           </motion.div>
 
-          <motion.div 
-            className="stat-card"
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            transition={{ delay: 0.2 }}
+            className="stat-card"
           >
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
-                <Battery className="h-5 w-5 text-green-400" />
+                <Zap className="h-5 w-5 text-green-400" />
               </div>
               <div>
                 <p className="text-xs font-medium text-white/70 uppercase tracking-wide">Total Cells</p>
-                <p className="text-xl font-bold text-white">{stats.cells}</p>
+                <p className="text-xl font-bold text-white">{uniqueCells.length}</p>
               </div>
             </div>
           </motion.div>
 
-          <motion.div 
-            className="stat-card"
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ delay: 0.3 }}
+            className="stat-card"
           >
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center">
-                <AlertCircle className="h-5 w-5 text-red-400" />
+              <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                <Activity className="h-5 w-5 text-purple-400" />
               </div>
               <div>
-                <p className="text-xs font-medium text-white/70 uppercase tracking-wide">Active Alerts</p>
-                <p className="text-xl font-bold text-white">{stats.alerts}</p>
+                <p className="text-xs font-medium text-white/70 uppercase tracking-wide">Data Points</p>
+                <p className="text-xl font-bold text-white">{batteryData.length}</p>
               </div>
             </div>
           </motion.div>
 
-          <motion.div 
-            className="stat-card"
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            transition={{ delay: 0.4 }}
+            className="stat-card"
           >
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
-                <Shield className="h-5 w-5 text-green-400" />
+              <div className="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+                <Thermometer className="h-5 w-5 text-yellow-400" />
               </div>
               <div>
-                <p className="text-xs font-medium text-white/70 uppercase tracking-wide">System Status</p>
-                <p className="text-xl font-bold gradient-text-success">{stats.status}</p>
+                <p className="text-xs font-medium text-white/70 uppercase tracking-wide">Avg Temp</p>
+                <p className="text-xl font-bold text-white">
+                  {batteryData.length > 0 
+                    ? (batteryData.reduce((sum, item) => sum + item.cell_temperature, 0) / batteryData.length).toFixed(1)
+                    : '0.0'}°C
+                </p>
               </div>
             </div>
           </motion.div>
 
-          <motion.div 
-            className="stat-card"
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
+            transition={{ delay: 0.5 }}
+            className="stat-card"
           >
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
-                <Clock className="h-5 w-5 text-green-400" />
+              <div className="w-10 h-10 bg-indigo-500/20 rounded-lg flex items-center justify-center">
+                <Zap className="h-5 w-5 text-indigo-400" />
               </div>
               <div>
-                <p className="text-xs font-medium text-white/70 uppercase tracking-wide">System Uptime</p>
-                <p className="text-xl font-bold gradient-text-success">{stats.uptime}</p>
+                <p className="text-xs font-medium text-white/70 uppercase tracking-wide">Avg Voltage</p>
+                <p className="text-xl font-bold text-white">
+                  {batteryData.length > 0 
+                    ? (batteryData.reduce((sum, item) => sum + item.cell_voltage, 0) / batteryData.length).toFixed(2)
+                    : '0.00'}V
+                </p>
               </div>
             </div>
           </motion.div>
 
-          <motion.div 
-            className="stat-card"
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
+            transition={{ delay: 0.6 }}
+            className="stat-card"
           >
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                <TrendingUp className="h-5 w-5 text-blue-400" />
+              <div className="w-10 h-10 bg-pink-500/20 rounded-lg flex items-center justify-center">
+                <Clock className="h-5 w-5 text-pink-400" />
               </div>
               <div>
-                <p className="text-xs font-medium text-white/70 uppercase tracking-wide">Efficiency Score</p>
-                <p className="text-xl font-bold gradient-text">{stats.efficiency}</p>
+                <p className="text-xs font-medium text-white/70 uppercase tracking-wide">Last Update</p>
+                <p className="text-sm font-bold text-white">
+                  {batteryData.length > 0 
+                    ? new Date(batteryData[batteryData.length - 1].packet_datetime).toLocaleTimeString()
+                    : 'N/A'}
+                </p>
               </div>
             </div>
           </motion.div>
         </div>
 
         {/* Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <div className="flex gap-4 mb-6">
           <motion.div 
-            className="chart-container"
+            className="chart-container flex-1"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.6 }}
           >
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold text-white">Voltage Trend</h3>
-              <div className="w-10 h-10 bg-yellow-500/20 rounded-xl flex items-center justify-center">
-                <Zap className="h-5 w-5 text-yellow-400" />
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-base font-semibold text-white">Voltage Trend</h3>
+              <div className="w-6 h-6 bg-yellow-500/20 rounded flex items-center justify-center">
+                <Zap className="h-3 w-3 text-yellow-400" />
               </div>
             </div>
-            <div className="h-64 bg-white/5 rounded-xl flex items-center justify-center p-4">
-              <VoltageChart data={batteryData} />
+            <div className="h-32 bg-white/5 rounded flex items-center justify-center p-2">
+              {filteredData.length > 0 ? (
+                <VoltageChart data={filteredData} />
+              ) : (
+                <div className="text-center">
+                  <p className="text-gray-400 text-xs">Loading voltage data...</p>
+                </div>
+              )}
             </div>
           </motion.div>
 
           <motion.div 
-            className="chart-container"
+            className="chart-container flex-1"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.7 }}
           >
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold text-white">Temperature Trend</h3>
-              <div className="w-10 h-10 bg-red-500/20 rounded-xl flex items-center justify-center">
-                <Thermometer className="h-5 w-5 text-red-400" />
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-base font-semibold text-white">Temperature Trend</h3>
+              <div className="w-6 h-6 bg-red-500/20 rounded flex items-center justify-center">
+                <Thermometer className="h-3 w-3 text-red-400" />
               </div>
             </div>
-            <div className="h-64 bg-white/5 rounded-xl flex items-center justify-center p-4">
-              <TemperatureChart data={batteryData} />
+            <div className="h-32 bg-white/5 rounded flex items-center justify-center p-2">
+              {filteredData.length > 0 ? (
+                <TemperatureChart data={filteredData} />
+              ) : (
+                <div className="text-center">
+                  <p className="text-gray-400 text-xs">Loading temperature data...</p>
+                </div>
+              )}
             </div>
           </motion.div>
         </div>
+
+        {/* Geographic Map */}
+        <motion.div 
+          className="chart-container mb-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.8 }}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-white">Battery Sites Geographic Distribution</h3>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                <span className="text-xs text-white/70">Healthy</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                <span className="text-xs text-white/70">Warning</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                <span className="text-xs text-white/70">Critical</span>
+              </div>
+            </div>
+          </div>
+          <div className="h-80 rounded-lg overflow-hidden">
+            <BasicMap
+              batteryData={filteredData}
+              mockSiteLocations={mockSiteLocations}
+              getSiteStats={(siteId) => getSiteStats(siteId, filteredData)}
+              getMarkerColor={getMarkerColor}
+              getMarkerSize={getMarkerSize}
+            />
+          </div>
+        </motion.div>
 
         {/* Data Table */}
         <motion.div 
           className="data-table"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.8 }}
+          transition={{ duration: 0.5, delay: 0.9 }}
         >
           <div className="px-6 py-4 border-b border-white/10">
             <div className="flex items-center justify-between">
-              <h3 className="text-xl font-semibold text-white">Battery Data ({batteryData.length} records)</h3>
+              <h3 className="text-xl font-semibold text-white">Battery Data ({filteredData.length} records)</h3>
               <div className="flex items-center space-x-4">
-                <select className="filter-select">
-                  <option>All Devices</option>
+                <select 
+                  className="filter-select"
+                  value={selectedDevice}
+                  onChange={(e) => setSelectedDevice(e.target.value)}
+                >
+                  <option value="all">All Devices ({uniqueDevices.length})</option>
+                  {uniqueDevices.map(deviceId => (
+                    <option key={deviceId} value={deviceId.toString()}>
+                      Device-{deviceId.toString().padStart(3, '0')}
+                    </option>
+                  ))}
                 </select>
-                <select className="filter-select">
-                  <option>All Cells</option>
+                <select 
+                  className="filter-select"
+                  value={selectedCell}
+                  onChange={(e) => setSelectedCell(e.target.value)}
+                >
+                  <option value="all">All Cells ({uniqueCells.length})</option>
+                  {uniqueCells.map(cellNumber => (
+                    <option key={cellNumber} value={cellNumber.toString()}>
+                      Cell-{cellNumber.toString().padStart(2, '0')}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
           </div>
-          <div className="overflow-x-auto overflow-y-auto max-h-[600px]">
+          <div className="overflow-x-auto overflow-y-auto max-h-[500px]">
             <table className="w-full">
               <thead className="bg-white/5 sticky top-0 z-10">
                 <tr>
@@ -606,7 +771,7 @@ export default function Dashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
-                {batteryData.map((item) => (
+                {filteredData.map((item) => (
                   <tr key={item.id} className="hover:bg-white/5 transition-colors">
                     <td className="px-6 py-4 text-sm text-white">Device-{item.device_id.toString().padStart(3, '0')}</td>
                     <td className="px-6 py-4 text-sm text-white">Cell-{item.cell_number.toString().padStart(2, '0')}</td>

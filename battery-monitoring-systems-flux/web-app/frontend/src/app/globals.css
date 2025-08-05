@@ -3,18 +3,34 @@
 @tailwind utilities;
 
 :root {
-  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  --warning-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-  --danger-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-  --glass-bg: rgba(255, 255, 255, 0.1);
-  --glass-border: rgba(255, 255, 255, 0.2);
-  --neon-blue: #00d4ff;
-  --neon-purple: #9d4edd;
-  --neon-pink: #ff6b6b;
-  --neon-green: #51cf66;
-  --neon-yellow: #ffd43b;
+  /* Battery Monitoring Theme Colors */
+  --primary-blue: #0ea5e9;
+  --primary-blue-dark: #0284c7;
+  --secondary-green: #10b981;
+  --secondary-green-dark: #059669;
+  --accent-orange: #f59e0b;
+  --accent-orange-dark: #d97706;
+  --warning-red: #ef4444;
+  --warning-red-dark: #dc2626;
+  --neutral-gray: #64748b;
+  --neutral-gray-dark: #475569;
+  
+  /* Battery-specific gradients */
+  --battery-gradient: linear-gradient(135deg, #0ea5e9 0%, #10b981 50%, #f59e0b 100%);
+  --energy-gradient: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
+  --power-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --alert-gradient: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+  
+  /* Modern glass effects */
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  
+  /* Battery status colors */
+  --battery-full: #10b981;
+  --battery-medium: #f59e0b;
+  --battery-low: #ef4444;
+  --battery-critical: #dc2626;
 }
 
 * {
@@ -22,7 +38,7 @@
 }
 
 body {
-  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #475569 75%, #64748b 100%);
   min-height: 100vh;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -31,7 +47,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Animated background */
+/* Battery-themed animated background */
 body::before {
   content: '';
   position: fixed;
@@ -40,21 +56,31 @@ body::before {
   width: 100%;
   height: 100%;
   background: 
-    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
-  animation: backgroundShift 20s ease-in-out infinite;
+    radial-gradient(circle at 20% 80%, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.1) 0%, transparent 50%);
+  animation: batteryPulse 15s ease-in-out infinite;
   z-index: -1;
 }
 
-@keyframes backgroundShift {
-  0%, 100% { transform: scale(1) rotate(0deg); }
-  50% { transform: scale(1.1) rotate(1deg); }
+@keyframes batteryPulse {
+  0%, 100% { 
+    transform: scale(1) rotate(0deg);
+    opacity: 0.8;
+  }
+  33% { 
+    transform: scale(1.05) rotate(0.5deg);
+    opacity: 1;
+  }
+  66% { 
+    transform: scale(1.02) rotate(-0.5deg);
+    opacity: 0.9;
+  }
 }
 
-/* Custom scrollbar */
+/* Battery-themed scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
@@ -63,63 +89,71 @@ body::before {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--neon-blue), var(--neon-purple));
+  background: var(--battery-gradient);
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, var(--neon-purple), var(--neon-pink));
+  background: var(--energy-gradient);
 }
 
-/* Glass morphism effects */
+/* Modern glass morphism */
 .glass {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
+    var(--glass-shadow),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-card:hover {
-  transform: translateY(-8px) scale(1.02);
+  transform: translateY(-6px) scale(1.02);
   box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(255, 255, 255, 0.2),
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-/* Premium animations */
-@keyframes float {
+/* Battery-themed animations */
+@keyframes batteryFloat {
   0%, 100% { transform: translateY(0px) rotate(0deg); }
-  33% { transform: translateY(-10px) rotate(1deg); }
-  66% { transform: translateY(-5px) rotate(-1deg); }
+  33% { transform: translateY(-8px) rotate(1deg); }
+  66% { transform: translateY(-4px) rotate(-1deg); }
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(1.05); }
+@keyframes energyPulse {
+  0%, 100% { 
+    opacity: 1; 
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.5);
+  }
+  50% { 
+    opacity: 0.8; 
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(14, 165, 233, 0.8);
+  }
 }
 
-@keyframes shimmer {
+@keyframes powerShimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
 
-@keyframes slideInUp {
+@keyframes batterySlideIn {
   0% {
     opacity: 0;
-    transform: translateY(40px) scale(0.95);
+    transform: translateY(30px) scale(0.95);
   }
   100% {
     opacity: 1;
@@ -127,17 +161,21 @@ body::before {
   }
 }
 
-@keyframes fadeIn {
+@keyframes batteryFadeIn {
   0% { opacity: 0; transform: scale(0.9); }
   100% { opacity: 1; transform: scale(1); }
 }
 
-@keyframes glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.5); }
-  50% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.8), 0 0 60px rgba(0, 212, 255, 0.3); }
+@keyframes batteryGlow {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.4);
+  }
+  50% { 
+    box-shadow: 0 0 40px rgba(14, 165, 233, 0.7), 0 0 60px rgba(14, 165, 233, 0.3);
+  }
 }
 
-@keyframes neonPulse {
+@keyframes batteryNeonPulse {
   0%, 100% { 
     text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor;
   }
@@ -146,12 +184,12 @@ body::before {
   }
 }
 
-@keyframes blink {
+@keyframes batteryBlink {
   0%, 50% { opacity: 1; }
   51%, 100% { opacity: 0; }
 }
 
-@keyframes typingBounce {
+@keyframes batteryTypingBounce {
   0%, 80%, 100% {
     transform: scale(0.8);
     opacity: 0.5;
@@ -162,34 +200,34 @@ body::before {
   }
 }
 
-@keyframes chatPulse {
+@keyframes batteryChatPulse {
   0%, 100% {
-    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
+    box-shadow: 0 4px 20px rgba(14, 165, 233, 0.4);
   }
   50% {
-    box-shadow: 0 8px 30px rgba(157, 78, 221, 0.6);
+    box-shadow: 0 8px 30px rgba(16, 185, 129, 0.6);
   }
 }
 
-@keyframes chatGlow {
+@keyframes batteryChatGlow {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.6), 0 0 40px rgba(157, 78, 221, 0.4);
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.6), 0 0 40px rgba(16, 185, 129, 0.4);
   }
   50% {
-    box-shadow: 0 0 30px rgba(0, 212, 255, 0.8), 0 0 60px rgba(157, 78, 221, 0.6);
+    box-shadow: 0 0 30px rgba(14, 165, 233, 0.8), 0 0 60px rgba(16, 185, 129, 0.6);
   }
 }
 
-@keyframes chatBounce {
+@keyframes batteryChatBounce {
   0%, 100% {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-8px);
+    transform: translateY(-6px);
   }
 }
 
-@keyframes slideInRight {
+@keyframes batterySlideInRight {
   0% {
     opacity: 0;
     transform: translateX(30px) scale(0.9);
@@ -201,46 +239,46 @@ body::before {
 }
 
 /* Animation utility classes */
-.animate-float {
-  animation: float 6s ease-in-out infinite;
+.animate-batteryFloat {
+  animation: batteryFloat 6s ease-in-out infinite;
 }
 
-.animate-pulse-slow {
-  animation: pulse 3s ease-in-out infinite;
+.animate-energyPulse {
+  animation: energyPulse 3s ease-in-out infinite;
 }
 
-.animate-shimmer {
+.animate-powerShimmer {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.1),
+    rgba(14, 165, 233, 0.1),
     transparent
   );
   background-size: 200% 100%;
-  animation: shimmer 2s ease-in-out infinite;
+  animation: powerShimmer 2s ease-in-out infinite;
 }
 
-.animate-slideInUp {
-  animation: slideInUp 0.8s ease-out;
+.animate-batterySlideIn {
+  animation: batterySlideIn 0.8s ease-out;
 }
 
-.animate-fadeIn {
-  animation: fadeIn 0.6s ease-out;
+.animate-batteryFadeIn {
+  animation: batteryFadeIn 0.6s ease-out;
 }
 
-.animate-glow {
-  animation: glow 2s ease-in-out infinite alternate;
+.animate-batteryGlow {
+  animation: batteryGlow 2s ease-in-out infinite alternate;
 }
 
-.animate-neonPulse {
-  animation: neonPulse 2s ease-in-out infinite;
+.animate-batteryNeonPulse {
+  animation: batteryNeonPulse 2s ease-in-out infinite;
 }
 
 /* Component styles */
 .header {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--glass-border);
   box-shadow: 
     0 4px 20px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -250,16 +288,16 @@ body::before {
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, var(--neon-blue) 0%, var(--neon-purple) 50%, var(--neon-pink) 100%);
+  background: var(--battery-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   font-weight: 700;
-  animation: neonPulse 3s ease-in-out infinite;
+  animation: batteryNeonPulse 3s ease-in-out infinite;
 }
 
 .gradient-text-success {
-  background: linear-gradient(135deg, var(--neon-green) 0%, #00f2fe 100%);
+  background: var(--power-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -267,22 +305,22 @@ body::before {
 }
 
 .gradient-text-warning {
-  background: linear-gradient(135deg, var(--neon-yellow) 0%, #fa709a 100%);
+  background: var(--alert-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .gradient-text-danger {
-  background: linear-gradient(135deg, var(--neon-pink) 0%, #ff9a9e 100%);
+  background: linear-gradient(135deg, var(--warning-red) 0%, var(--warning-red-dark) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Button styles */
+/* Battery-themed button styles */
 .btn-primary {
-  background: linear-gradient(135deg, var(--neon-blue) 0%, var(--neon-purple) 100%);
+  background: var(--energy-gradient);
   border: none;
   color: white;
   padding: 14px 28px;
@@ -291,7 +329,7 @@ body::before {
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 
-    0 8px 25px rgba(0, 212, 255, 0.3),
+    0 8px 25px rgba(14, 165, 233, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   position: relative;
   overflow: hidden;
@@ -315,15 +353,15 @@ body::before {
 .btn-primary:hover {
   transform: translateY(-3px) scale(1.05);
   box-shadow: 
-    0 15px 35px rgba(0, 212, 255, 0.4),
+    0 15px 35px rgba(14, 165, 233, 0.4),
     0 0 0 1px rgba(255, 255, 255, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--glass-border);
   color: white;
   padding: 14px 28px;
   border-radius: 16px;
@@ -339,21 +377,21 @@ body::before {
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
 }
 
-/* Card styles */
+/* Battery-themed card styles */
 .stat-card {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 12px;
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 16px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
+    var(--glass-shadow),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   position: relative;
   overflow: hidden;
-  min-width: 120px;
-  max-width: 200px;
+  min-width: 140px;
+  max-width: 220px;
 }
 
 .stat-card::before {
@@ -362,8 +400,8 @@ body::before {
   top: 0;
   left: 0;
   right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  height: 2px;
+  background: var(--battery-gradient);
 }
 
 .stat-card:hover {
@@ -375,14 +413,14 @@ body::before {
 }
 
 .chart-container {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 20px;
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 24px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
+    var(--glass-shadow),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
@@ -394,13 +432,13 @@ body::before {
 }
 
 .data-table {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
   overflow: hidden;
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
+    var(--glass-shadow),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
@@ -415,7 +453,7 @@ body::before {
   text-transform: uppercase;
   letter-spacing: 1px;
   padding: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--glass-border);
   font-size: 0.875rem;
 }
 
@@ -432,11 +470,11 @@ body::before {
   transform: scale(1.01);
 }
 
-/* Form styles */
+/* Battery-themed form styles */
 .filter-select {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--glass-bg);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--glass-border);
   border-radius: 12px;
   color: white;
   padding: 12px 16px;
@@ -446,8 +484,8 @@ body::before {
 
 .filter-select:focus {
   outline: none;
-  border-color: var(--neon-blue);
-  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2);
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
 }
 
 .filter-select option {
@@ -455,7 +493,7 @@ body::before {
   color: white;
 }
 
-/* Status badges */
+/* Battery status badges */
 .status-badge {
   padding: 8px 16px;
   border-radius: 20px;
@@ -468,75 +506,75 @@ body::before {
 }
 
 .status-healthy {
-  background: linear-gradient(135deg, var(--neon-green) 0%, #00f2fe 100%);
+  background: var(--power-gradient);
   color: white;
-  box-shadow: 0 4px 15px rgba(81, 207, 102, 0.4);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
 }
 
 .status-warning {
-  background: linear-gradient(135deg, var(--neon-yellow) 0%, #fa709a 100%);
+  background: var(--alert-gradient);
   color: white;
-  box-shadow: 0 4px 15px rgba(255, 212, 59, 0.4);
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
 }
 
 .status-danger {
-  background: linear-gradient(135deg, var(--neon-pink) 0%, #ff9a9e 100%);
+  background: linear-gradient(135deg, var(--warning-red) 0%, var(--warning-red-dark) 100%);
   color: white;
-  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
 }
 
-/* Connection indicator */
+/* Battery connection indicator */
 .connection-indicator {
   width: 12px;
   height: 12px;
   border-radius: 50%;
   display: inline-block;
   margin-right: 8px;
-  animation: pulse 2s infinite;
+  animation: energyPulse 2s infinite;
   box-shadow: 0 0 20px currentColor;
 }
 
 .connection-connected {
-  background: linear-gradient(135deg, var(--neon-green) 0%, #00f2fe 100%);
-  color: var(--neon-green);
+  background: var(--power-gradient);
+  color: var(--secondary-green);
 }
 
 .connection-disconnected {
-  background: linear-gradient(135deg, var(--neon-pink) 0%, #ff9a9e 100%);
-  color: var(--neon-pink);
+  background: linear-gradient(135deg, var(--warning-red) 0%, var(--warning-red-dark) 100%);
+  color: var(--warning-red);
 }
 
-/* Filter container */
+/* Battery filter container */
 .filter-container {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
   border-radius: 20px;
   padding: 20px;
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
+    var(--glass-shadow),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-/* Chat modal styles */
+/* Battery chat modal styles */
 .chat-modal {
-  background: rgba(15, 15, 35, 0.95);
+  background: rgba(15, 23, 42, 0.95);
   backdrop-filter: blur(30px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
   border-radius: 24px;
   box-shadow: 
     0 25px 60px rgba(0, 0, 0, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-/* Chat message styles */
+/* Battery chat message styles */
 .chat-message {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
   border-radius: 20px;
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
+    var(--glass-shadow),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
   max-width: 80%;
@@ -551,25 +589,25 @@ body::before {
 }
 
 .chat-message-user {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--energy-gradient);
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 
-    0 8px 32px rgba(102, 126, 234, 0.3),
+    0 8px 32px rgba(14, 165, 233, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .chat-message-user:hover {
   box-shadow: 
-    0 12px 40px rgba(102, 126, 234, 0.4),
+    0 12px 40px rgba(14, 165, 233, 0.4),
     0 0 0 1px rgba(255, 255, 255, 0.3);
 }
 
 .chat-message-bot {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
+    var(--glass-shadow),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
@@ -599,7 +637,7 @@ body::before {
   height: 16px;
   background: white;
   margin-left: 4px;
-  animation: blink 1s infinite;
+  animation: batteryBlink 1s infinite;
 }
 
 .chat-typing-indicator {
@@ -613,31 +651,31 @@ body::before {
   height: 8px;
   background: rgba(255, 255, 255, 0.6);
   border-radius: 50%;
-  animation: typingBounce 1.4s infinite ease-in-out;
+  animation: batteryTypingBounce 1.4s infinite ease-in-out;
 }
 
 .chat-typing-dot:nth-child(1) { animation-delay: -0.32s; }
 .chat-typing-dot:nth-child(2) { animation-delay: -0.16s; }
 
-/* Floating chatbot styles */
+/* Battery floating chatbot styles */
 .floating-chatbot {
-  animation: float 4s ease-in-out infinite;
+  animation: batteryFloat 4s ease-in-out infinite;
 }
 
 .chatbot-pulse {
-  animation: chatPulse 2s ease-in-out infinite;
+  animation: batteryChatPulse 2s ease-in-out infinite;
 }
 
 .chat-glow {
-  animation: chatGlow 2s ease-in-out infinite;
+  animation: batteryChatGlow 2s ease-in-out infinite;
 }
 
 .chat-bounce {
-  animation: chatBounce 2s ease-in-out infinite;
+  animation: batteryChatBounce 2s ease-in-out infinite;
 }
 
 .chat-message-enter {
-  animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: batterySlideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .chat-backdrop {
@@ -645,22 +683,22 @@ body::before {
   background: rgba(0, 0, 0, 0.6);
 }
 
-/* Neon effects */
+/* Battery neon effects */
 .neon-border {
-  border: 1px solid var(--neon-blue);
-  box-shadow: 0 0 10px var(--neon-blue), inset 0 0 10px rgba(0, 212, 255, 0.1);
+  border: 1px solid var(--primary-blue);
+  box-shadow: 0 0 10px var(--primary-blue), inset 0 0 10px rgba(14, 165, 233, 0.1);
 }
 
 .neon-text {
-  color: var(--neon-blue);
-  text-shadow: 0 0 10px var(--neon-blue);
+  color: var(--primary-blue);
+  text-shadow: 0 0 10px var(--primary-blue);
 }
 
-/* Premium input styles */
+/* Battery premium input styles */
 .premium-input {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
   border-radius: 12px;
   color: white;
   padding: 12px 16px;
@@ -670,9 +708,9 @@ body::before {
 
 .premium-input:focus {
   outline: none;
-  border-color: var(--neon-blue);
+  border-color: var(--primary-blue);
   box-shadow: 
-    0 0 0 3px rgba(0, 212, 255, 0.2),
+    0 0 0 3px rgba(14, 165, 233, 0.2),
     0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
@@ -680,26 +718,26 @@ body::before {
   color: rgba(255, 255, 255, 0.5);
 }
 
-/* Loading states */
+/* Battery loading states */
 .loading-shimmer {
   background: linear-gradient(90deg, 
     transparent 0%, 
-    rgba(255, 255, 255, 0.1) 25%, 
-    rgba(255, 255, 255, 0.2) 50%, 
-    rgba(255, 255, 255, 0.1) 75%, 
+    rgba(14, 165, 233, 0.1) 25%, 
+    rgba(14, 165, 233, 0.2) 50%, 
+    rgba(14, 165, 233, 0.1) 75%, 
     transparent 100%
   );
   background-size: 200% 100%;
-  animation: shimmer 2s infinite;
+  animation: powerShimmer 2s infinite;
 }
 
 .skeleton {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: energyPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Error and success states */
+/* Battery error and success states */
 .error-state {
   background: rgba(239, 68, 68, 0.1);
   border: 1px solid rgba(239, 68, 68, 0.3);
@@ -709,8 +747,8 @@ body::before {
 }
 
 .success-state {
-  background: rgba(34, 197, 94, 0.1);
-  border: 1px solid rgba(34, 197, 94, 0.3);
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
   color: #86efac;
   padding: 16px;
   border-radius: 12px;
@@ -724,7 +762,7 @@ body::before {
   border-radius: 12px;
 }
 
-/* Tooltip styles */
+/* Battery tooltip styles */
 .tooltip {
   position: absolute;
   z-index: 50;
@@ -742,7 +780,7 @@ body::before {
   opacity: 1;
 }
 
-/* Modal and overlay styles */
+/* Battery modal and overlay styles */
 .overlay {
   position: fixed;
   inset: 0;
@@ -756,9 +794,9 @@ body::before {
 }
 
 .modal {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--glass-bg);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--glass-border);
   border-radius: 24px;
   padding: 24px;
   max-width: 28rem;
@@ -766,13 +804,13 @@ body::before {
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
 }
 
-/* Data visualization improvements */
+/* Battery data visualization improvements */
 .chart-tooltip {
   background: rgba(0, 0, 0, 0.9);
   color: white;
   padding: 12px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--glass-border);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
@@ -798,7 +836,7 @@ body::before {
   border-radius: 50%;
 }
 
-/* Animation performance improvements */
+/* Battery animation performance improvements */
 .will-change-transform {
   will-change: transform;
 }
@@ -811,7 +849,7 @@ body::before {
   will-change: auto;
 }
 
-/* Content loading states */
+/* Battery content loading states */
 .content-loading {
   position: relative;
   overflow: hidden;
@@ -821,12 +859,12 @@ body::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-  animation: shimmer 2s infinite;
+  background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.05), transparent);
+  animation: powerShimmer 2s infinite;
   transform: translateX(-100%);
 }
 
-/* Enhanced button states */
+/* Battery enhanced button states */
 .btn-loading {
   position: relative;
   cursor: not-allowed;
@@ -839,10 +877,10 @@ body::before {
   inset: 0;
   background: rgba(255, 255, 255, 0.2);
   border-radius: 16px;
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: energyPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Better spacing utilities */
+/* Battery better spacing utilities */
 .space-y-responsive > * + * {
   margin-top: 1rem;
 }
@@ -853,9 +891,9 @@ body::before {
   }
 }
 
-/* Typography improvements */
+/* Battery typography improvements */
 .text-gradient {
-  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+  background: var(--battery-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -865,7 +903,7 @@ body::before {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Container improvements */
+/* Battery container improvements */
 .container-responsive {
   max-width: 80rem;
   margin-left: auto;
@@ -888,7 +926,7 @@ body::before {
   }
 }
 
-/* Z-index management */
+/* Battery z-index management */
 .z-dropdown { z-index: 1000; }
 .z-sticky { z-index: 1020; }
 .z-fixed { z-index: 1030; }
@@ -898,7 +936,7 @@ body::before {
 .z-tooltip { z-index: 1070; }
 .z-toast { z-index: 1080; }
 
-/* Layout grid improvements */
+/* Battery layout grid improvements */
 .grid-responsive {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -912,7 +950,7 @@ body::before {
   }
 }
 
-/* Custom scrollbar improvements */
+/* Battery custom scrollbar improvements */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -932,20 +970,20 @@ body::before {
   background: rgba(255, 255, 255, 0.3);
 }
 
-/* Enhanced focus indicators */
+/* Battery enhanced focus indicators */
 .enhanced-focus:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.5);
+  box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.5);
   border-radius: 12px;
 }
 
-/* Custom focus styles */
+/* Battery custom focus styles */
 .focus-ring:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.3);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.3);
 }
 
-/* Icon animations */
+/* Battery icon animations */
 .icon-bounce {
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -954,10 +992,10 @@ body::before {
   transform: scale(1.2) rotate(5deg);
 }
 
-/* Accessibility improvements */
+/* Battery accessibility improvements */
 .focus-visible:focus {
   outline: none;
-  box-shadow: 0 0 0 2px #3b82f6, 0 0 0 4px rgba(59, 130, 246, 0.5);
+  box-shadow: 0 0 0 2px var(--primary-blue), 0 0 0 4px rgba(14, 165, 233, 0.5);
 }
 
 .sr-only {
@@ -972,7 +1010,7 @@ body::before {
   border: 0;
 }
 
-/* Responsive design improvements */
+/* Battery responsive design improvements */
 @media (max-width: 768px) {
   .header {
     padding: 12px 16px;
@@ -1024,7 +1062,7 @@ body::before {
   }
 }
 
-/* Dark mode improvements */
+/* Battery dark mode improvements */
 @media (prefers-color-scheme: dark) {
   body {
     background: #0f172a;
@@ -1046,7 +1084,7 @@ body::before {
   }
 }
 
-/* Print styles */
+/* Battery print styles */
 @media print {
   body {
     background: white;
@@ -1064,7 +1102,7 @@ body::before {
   }
 }
 
-/* High contrast mode */
+/* Battery high contrast mode */
 @media (prefers-contrast: high) {
   .gradient-text {
     background: white;
@@ -1085,7 +1123,7 @@ body::before {
   }
 }
 
-/* Motion reduced preferences */
+/* Battery motion reduced preferences */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
@@ -1093,11 +1131,11 @@ body::before {
     transition-duration: 0.01ms !important;
   }
   
-  .animate-float,
-  .animate-pulse-slow,
-  .animate-shimmer,
-  .animate-glow,
-  .animate-neonPulse {
+  .animate-batteryFloat,
+  .animate-energyPulse,
+  .animate-powerShimmer,
+  .animate-batteryGlow,
+  .animate-batteryNeonPulse {
     animation: none;
   }
 }
